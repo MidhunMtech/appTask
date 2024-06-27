@@ -52,3 +52,22 @@ set `delete` = 0
 where `delete` = 1;*/
 
 select * from contacts;
+
+SELECT 
+	t1.email,
+    t2.userId,
+	concat(t2.fname," ",t2.lname) as fullname,
+    t2.gender,
+	t2.DOB,
+	t2.photoName,
+	t2.phone,
+	t2.address,
+	t2.street
+FROM 
+	registerForm AS t1
+INNER JOIN 
+	contacts AS t2
+ON t2.nameId_fk = t1.nameId
+WHERE t2.userId = 4;
+
+
