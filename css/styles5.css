@@ -1,0 +1,35 @@
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.photo {
+    width: 100px;
+}
+.photo img {
+    width: 60px;
+    height: 60px;
+}
+
+.edit {
+    background-color: rgb(5, 112, 112);
+    text-decoration: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    color: black;
+}
+
+.edit:hover {
+    background-color: aqua;
+}
