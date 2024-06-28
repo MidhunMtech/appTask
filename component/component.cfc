@@ -58,7 +58,7 @@
                 <cfset local.error = "<p style='color: red;'>username exists. try again..</p>" />
             </cfif>
             <cfif structKeyExists(url, "error") AND url.error EQ "4">
-                <cfset local.error = "<p style='color: red;'>username or password not matching. try again..</p>" />
+                <cfset local.error = "<p style='color: red;'>username or password not valid. try again..</p>" />
             </cfif>
             <cfif structKeyExists(url, "error") AND url.error EQ "5">
                 <cfset local.error = "<p style='color: red;'>Email already exists. try again..</p>" />
@@ -87,21 +87,6 @@
                 username = <cfqueryparam value="#arguments.Lform.username#" cfsqltype="cf_sql_varchar">
                 AND password = <cfqueryparam value="#arguments.Lform.password#" cfsqltype="cf_sql_varchar">
         </cfquery>
-    <!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
-        <cfquery name="local.userCheck" datasource="cfTask2">    
-            SELECT 
-                T1.nameId_fk,
-                T2.nameID
-            FROM 
-                contacts as T1
-            INNER JOIN 
-                registerForm as T2
-            ON 
-                T1.nameId_fk = T2.nameID
-            WHERE
-                T1.nameId_fk = <cfqueryparam value="#local.checkUser.nameID#" cfsqltype="cf_sql_integer">
-        </cfquery>
-
         <cfif NOT len(arguments.Lform.username)
             OR NOT len(arguments.Lform.password)>
             <cflocation  url="login.cfm?error=6">
@@ -109,6 +94,21 @@
             <cfif queryRecordCount(local.checkUser) EQ "1">
                 <cfset session.userId = local.checkUser.nameID />
                 <cfset session.userName = local.checkUser.username />
+<!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
+                <cfquery name="local.userCheck" datasource="cfTask2">    
+                    SELECT 
+                        T1.nameId_fk,
+                        T2.nameID
+                    FROM 
+                        contacts as T1
+                    INNER JOIN 
+                        registerForm as T2
+                    ON 
+                        T1.nameId_fk = T2.nameID
+                    WHERE
+                        T1.nameId_fk = <cfqueryparam value="#local.checkUser.nameID#" cfsqltype="cf_sql_integer">
+                        AND T1.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+                </cfquery>
                 <cfif queryRecordCount(local.userCheck) EQ "0"> <!-- If user exists redirect to list.cfm -->
                     <cflocation url="create.cfm" />
                 <cfelse>
@@ -215,6 +215,7 @@
                 T1.nameID = T2.nameId_fk
             WHERE
                 T1.nameID = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                AND T2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfif queryRecordCount(local.contactCheck) EQ "0"> <!--If user details not exists redirect to create.cfm -->
             <cflocation  url="create.cfm">
