@@ -69,6 +69,9 @@
             <cfif structKeyExists(url, "pdf") AND url.pdf EQ "true">
                 <cfset local.error = "<p style='color: green; text-align:center;'>PDF download Successfully....</p>" />
             </cfif>
+            <cfif structKeyExists(url, "print") AND url.print EQ "true">
+                <cfset local.error = "<p style='color: green; text-align:center;'>Print done Successfully....</p>" />
+            </cfif>
             <cfif structKeyExists(session, "excel") AND session.excel EQ "true">
                 <cfset local.error = "<p style='color: green; text-align:center;'>Excel download Successfully....</p>" />
             </cfif>
@@ -338,6 +341,10 @@
 
 
     <cffunction  name="getData" returnType="query" access="public" hint="Fetching contacts table for pdf and excel download">
+        <cfif NOT structKeyExists(session, "userId")>
+            <cflocation  url="login.cfm">
+        </cfif>
+        
         <cfquery name="local.pdfData" datasource="cfTask2">
             SELECT 
                 t1.nameID AS ID,

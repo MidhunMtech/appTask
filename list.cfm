@@ -16,7 +16,7 @@
 
         <header>
             <ul>
-                <li><a href="#">Print</a></li>
+                <li><a href="print.cfm">Print</a></li>
                 <li><a href="excel.cfm">Excel</a></li>
                 <li><a href="pdf.cfm">Pdf</a></li>
             </ul>

@@ -1,0 +1,17 @@
+body {
+    width: 100%;
+}
+table {
+    width: 900px;
+}
+div {
+    width: 70%;
+    /* text-align: center; */
+    margin: 10px;
+}
+#print {
+    padding: 5px 30px;
+    color: black;
+    background-color: green;
+    font-weight: bold;
+}
