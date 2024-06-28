@@ -87,6 +87,20 @@
                 username = <cfqueryparam value="#arguments.Lform.username#" cfsqltype="cf_sql_varchar">
                 AND password = <cfqueryparam value="#arguments.Lform.password#" cfsqltype="cf_sql_varchar">
         </cfquery>
+    <!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
+        <cfquery name="local.userCheck" datasource="cfTask2">    
+            SELECT 
+                T1.nameId_fk,
+                T2.nameID
+            FROM 
+                contacts as T1
+            INNER JOIN 
+                registerForm as T2
+            ON 
+                T1.nameId_fk = T2.nameID
+            WHERE
+                T1.nameId_fk = <cfqueryparam value="#local.checkUser.nameID#" cfsqltype="cf_sql_integer">
+        </cfquery>
 
         <cfif NOT len(arguments.Lform.username)
             OR NOT len(arguments.Lform.password)>
@@ -95,7 +109,11 @@
             <cfif queryRecordCount(local.checkUser) EQ "1">
                 <cfset session.userId = local.checkUser.nameID />
                 <cfset session.userName = local.checkUser.username />
-                <cflocation url="create.cfm" />
+                <cfif queryRecordCount(local.userCheck) EQ "0"> <!-- If user exists redirect to list.cfm -->
+                    <cflocation url="create.cfm" />
+                <cfelse>
+                    <cflocation  url="list.cfm">
+                </cfif>
             <cfelse>
                 <cflocation  url="login.cfm?error=4">
             </cfif>
@@ -130,7 +148,7 @@
             <cflocation  url="create.cfm?error=3">
         <cfelse>
             <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
+                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\upload" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
             <cfset local.photoName = cffile.serverfile />
@@ -183,6 +201,24 @@
                 is_delete = 0
         </cfquery>
         <cfset session.photo = local.getContacts.photoName />
+
+<!-- Query for checking user details exists in the contacts table, If not exists redirect to create.cfm -->
+        <cfquery name="local.contactCheck" datasource="cfTask2">
+            SELECT 
+                T1.nameID,
+                T2.nameId_fk
+            FROM
+                registerForm AS T1
+            INNER JOIN 
+                contacts AS T2
+            ON 
+                T1.nameID = T2.nameId_fk
+            WHERE
+                T1.nameID = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif queryRecordCount(local.contactCheck) EQ "0"> <!--If user details not exists redirect to create.cfm -->
+            <cflocation  url="create.cfm">
+        </cfif>
         <cfreturn local.getContacts>
     </cffunction>
 
@@ -216,7 +252,7 @@
             <cflocation  url="create.cfm?error=3">
         <cfelse> 
             <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
+                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\upload" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
             <cfset local.photoName = cffile.serverfile />
@@ -261,6 +297,7 @@
         </cfif>
         <cfif structKeyExists(url, "userid")>
             <cftry>
+<!--This is to fetech email from registerForm table  and other details from contacts table -->
                 <cfquery name="local.viewUser" datasource="cfTask2">
                     SELECT 
                         t1.email,
