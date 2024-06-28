@@ -24,7 +24,7 @@
             <cftry>
                 <cfoutput query="contacts">
                     <tr>
-                        <td class="photo"><img src="upload/#contacts.photoName#" alt="Photo"></td>
+                        <td class="photo"><img src="uploads/#contacts.photoName#" alt="Photo"></td>
                         <td>#contacts.fullname#</td>
                         <td>#contacts.phone#</td>
                         <td><a class="edit" href="edit.cfm?userid=#userId#">Edit</a></td>

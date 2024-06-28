@@ -148,7 +148,7 @@
             <cflocation  url="create.cfm?error=3">
         <cfelse>
             <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\upload" 
+                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
             <cfset local.photoName = cffile.serverfile />
@@ -252,7 +252,7 @@
             <cflocation  url="create.cfm?error=3">
         <cfelse> 
             <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\upload" 
+                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
             <cfset local.photoName = cffile.serverfile />
