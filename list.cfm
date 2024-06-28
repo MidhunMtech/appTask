@@ -18,7 +18,7 @@
             <ul>
                 <li><a href="#">Print</a></li>
                 <li><a href="#">Excel</a></li>
-                <li><a href="#">Pdf</a></li>
+                <li><a href="pdf.cfm">Pdf</a></li>
             </ul>
         </header>
 
