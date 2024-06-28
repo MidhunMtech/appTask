@@ -1,23 +1,15 @@
-<!--- Query the database to retrieve data from the person table --->
-<cfquery name="personData" datasource="cfTask">
-    SELECT firstname, lastname
-    FROM person
-</cfquery>
+<cfinvoke component="component.component" method="getData" returnvariable="getData">
 
-<!--- Initialize the CSV string --->
-<cfset csvData = "">
+<cfset csvData = "ID, User Id, Fullname, Email Id, Gender, DOB, Photo Name, Phone No, Address, Street" & chr(13) & chr(10)>
 
-<!--- Add headers to CSV string --->
-<cfset csvData = "firstname,lastname" & chr(13) & chr(10)>
-
-<!--- Loop over query results to build CSV data --->
-<cfloop query="personData">
-    <cfset csvData &= #firstname# & "," & #lastname# & chr(13) & chr(10)>
+<cfloop query="getData">
+    <cfoutput>
+        <cfset csvData &= #ID# & "," & #userId# & "," & #fullname# & "," & #email# & "," & #gender# & "," & #DOB# & "," & #photoName# & "," & #phone# & "," & #address# & "," & #street# & chr(13) & chr(10)>
+    </cfoutput>
 </cfloop>
 
-<!--- Set headers for Excel file download --->
-<cfheader name="Content-Disposition" value="attachment; filename=person_data.xlsx">
-<cfheader name="Content-Type" value="text/xlsx; charset=utf-8">
 
-<!--- Output the CSV data --->
+<cfheader name="Content-Disposition" value="attachment; filename=addressBook.xlsx">
+<cfheader name="Content-Type" value="text/xlsx; charset=utf-8">
 <cfoutput>#csvData#</cfoutput>
+<!--- <cflocation  url="list.cfm?excel=true"> --->

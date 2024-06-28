@@ -17,15 +17,17 @@
         <header>
             <ul>
                 <li><a href="#">Print</a></li>
-                <li><a href="#">Excel</a></li>
+                <li><a href="excel.cfm">Excel</a></li>
                 <li><a href="pdf.cfm">Pdf</a></li>
             </ul>
         </header>
+        <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
+        <cfoutput>#errorMsg#</cfoutput>
 
         <div class="container">
             <section class="left-section">
                 <cfoutput>
-                    <!---<img src="uploads/#session.photo#" width="50" height="50" shape="poly">--->
+        <!---<img src="uploads/#session.photo#" width="50" height="50" shape="poly">--->
                     <h2>#session.userName#</h2>
                 </cfoutput>
                 <ul class="btn">

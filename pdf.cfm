@@ -1,26 +1,4 @@
-<cfquery name="getData" datasource="cfTask2">
-    SELECT 
-        t1.nameID AS ID,
-        t2.userId,
-        concat(t2.title, " ", t2.fname, " ", t2.lname) as fullname,
-        t1.email,
-        t2.gender,
-        t2.DOB,
-        t2.photoName,
-        t2.phone,
-        t2.address,
-        t2.street
-    FROM 
-        registerForm AS t1
-    INNER JOIN 
-        contacts AS t2
-    ON 
-        t2.nameId_fk = t1.nameId
-    WHERE
-        t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-    ORDER BY ID
-</cfquery>
-<cfdump  var="#getData#">
+<cfinvoke component="component.component" method="getData" returnvariable="getData">
 
 <cfset pdfPath = expandPath("./downloads/pdf/addressBook.pdf")>
 <cfdocument format="PDF" filename="#pdfPath#" name="pdfDoc" overwrite="yes">
@@ -36,7 +14,7 @@
                     <th>Gender</th>
                     <th>DOB</th>
                     <th>Photo Name</th>
-                    <th>Phone</th>
+                    <th>Phone No</th>
                     <th>Address</th>
                     <th>Street</th>
                 </tr>
@@ -47,20 +25,18 @@
                         <td>#getData.ID#</td>
                         <td>#getData.userId#</td>
                         <td>#getdata.fullname#</td>
-                        <td>#email#</td>
-                        <td>#gender#</td>
-                        <td>#DOB#</td>
-                        <td>#photoName#</td>
-                        <td>#phone#</td>
-                        <td>#address#</td>
-                        <td>#street#</td>
+                        <td>#getdata.email#</td>
+                        <td>#getdata.gender#</td>
+                        <td>#getdata.DOB#</td>
+                        <td>#getdata.photoName#</td>
+                        <td>#getdata.phone#</td>
+                        <td>#getdata.address#</td>
+                        <td>#getdata.street#</td>
                     </tr>
                 </cfloop>
             </tbody>
         </table>
     </cfoutput>
 </cfdocument>
-<cflocation  url="list.cfm">
 
-<!--- <cfheader name="Content-Disposition" value="attachment;filename=addressBook1.pdf"> 
-<cfcontent type="application/pdf" variable="#toBinary(pdfDoc)#">--->
+<cflocation  url="list.cfm?pdf=true">

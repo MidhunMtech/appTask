@@ -1,5 +1,5 @@
 <cfcomponent>
-    <cffunction  name="registerForm" returnType="void" access="public">
+    <cffunction  name="registerForm" returnType="void" access="public" hint="For register">
         <cfargument  name="form" type="any" required="true">
         <cfdump  var="#form#">
         <cfquery name="local.getRegister" datasource="cfTAsk2">
@@ -45,7 +45,7 @@
        
     </cffunction>
 
-    <cffunction  name="errorMessage" returnType="string" access="public">
+    <cffunction  name="errorMessage" returnType="string" access="public" hint="All the Error messages">
         <cftry>
             <cfset local.error = ""/>
             <cfif structKeyExists(url, "error") AND url.error EQ "3" >
@@ -66,6 +66,12 @@
             <cfif structKeyExists(url, "error") AND url.error EQ "6">
                 <cfset local.error = "<p style='color: red;'>Need to fill USERNAME and PASSWORD. try again..</p>" />
             </cfif>
+            <cfif structKeyExists(url, "pdf") AND url.pdf EQ "true">
+                <cfset local.error = "<p style='color: green; text-align:center;'>PDF download Successfully....</p>" />
+            </cfif>
+            <cfif structKeyExists(session, "excel") AND session.excel EQ "true">
+                <cfset local.error = "<p style='color: green; text-align:center;'>Excel download Successfully....</p>" />
+            </cfif>
         <cfreturn local.error />
         <cfcatch>
             <cfdump  var="#cfcatch#">
@@ -73,7 +79,7 @@
         </cftry>
     </cffunction>
 
-    <cffunction name="login" returnType="void" access="public">
+    <cffunction name="login" returnType="void" access="public" hint="For login">
         <cfargument name="Lform" type="any" required="true">
 
         <cfquery name="local.checkUser" datasource="cfTask2">
@@ -94,7 +100,7 @@
             <cfif queryRecordCount(local.checkUser) EQ "1">
                 <cfset session.userId = local.checkUser.nameID />
                 <cfset session.userName = local.checkUser.username />
-<!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
+        <!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
                 <cfquery name="local.userCheck" datasource="cfTask2">    
                     SELECT 
                         T1.nameId_fk,
@@ -121,7 +127,7 @@
     </cffunction>
 
 
-    <cffunction  name="logout" returnType="void" access="public">
+    <cffunction  name="logout" returnType="void" access="public" hint="For logout">
 
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
@@ -133,7 +139,7 @@
     </cffunction>
 
     
-    <cffunction name="Addcontact" returnType="void" access="public">
+    <cffunction name="Addcontact" returnType="void" access="public" hint="To create new contacts in the contact table">
         <cfargument name="form" type="any" required="true" >
 
         <cfif NOT len(arguments.form.title)
@@ -184,7 +190,7 @@
         </cfif>
     </cffunction>
 
-    <cffunction  name="getContacts" returnType="query" access="public">
+    <cffunction  name="getContacts" returnType="query" access="public" hint="To fetch the contacts table to show in the list">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
@@ -223,7 +229,7 @@
         <cfreturn local.getContacts>
     </cffunction>
 
-    <cffunction  name="userDetails" access="public" returnType="query">
+    <cffunction  name="userDetails" access="public" returnType="query" hint="This is for Edit the contact details">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
@@ -236,7 +242,7 @@
         <cfreturn local.userDetails />
     </cffunction>
 
-    <cffunction name="updateDetails" returnType="void" access="public">
+    <cffunction name="updateDetails" returnType="void" access="public" hint="To update the contact details">
         <cfargument  name="form" type="any" required="true">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
@@ -278,7 +284,7 @@
         </cfif>
     </cffunction>
 
-    <cffunction  name="deleteUser" returnType="void" access="public">
+    <cffunction  name="deleteUser" returnType="void" access="public" hint="This is for delete contacts">
             <cfif structKeyExists(url, "delete") AND url.delete EQ "true" AND structKeyExists(url, "userid")>
                 <cfquery name="local.deleteUser" datasource="cfTask2">
                     UPDATE 
@@ -292,7 +298,7 @@
             </cfif>
     </cffunction>
 
-    <cffunction  name="viewUser" returnType="query" access="public">
+    <cffunction  name="viewUser" returnType="query" access="public" hint="this to view contact deatils for each user">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
@@ -328,6 +334,34 @@
             <cflocation  url="list.cfm">
         </cfif>
         <cfreturn local.viewUser/>
+    </cffunction>
+
+
+    <cffunction  name="getData" returnType="query" access="public" hint="Fetching contacts table for pdf and excel download">
+        <cfquery name="local.pdfData" datasource="cfTask2">
+            SELECT 
+                t1.nameID AS ID,
+                t2.userId,
+                concat(t2.title, " ", t2.fname, " ", t2.lname) as fullname,
+                t1.email,
+                t2.gender,
+                t2.DOB,
+                t2.photoName,
+                t2.phone,
+                t2.address,
+                t2.street
+            FROM 
+                registerForm AS t1
+            INNER JOIN 
+                contacts AS t2
+            ON 
+                t2.nameId_fk = t1.nameId
+            WHERE
+                t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+            ORDER BY ID
+        </cfquery>
+
+        <cfreturn local.pdfData />
     </cffunction>
     
 </cfcomponent>
