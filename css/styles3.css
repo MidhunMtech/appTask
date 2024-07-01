@@ -67,11 +67,11 @@ header ul li a:hover {
 }
 
 .left-section {
-    width: 15%;
+    /* width: 100%; */
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    height: 110px;
+    height: 130px;
     text-align: center;
 }
 
@@ -97,17 +97,16 @@ header ul li a:hover {
     background-color: #0f6096;
 }
 
-.left-section {
-    margin-right: 5%;
-}
-
 .right-section {
-    width: 80%;
+    /* width: 100%; */
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
 }
 .h {
     color: green;
+}
+.modal-lg-custom {
+    max-width: 50%; /* modal width */
 }
 
