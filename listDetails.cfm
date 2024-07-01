@@ -27,9 +27,9 @@
                         <td class="photo"><img src="uploads/#contacts.photoName#" alt="Photo"></td>
                         <td>#contacts.fullname#</td>
                         <td>#contacts.phone#</td>
-                        <td><a class="edit" href="edit.cfm?userid=#userId#">Edit</a></td>
-                        <td><a class="edit" href="list.cfm?userid=#userId#&delete=true">Delete</a></td>
-                        <td><a class="edit" href="view.cfm?userid=#userId#">View</a></td>
+                        <td><a class="edit" href="edit.cfm?userid=#contacts.userId#">Edit</a></td>
+                        <td><a class="edit" href="list.cfm?userid=#contacts.userId#&delete=true">Delete</a></td>
+                        <td><a class="edit" href="view.cfm?userid=#contacts.userId#">View</a></td>
                     </tr>
                 </cfoutput>
             <cfcatch>
@@ -39,4 +39,5 @@
         </tbody>
     </table>
 </body>
+
 

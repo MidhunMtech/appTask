@@ -32,4 +32,5 @@ tr:nth-child(even) {
 
 .edit:hover {
     background-color: aqua;
+    text-decoration: none;
 }

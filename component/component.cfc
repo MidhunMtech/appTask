@@ -66,7 +66,19 @@
             <cfif structKeyExists(url, "error") AND url.error EQ "6">
                 <cfset local.error = "<p style='color: red;'>Need to fill USERNAME and PASSWORD. try again..</p>" />
             </cfif>
-            <cfif structKeyExists(url, "pdf") AND url.pdf EQ "true">
+            
+        <cfreturn local.error />
+        <cfcatch>
+            <cfdump  var="#cfcatch#">
+        </cfcatch>
+        </cftry>
+    </cffunction>
+
+
+    <cffunction  name="errorMessageList" returnType="string" access="public" hint="All the Error messages">
+        <cftry>
+            <cfset local.error = ""/>
+                <cfif structKeyExists(url, "pdf") AND url.pdf EQ "true">
                 <cfset local.error = "<p style='color: green; text-align:center;'>PDF download Successfully....</p>" />
             </cfif>
             <cfif structKeyExists(url, "print") AND url.print EQ "true">
@@ -154,7 +166,7 @@
             OR NOT len(arguments.form.address)
             OR NOT len(arguments.form.street)
             OR NOT len(arguments.form.photo)>
-            <cflocation  url="create.cfm?error=3">
+            <cflocation  url="?error=3">
         <cfelse>
             <cffile  action="upload"
                 destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
@@ -259,7 +271,7 @@
             OR NOT len(arguments.form.address)
             OR NOT len(arguments.form.street)
             OR NOT len(arguments.form.photo)>
-            <cflocation  url="create.cfm?error=3">
+            <cflocation  url="edit.cfm?error=3">
         <cfelse> 
             <cffile  action="upload"
                 destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 

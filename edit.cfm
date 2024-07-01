@@ -20,12 +20,12 @@
                 <li><a href="list.cfm">List</a></li>
             </ul>
         </nav>
-        <div class="container">
+        <div class="container2">
             <h1>Contact Details</h1>
             <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
             <cfoutput>#errorMsg#</cfoutput>
             <cfoutput>
-                <form action="" method="post" enctype="multipart/form-data">
+                <form id="editForm" action="" method="post" enctype="multipart/form-data">
                     <fieldset>
                         <legend>Personal Details</legend>
                         <div class="form-group">
@@ -82,7 +82,7 @@
                         </div>
                     </fieldset>
                     <input type="hidden" name="userid" value="#userDetails.userId#">
-                    <button type="submit" name="submit">Update</button>
+                    <button class="btn2" type="submit" name="submit">Update</button>
                 </form>
             </cfoutput>
         </div>
@@ -98,3 +98,4 @@
     <cfdump  var="#cfcatch#">
 </cfcatch>
 </cftry>
+
