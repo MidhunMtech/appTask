@@ -1,3 +1,5 @@
+
+
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <!DOCTYPE html>
 <html lang="en">
@@ -14,11 +16,11 @@
                 <li><a href="list.cfm">List</a></li>
             </ul>
         </nav>
-        <div class="container">
+        <div class="container1">
             <h1>Contact Details</h1>
             <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
             <cfoutput>#errorMsg#</cfoutput>
-            <form action="" method="post" enctype="multipart/form-data">
+            <form id="createForm" action="" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Personal Details</legend>
                     <div class="form-group">
