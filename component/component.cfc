@@ -159,7 +159,10 @@
     
     <cffunction name="Addcontact" returnType="void" access="public" hint="To create new contacts in the contact table">
         <cfargument name="form" type="any" required="true" >
-
+        
+        <cfif NOT structKeyExists(session, "userId")>
+            <cflocation  url="login.cfm">
+        </cfif>
         <cfif NOT len(arguments.form.title)
             OR NOT len(arguments.form.fname)
             OR NOT len(arguments.form.lname)
@@ -252,6 +255,10 @@
     <cffunction name="userDetails1" access="remote" returnformat="json" hint="datas to show for update">
         <cfargument name="userid" type="numeric" required="true"> 
         
+        <cfif NOT structKeyExists(session, "userId")>
+            <cflocation  url="login.cfm">
+        </cfif>
+
         <cfquery name="local.getUser" datasource="cfTask2">
             SELECT 
                 t1.title as title_name,
@@ -432,5 +439,5 @@
 
         <cfreturn local.title>
     </cffunction>
-    
+
 </cfcomponent>

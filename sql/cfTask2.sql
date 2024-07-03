@@ -12,9 +12,9 @@ CREATE TABLE registerForm (
 
 -- Disable foreign key checks
 SET FOREIGN_KEY_CHECKS = 0;
-
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
+
  SELECT * FROM registerForm;
  truncate table registerForm;
  
@@ -31,7 +31,7 @@ SET FOREIGN_KEY_CHECKS = 1;
     ("Mrs."),
     ("Dr.");
     
- select * from title_names;
+ SELECT * FROM title_names;
  
  CREATE TABLE contacts (
 	userId INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,6 +79,7 @@ MODIFY COLUMN `delete` INT DEFAULT FALSE;
 ALTER TABLE contacts
 CHANGE `delete` is_delete INT DEFAULT FALSE;
 
+-- to disable the safe updates mode
 SET SQL_SAFE_UPDATES = 0;
 /*update contacts
 set `delete` = 0

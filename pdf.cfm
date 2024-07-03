@@ -1,4 +1,5 @@
 <cfinvoke component="component.component" method="getData" returnvariable="getData">
+<link rel="stylesheet" href="css/styles7.css">  
 <cfset pdfPath = expandPath("./downloads/pdf/addressBook.pdf")>
 <cfdocument format="PDF" filename="#pdfPath#" name="pdfDoc" overwrite="yes">
     <cfoutput>
