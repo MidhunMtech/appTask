@@ -1,4 +1,5 @@
 <cfcomponent>
+    
     <cffunction  name="registerForm" returnType="void" access="public" hint="For register">
         <cfargument  name="form" type="any" required="true">
         <cfdump  var="#form#">
@@ -75,7 +76,7 @@
     </cffunction>
 
 
-    <cffunction  name="errorMessageList" returnType="string" access="public" hint="All the Error messages">
+    <cffunction  name="errorMessageList" returnType="string" access="public" hint="All the Error messages in the list page">
         <cftry>
             <cfset local.error = ""/>
                 <cfif structKeyExists(url, "pdf") AND url.pdf EQ "true">
@@ -84,8 +85,11 @@
             <cfif structKeyExists(url, "print") AND url.print EQ "true">
                 <cfset local.error = "<p style='color: green; text-align:center;'>Print done Successfully....</p>" />
             </cfif>
-            <cfif structKeyExists(session, "excel") AND session.excel EQ "true">
+            <cfif structKeyExists(url, "excel") AND url.excel EQ "true">
                 <cfset local.error = "<p style='color: green; text-align:center;'>Excel download Successfully....</p>" />
+            </cfif>
+            <cfif structKeyExists(url, "error") AND url.error EQ "30" >
+                <cfset local.error = "<p style='color: red; text-align:center;'>Update failed. Try again....</p>" />
             </cfif>
         <cfreturn local.error />
         <cfcatch>
@@ -116,7 +120,7 @@
                 <cfset session.userId = local.checkUser.nameID />
                 <cfset session.userName = local.checkUser.username />
         <!-- Query for checking user details exists in the contacts table, If exists redirect to list.cfm -->
-                <cfquery name="local.userCheck" datasource="cfTask2">    
+                <!--- <cfquery name="local.userCheck" datasource="cfTask2">    
                     SELECT 
                         T1.nameId_fk,
                         T2.nameID
@@ -132,9 +136,8 @@
                 </cfquery>
                 <cfif queryRecordCount(local.userCheck) EQ "0"> <!-- If user exists redirect to list.cfm -->
                     <cflocation url="create.cfm" />
-                <cfelse>
-                    <cflocation  url="list.cfm">
-                </cfif>
+                <cfelse> --->
+                <cflocation  url="list.cfm">  
             <cfelse>
                 <cflocation  url="login.cfm?error=4">
             </cfif>
@@ -177,7 +180,7 @@
             <cfquery name="local.contactInsert" datasource="cfTask2">
                 INSERT INTO 
                     contacts(
-                        title,
+                        title_id,
                         fname,
                         lname,
                         gender,
@@ -212,6 +215,7 @@
         <cfquery name="local.getContacts" datasource="cfTask2">
             SELECT 
                 concat(fname," ",lname) AS fullname,
+                title_id,
                 phone,
                 photoName,
                 userId,
@@ -223,8 +227,8 @@
         </cfquery>
         <cfset session.photo = local.getContacts.photoName />
 
-<!-- Query for checking user details exists in the contacts table, If not exists redirect to create.cfm -->
-        <cfquery name="local.contactCheck" datasource="cfTask2">
+<!--- Query for checking user details exists in the contacts table, If not exists redirect to create.cfm --->
+        <!---<cfquery name="local.contactCheck" datasource="cfTask2">
             SELECT 
                 T1.nameID,
                 T2.nameId_fk
@@ -238,13 +242,46 @@
                 T1.nameID = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                 AND T2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
         </cfquery>
-        <cfif queryRecordCount(local.contactCheck) EQ "0"> <!--If user details not exists redirect to create.cfm -->
+         <cfif queryRecordCount(local.contactCheck) EQ "0"> <!--If user details not exists redirect to create.cfm -->
             <cflocation  url="create.cfm">
-        </cfif>
+        </cfif> --->
         <cfreturn local.getContacts>
     </cffunction>
 
-    <cffunction  name="userDetails" access="public" returnType="query" hint="This is for Edit the contact details">
+
+    <cffunction name="userDetails1" access="remote" returnformat="json" hint="datas to show for update">
+        <cfargument name="userid" type="numeric" required="true"> 
+        
+        <cfquery name="local.getUser" datasource="cfTask2">
+            SELECT 
+                t1.title as title_name,
+                fname, 
+                lname, 
+                gender, 
+                DOB, 
+                photoName, 
+                phone, 
+                address, 
+                street,
+                userId,
+                T2.title_id
+            FROM 
+                title_names as T1
+            INNER JOIN
+                contacts AS T2
+            ON 
+                T1.title_id = T2.title_id
+            WHERE 
+                userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn local.getUser>
+        <!---<cfreturn local.getUser />--->
+    </cffunction>
+
+
+
+
+    <!---<cffunction  name="userDetails" access="public" returnType="query" hint="This is for Edit the contact details">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
@@ -255,14 +292,14 @@
                 userId = <cfqueryparam value="#url.userid#" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfreturn local.userDetails />
-    </cffunction>
+    </cffunction> --->
 
     <cffunction name="updateDetails" returnType="void" access="public" hint="To update the contact details">
         <cfargument  name="form" type="any" required="true">
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
-        <cfif NOT len(arguments.form.title)
+<!---         <cfif NOT len(arguments.form.title)
             OR NOT len(arguments.form.fname)
             OR NOT len(arguments.form.lname)
             OR NOT len(arguments.form.gender)
@@ -272,31 +309,30 @@
             OR NOT len(arguments.form.street)
             OR NOT len(arguments.form.photo)>
             <cflocation  url="edit.cfm?error=3">
-        <cfelse> 
-            <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
-                fileField="form.photo" 
-                nameConflict="makeunique">
-            <cfset local.photoName = cffile.serverfile />
+        <cfelse> ---> 
+        <cffile  action="upload"
+            destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
+            fileField="form.photo" 
+            nameConflict="makeunique">
+        <cfset local.photoName = cffile.serverfile />
 
-            <cfquery name="local.contactInsert" datasource="cfTask2">
-                UPDATE 
-                    contacts
-                SET 
-                    title = <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_varchar">,
-                    fname = <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
-                    lname = <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
-                    gender = <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
-                    DOB = <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
-                    PhotoName = <cfqueryparam value="#local.photoName#" cfsqltype="cf_sql_varchar">,
-                    phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
-                    address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
-                    street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">
-                WHERE
-                    userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
-            </cfquery>
-            <cflocation  url="list.cfm">
-        </cfif>
+        <cfquery name="local.contactInsert" datasource="cfTask2">
+            UPDATE 
+                contacts
+            SET 
+                title_id = <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_varchar">,
+                fname = <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
+                lname = <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
+                gender = <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
+                DOB = <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
+                PhotoName = <cfqueryparam value="#local.photoName#" cfsqltype="cf_sql_varchar">,
+                phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">
+            WHERE
+                userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cflocation  url="list.cfm">
     </cffunction>
 
     <cffunction  name="deleteUser" returnType="void" access="public" hint="This is for delete contacts">
@@ -313,24 +349,25 @@
             </cfif>
     </cffunction>
 
-    <cffunction  name="viewUser" returnType="query" access="public" hint="this to view contact deatils for each user">
+    <cffunction  name="viewUser" access="remote" returnformat="json" hint="this to view contact deatils for each user">
+        <cfargument name="userid" type="numeric" required="true"> 
         <cfif NOT structKeyExists(session, "userId")>
             <cflocation  url="login.cfm">
         </cfif>
         <cfif structKeyExists(url, "userid")>
             <cftry>
-<!--This is to fetech email from registerForm table  and other details from contacts table -->
+
                 <cfquery name="local.viewUser" datasource="cfTask2">
                     SELECT 
-                        t1.email,
-                        t2.userId,
+                        t1.email as email,
+                        t2.userId as userId,
                         concat(t2.fname," ",t2.lname) as fullname,
-                        t2.gender,
-                        t2.DOB,
-                        t2.photoName,
-                        t2.phone,
-                        t2.address,
-                        t2.street
+                        t2.gender as gender,
+                        t2.DOB as DOB,
+                        t2.photoName as PhotoName,
+                        t2.phone as phone,
+                        t2.address as address,
+                        t2.street as street
                     FROM 
                         registerForm AS t1
                     INNER JOIN 
@@ -338,7 +375,7 @@
                     ON 
                         t2.nameId_fk = t1.nameId
                     WHERE
-                        t2.userId = <cfqueryparam value="#url.userid#" cfsqltype="cf_sql_integer">
+                        t2.userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
                 </cfquery>
             <cfcatch>
                 <cfdump  var="#cfcatch#">
@@ -361,7 +398,7 @@
             SELECT 
                 t1.nameID AS ID,
                 t2.userId,
-                concat(t2.title, " ", t2.fname, " ", t2.lname) as fullname,
+                concat(t2.fname, " ", t2.lname) as fullname,
                 t1.email,
                 t2.gender,
                 t2.DOB,
@@ -381,6 +418,19 @@
         </cfquery>
 
         <cfreturn local.pdfData />
+    </cffunction>
+
+    
+    <cffunction  name="title" access="public" returnType="query">
+        <cfquery name="local.title" datasource="cfTask2">
+            SELECT
+                title_id,
+                title
+            FROM
+                title_names
+        </cfquery>
+
+        <cfreturn local.title>
     </cffunction>
     
 </cfcomponent>
