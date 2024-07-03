@@ -1,16 +1,10 @@
 $(document).ready(function() {
     $("#createId").click(function() {
-        $("#myModal").fadeIn(function() {
-            // $("#edit").hide();
-            $("#createPop").show();
-        });
+        $("#myModal").fadeIn();
     });
 
     $(".close").click(function() {
-        $("#myModal").fadeOut(function() {
-            $("#createPop").hide();
-            // $("#edit").hide();
-        });
+        $("#myModal").fadeOut();
     });
     
     
@@ -20,21 +14,9 @@ $(document).ready(function() {
         $('#myModal').show();
     }
 
-    /*$(".close").click(function() {
-    $("#myModal").fadeOut();
-    });*/
-
-    // Close modal when clicking outside of it
-    // $(window).click(function(event) {
-    //     if (event.target == $("#myModal")[0]) {
-    //         $("#myModal").fadeOut();
-    //     }
-    // });
-
 
     $(".editPop").click(function() {
         var userId = $(this).data('userid');
-        // var url = '../appTask/component/component.cfc?method=userDetails1&userid='+ userId;
         $.ajax({
             url: '../appTask/component/component.cfc?method=userDetails1',
             method: 'POST',
@@ -43,12 +25,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 var userData = JSON.parse(response);
-                console.log(userData); 
                 $('#myModal2').show();
-
-                console.log(userData.DATA[0][1]);// Assuming your server response is JSON
-                console.log(userData.DATA[0][10]); 
-                console.log(userData.DATA[0][9]);
 
                 $('.title').val(userData.DATA[0][10]);
                 $('.title').text(userData.DATA[0][0]);
@@ -76,11 +53,7 @@ $(document).ready(function() {
         $("#myModal2").fadeOut()
     });
 
-    // $(window).click(function(event) {
-    //     if (event.target == $("#myModal2")[0]) {
-    //         $("#myModal2").fadeOut();
-    //     }
-    // });
+    
     
     $("#submitId").click(function() {
         var title = $(".title").val();
@@ -96,64 +69,18 @@ $(document).ready(function() {
 
 		var valid = true;
 
-        if(title.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-
-        if(fname.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-
-        if(lname.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(gender.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(dob.length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(photo.length == "") {
-            $("#label1").show();
-            console.log("1");
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(phone.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(address.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(street.trim().length == "") {
-            $("#label1").show();
-            valid = false;
-        } else {
-            $("#label1").hide();  
-        }
-        if(userid.trim().length == "") {
+        if (
+            title.trim().length == "" 
+            || fname.trim().length == "" 
+            || lname.trim().length == "" 
+            || gender.trim().length == "" 
+            || dob.length == "" 
+            || photo.length == "" 
+            || phone.trim().length == "" 
+            || address.trim().length == "" 
+            || street.trim().length == "" 
+            || userid.trim().length == ""
+        ) {
             $("#label1").show();
             valid = false;
         } else {
@@ -163,7 +90,6 @@ $(document).ready(function() {
         return valid;
     });
 
-    
     
     
     $(".viewPop").click(function() {
@@ -177,9 +103,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 var userData = JSON.parse(response);
-                console.log(userData); 
                 $('#myModal3').show();  
-                console.log(userData.DATA[0][1]);
                 var img = "uploads/" + userData.DATA[0][5]
                 $('.fullnameView').text(userData.DATA[0][2]);
                 $('.viewEmail').text(userData.DATA[0][0]);
@@ -194,43 +118,15 @@ $(document).ready(function() {
 
 
     $(".close").click(function() {
-        $("#myModal3").fadeOut()
+        $("#myModal3").hide()
+    });
+
+
+    // Close modal when clicking outside of it
+    $(window).click(function(event) {
+        if (event.target == $("#myModal3")[0]) {
+            $("#myModal3").hide();
+        }
     });
     
 });
-
-
-
-
-
-
-/*
-
-$(".editPop").click(function() {
-    var userId = $(this).data('userid'); // Assuming you have a data-userid attribute on your #editPop element
-    $.ajax({
-        url: 'component/component.cfc?method=userDetails1',
-        method: 'POST',
-        data: {
-            userid: userId
-        },
-        success: function(response) {
-            var userData = JSON.parse(response); // Assuming your server response is JSON
-            $('#title').val(userData.title);
-            $('#fname').val(userData.fname);
-            $('#lname').val(userData.lname);
-            $('#gender').val(userData.gender);
-            $('#dob').val(userData.DOB);
-            $('#photo').val(userData.photoName);
-            $('#phone').val(userData.phone);
-            $('#address').val(userData.address);
-            $('#street').val(userData.street);
-            // Assign other fields similarly
-            $('#myModal2').show();
-        },
-        error: function(xhr, status, error) {
-            console.error("An error occurred: " + error);
-        }
-    });
-});
-*/
