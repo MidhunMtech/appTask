@@ -1,10 +1,10 @@
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <cftry>
-    <cfinvoke  component="component.component" method="userDetails" returnvariable="userDetails">
+    <cfinvoke  component="component.component" method="userDetails1" userid="" returnvariable="userDetails">
 <cfcatch>
     <cfdump  var="#cfcatch#">
 </cfcatch>
-</cftry>
+</cftry>--->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="gender">Gender <span>*</span></label>
                             <select id="gender" name="gender">
-                                <option value="#userDetails.gender#">#userDetails.gender#</option>
+                                <option value="#userDetails.gender#"></option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group">
                             <label for="photo">Photo <span>*</span></label>
-                            <input type="file" id="photo" name="photo" value="#userDetails.photoName#" accept="image/*" required>
+                            <input type="file" id="photo" name="photo" value="" accept="image/*" required>
                             <img id="preview" src="" alt="#userDetails.photoName#">
                         </div>
                     </fieldset>
@@ -88,7 +88,8 @@
         </div>
     </body>
 </html>
-
+<script src="js/jquery.min.js"></script>
+<script src="js/modal.js"></script>
 <cftry>
     <cfif structKeyExists(form, "submit")>
         <cfset updateCFC = createObject("component", "component.component") />
@@ -98,4 +99,5 @@
     <cfdump  var="#cfcatch#">
 </cfcatch>
 </cftry>
+
 

@@ -47,7 +47,6 @@
         </cfoutput>
         <div>
             <button id="print">Print</button>
-            <!--- <a href="javascript:window.print()">Print Data</a> --->
         </div>
     </body>
 <html>

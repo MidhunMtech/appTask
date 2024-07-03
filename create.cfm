@@ -1,5 +1,5 @@
 
-
+<cfinvoke component="component.component" method="title" returnvariable="title">
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +20,7 @@
             <h1>Contact Details</h1>
             <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
             <cfoutput>#errorMsg#</cfoutput>
+
             <form id="createForm" action="" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Personal Details</legend>
@@ -27,20 +28,24 @@
                         <label for="title">Title <span>*</span></label>
                         <select id="title" name="title">
                             <option value=""></option>
-                            <option value="Mr.">Mr.</option>
-                            <option value="Ms.">Ms.</option>
-                            <option value="Mrs.">Mrs.</option>
-                            <option value="Dr.">Dr.</option>
+                            <cfloop query="title">
+                                <cfoutput>
+                                    <option value="#title.title_id#">#title.title#</option>
+                                </cfoutput>
+                            </cfloop>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="fname">First Name <span>*</span></label>
                         <input type="text" id="fname" name="fname" >
                     </div>
+
                     <div class="form-group">
                         <label for="lname">Last Name <span>*</span></label>
                         <input type="text" id="lname" name="lname" >
                     </div>
+                    
                     <div class="form-group">
                         <label for="gender">Gender <span>*</span></label>
                         <select id="gender" name="gender">
@@ -50,10 +55,12 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="dob">Date of Birth <span>*</span></label>
                         <input type="date" id="dob" name="dob" >
                     </div>
+
                     <div class="form-group">
                         <label for="photo">Photo <span>*</span></label>
                         <input type="file" id="photo" name="photo" accept="image/*">
@@ -61,15 +68,19 @@
                 </fieldset>
 
                 <fieldset>
+
                     <legend>Contact Details</legend>
+                    
                     <div class="form-group">
                         <label for="phone">Phone No <span>*</span></label>
                         <input type="text" id="phone" name="phone" >
                     </div>
+
                     <div class="form-group">
                         <label for="address">Address <span>*</span></label>
                         <input type="text" id="address" name="address" >
                     </div>
+
                     <div class="form-group">
                         <label for="street">Street <span>*</span></label>
                         <input type="text" id="street" name="street" >

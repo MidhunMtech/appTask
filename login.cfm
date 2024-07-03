@@ -25,12 +25,15 @@
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username">
                 </div>
+
                 <div class="input-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password">
                 </div>
+
                 <button type="submit" name="submit">Login</button>
             </form>
+            
             <p class="register">Don't have an account? <a href="register.cfm">Register here</a></p>
         </div>
     </body>

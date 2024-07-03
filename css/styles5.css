@@ -28,6 +28,7 @@ tr:nth-child(even) {
     border-radius: 15px;
     padding: 10px 20px;
     color: black;
+    cursor: pointer;
 }
 
 .edit:hover {
