@@ -1,4 +1,3 @@
-<cftry>
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <cfinvoke component="component.component" method="title" returnvariable="title">
 <!DOCTYPE html>
@@ -153,7 +152,3 @@
 
     </body>
 </html>
-<cfcatch type="any">
-<cfdump  var="#cfcatch#">
-</cfcatch>
-</cftry>
