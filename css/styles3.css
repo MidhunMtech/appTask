@@ -208,3 +208,10 @@ header ul li a:hover {
     padding: 10px 20px;
     margin-top: 10px;
 }
+.error1 {
+    display: none;
+    color: red;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}

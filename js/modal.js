@@ -57,34 +57,78 @@ $(document).ready(function() {
     
     $("#submitId").click(function() {
         var title = $(".title").val();
-		var fname = $(".fname").val();
-		var lname = $(".lname").val();
-		var gender = $(".gender").val();
-		var phone = $(".phone").val();
-		var address = $(".address").val();
-		var street = $(".street").val();
-		var dob = $(".dob").val();
-		var photo = $(".photo1").val();
-		var userid = $(".userid").val();
+        var fname = $(".fname").val();
+        var lname = $(".lname").val();
+        var gender = $(".gender").val();
+        var phone = $(".phone").val();
+        var address = $(".address").val();
+        var street = $(".street").val();
+        var dob = $(".dob").val();
+        var photo = $(".photo1").val();
 
-		var valid = true;
+        var valid = true;
 
-        if (
-            title.trim().length == "" 
-            || fname.trim().length == "" 
-            || lname.trim().length == "" 
-            || gender.trim().length == "" 
-            || dob.length == "" 
-            || photo.length == "" 
-            || phone.trim().length == "" 
-            || address.trim().length == "" 
-            || street.trim().length == "" 
-            || userid.trim().length == ""
-        ) {
-            $("#label1").show();
+        if(title.trim().length == "") {
+            $("#l1_title").show();
             valid = false;
         } else {
-            $("#label1").hide();  
+            $("#l1_title").hide();
+        }
+
+        if(fname.trim().length == "") {
+            $("#l1_fname").show();
+            valid = false;
+        } else {
+            $("#l1_fname").hide();  
+        }
+
+        if(lname.trim().length == "") {
+            $("#l1_lname").show();
+            valid = false;
+        } else {
+            $("#l1_lname").hide();  
+        }
+
+        if(gender.trim().length == "") {
+            $("#l1_gender").show();
+            valid = false;
+        } else {
+            $("#l1_gender").hide();  
+        }
+
+        if(dob.trim().length == "") {
+            $("#l1_dob").show();
+            valid = false;
+        } else {
+            $("#l1_dob").hide();  
+        }
+
+        if (phone.trim().length == 0 || phone.length < 10 || isNaN(parseInt(phone))) {
+            $("#l1_phone").show();
+            valid = false;
+        } else {
+            $("#l1_phone").hide();  
+        }        
+
+        if(photo.length == "") {
+            $("#l1_file").show();
+            valid = false;
+        } else {
+            $("#l1_file").hide();  
+        }
+
+        if(address.trim().length == "") {
+            $("#l1_address").show();
+            valid = false;
+        } else {
+            $("#l1_address").hide();  
+        }
+
+        if(street.trim().length == "") {
+            $("#l1_street").show();
+            valid = false;
+        } else {
+            $("#l1_street").hide();  
         }
 
         return valid;
@@ -94,7 +138,6 @@ $(document).ready(function() {
     
     $(".viewPop").click(function() {
         var userid = $(this).data('userid');
-        console.log(userid);
         $.ajax({
             url: '../appTask/component/component.cfc?method=viewUser',
             method: 'GET',
@@ -128,5 +171,23 @@ $(document).ready(function() {
             $("#myModal3").hide();
         }
     });
+
+    $(document).off('click', '.deletePop').on('click', '.deletePop', function(){
+        var userid = $(this).data('userid');
+
+        if (confirm("Are you sure you want to delete this user?")) {
+            $.ajax({
+                url: '../appTask/component/component.cfc?method=deleteUser',
+                method: 'POST',
+                data: {
+                    userid: userid  
+                },
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        }
+    });
+    
     
 });

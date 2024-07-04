@@ -7,7 +7,7 @@ CREATE TABLE registerForm (
         fullname VARCHAR(50),
         email VARCHAR(50),
         username VARCHAR(50),
-        password VARCHAR(20)
+        password VARCHAR(250)
 );
 
 -- Disable foreign key checks
@@ -82,8 +82,8 @@ CHANGE `delete` is_delete INT DEFAULT FALSE;
 -- to disable the safe updates mode
 SET SQL_SAFE_UPDATES = 0;
 /*update contacts
-set `delete` = 0
-where `delete` = 1;*/
+set `is_delete` = 0
+where `is_delete` = 1;*/
 
 truncate table contacts;
 select * from contacts;
@@ -121,3 +121,12 @@ FROM
 INNER JOIN
 	contacts AS T2
 ON T1.title_id = T2.title_id;
+
+
+CREATE TABLE Users (
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (username)
+);
+
+select * from Users;

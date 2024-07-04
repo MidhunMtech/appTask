@@ -1,10 +1,10 @@
 <cfinvoke  component="component.component" method="getContacts" returnvariable="contacts">
-<cftry>
+<!--- <cftry>
     <cfinvoke component="component.component" method="deleteUser" returnvariable="delete">
 <cfcatch>
     <cfdump  var="#cfcatch#">
 </cfcatch>
-</cftry>
+</cftry> --->
 <head>
     <link rel="stylesheet" type="text/css" href="css/styles5.css">
 </head>
@@ -28,7 +28,7 @@
                         <td>#contacts.fullname#</td>
                         <td>#contacts.phone#</td>
                         <td><a class="edit editPop" data-userid="#contacts.userId#" >Edit</a></td>
-                        <td><a class="edit" href="list.cfm?userid=#contacts.userId#&delete=true">Delete</a></td>
+                        <td><a class="edit deletePop"  data-userid="#contacts.userId#">Delete</a></td>
                         <td><a class="edit viewPop" data-userid="#contacts.userId#">View</a></td>
                     </tr>
                 </cfoutput>

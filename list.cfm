@@ -8,6 +8,8 @@
         <title>List Page</title>
         <link rel="stylesheet" href="css/styles3.css">
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/modal.js"></script>
     </head>
     <body>
         <nav>
@@ -64,6 +66,7 @@
                         <legend>Personal Details</legend>
                         <div class="form-group">
                             <label for="title">Title <span>*</span></label>
+                            <p id="l1_title" class="error1">Invalid title. try again...</p>
                             <select name="title">
                                 <option class="title" value=""></option>
                                 <cfloop query="title">
@@ -76,16 +79,19 @@
 
                         <div class="form-group">
                             <label for="fname">First Name <span>*</span></label>
+                            <p id="l1_fname" class="error1">Invalid first name. try again...</p>
                             <input type="text" class="fname" id="fname" name="fname" value="">
                         </div>
 
                         <div class="form-group">
                             <label for="lname">Last Name <span>*</span></label>
+                            <p id="l1_lname" class="error1">Invalid last name. try again...</p>
                             <input type="text" class="lname" id="lname" name="lname" value="">
                         </div>
 
                         <div class="form-group">
                             <label for="gender">Gender <span>*</span></label>
+                            <p id="l1_gender" class="error1">Invalid gender. try again...</p>
                             <select class="gender" id="gender" name="gender">
                                 <option value=""></option>
                                 <option value="Male">Male</option>
@@ -96,11 +102,13 @@
 
                         <div class="form-group">
                             <label for="dob">Date of Birth <span>*</span></label>
+                            <p id="l1_dob" class="error1">Date of Birth is Mandatory!. try again...</p>
                             <input type="date" class="dob" id="dob" name="dob" value="" required>
                         </div>
 
                         <div class="form-group">
                             <label for="photo">Photo <span>*</span></label>
+                            <p id="l1_file" class="error1">File Upload is Mandatory!. try again...</p>
                             <input type="file" class="photo1" id="photo" name="photo" value="" accept="image/*" >
                         </div>
                     </fieldset>
@@ -109,16 +117,19 @@
                         <legend>Contact Details</legend>
                         <div class="form-group">
                             <label for="phone">Phone No <span>*</span></label>
+                            <p id="l1_phone" class="error1">Invalid phone number. try again...</p>
                             <input type="text" class="phone" id="phone" name="phone" value="">
                         </div>
 
                         <div class="form-group">
                             <label for="address">Address <span>*</span></label>
+                            <p id="l1_address" class="error1">Invalid address. try again...</p>
                             <input type="text" class="address" id="addres" name="address" value="">
                         </div>
 
                         <div class="form-group">
                             <label for="street">Street <span>*</span></label>
+                            <p id="l1_street" class="error1">Invalid street. try again...</p>
                             <input type="text" class="street" id="stree" name="street" value="">
                         </div>
                     </fieldset>
@@ -146,9 +157,6 @@
                     </div>
             </div>
         </div>
-
-        <script src="js/jquery.min.js"></script>
-        <script src="js/modal.js"></script>
 
     </body>
 </html>

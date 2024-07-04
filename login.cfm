@@ -1,19 +1,11 @@
-<cftry>
-    <cfif structKeyExists(form, "submit")>
-        <cfset loginCFC = createObject("component", "component.component") />
-        <cfset result = loginCFC.login(Lform=#form#) />
-    </cfif>
-<cfcatch>
-    <cfdump  var="#cfcatch#">
-</cfcatch>
-</cftry>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Login Page</title>
         <link rel="stylesheet" href="css/styles.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/login.js"></script>
     </head>
     <body>
         <div class="login-container">
@@ -23,15 +15,17 @@
             <form action="" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>
+                    <p id="l_username" class="error">Invalid username. try again...</p>
                     <input type="text" id="username" name="username">
                 </div>
 
                 <div class="input-group">
                     <label for="password">Password</label>
+                    <p id="l_password" class="error">Invalid Password. try again...</p>
                     <input type="password" id="password" name="password">
                 </div>
 
-                <button type="submit" name="submit">Login</button>
+                <button id="registerForm" type="submit" name="submit">Login</button>
             </form>
             
             <p class="register">Don't have an account? <a href="register.cfm">Register here</a></p>
@@ -39,3 +33,12 @@
     </body>
 </html>
 
+<cftry>
+    <cfif structKeyExists(form, "submit")>
+        <cfset loginCFC = createObject("component", "component.component") />
+        <cfset result = loginCFC.login(Lform=#form#) />
+    </cfif>
+<cfcatch>
+    <cfdump  var="#cfcatch#">
+</cfcatch>
+</cftry>

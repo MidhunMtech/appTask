@@ -128,3 +128,10 @@ img::before {
     width: 20%;
     text-align: center;
 }
+.error {
+    display: none;
+    color: red;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}

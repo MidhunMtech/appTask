@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register Page</title>
         <link rel="stylesheet" href="css/styles2.css" type="text/css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/register.js"></script>
     </head>
     <body>
 
@@ -21,21 +23,27 @@
             <cfoutput>#errorMsg#</cfoutput>
             <form action="" method="post">
                 <label for="fullname">Full Name</label>
+                <p id="l_fullname" class="error">Invalid fullname. try again...</p>
                 <input type="text" id="fullname" name="fullname" placeholder="Your name..">
 
                 <label for="email">Email</label>
+                <p id="l_email" class="error">Invalid email. try again...</p>
                 <input type="email" id="email" name="email" placeholder="Your email..">
 
                 <label for="username">Username</label>
+                <p id="l_username" class="error">Invalid username. try again...</p>
+                <p id="l_username2" class="error">Username exists. try again...</p>
                 <input type="text" id="username" name="username" placeholder="Your username.." >
 
                 <label for="psw">Password</label>
-                <input type="password" id="psw" name="password" placeholder="Your password.." >
+                <p id="l_password" class="error">Password must contain 8 characters!. try again...</p>
+                <input type="password" id="password" name="password" placeholder="Your password.." >
 
                 <label for="Cpsw">Confirm Password</label>
-                <input type="password" id="Cpsw" name="Cpassword" placeholder="Your password.." >
+                <p id="l_confirmPassword" class="error">password and confirm password not matching. try again...</p>
+                <input type="password" id="confirmPassword" name="Cpassword" placeholder="Your password.." >
 
-                <button type="submit" name="submit">Register</button>
+                <button type="submit" name="submit" id="registerForm">Register</button>
             </form>
         </div>
     </body>

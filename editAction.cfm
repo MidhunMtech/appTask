@@ -17,7 +17,7 @@
             <cfset updateCFC = createObject("component", "component.component") />
             <cfset result = updateCFC.updateDetails(form = #form#) />
     <cfcatch>
-        <cfdump  var="#cfcatch#" abort>
+        <cfdump  var="#cfcatch#">
     </cfcatch>
     </cftry>
 </cfif>
