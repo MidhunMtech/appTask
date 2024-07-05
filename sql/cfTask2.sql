@@ -7,8 +7,12 @@ CREATE TABLE registerForm (
         fullname VARCHAR(50),
         email VARCHAR(50),
         username VARCHAR(50),
-        password VARCHAR(250)
+        password VARCHAR(250),
+        salt VARCHAR(255) NOT NULL
 );
+
+ALTER TABLE registerForm
+ADD COLUMN salt VARCHAR(255) NOT NULL;
 
 -- Disable foreign key checks
 SET FOREIGN_KEY_CHECKS = 0;
