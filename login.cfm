@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <title>Login Page</title>
-        <link rel="stylesheet" href="css/styles.css">
+<!---         <link rel="stylesheet" href="css/styles.css"> --->
         <script src="js/jquery.min.js"></script>
         <script src="js/login.js"></script>
     </head>
     <body>
         <div class="login-container">
             <h2>Login</h2>
-            <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
+            <cfinvoke  component="component.component" method="errorMessageList" returnvariable="errorMsg">
             <cfoutput>#errorMsg#</cfoutput>
             <form action="" method="POST">
                 <div class="input-group">
@@ -37,6 +37,12 @@
     <cfif structKeyExists(form, "submit")>
         <cfset loginCFC = createObject("component", "component.component") />
         <cfset result = loginCFC.login(Lform=#form#) />
+
+        <cfif result EQ "1">
+            <cflocation url="list.cfm" />
+        <cfelse>
+            <cflocation url="login.cfm?error=1" />
+        </cfif>
     </cfif>
 <cfcatch>
     <cfdump  var="#cfcatch#">

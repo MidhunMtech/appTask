@@ -1,4 +1,7 @@
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
+<cfif logout EQ "1">
+    <cflocation  url="login.cfm">
+</cfif>
 <cfinvoke component="component.component" method="title" returnvariable="title">
 <!DOCTYPE html>
 <html lang="en">
@@ -26,9 +29,11 @@
             </ul>
         </header>
 
-        <cfinvoke  component="component.component" method="errorMessageList" returnvariable="errorMsg">
-        <cfoutput>#errorMsg#</cfoutput>
-
+        <p id="pdf" class="downloadMessage">PDF download Successfully....</p>
+        <p id="print" class="downloadMessage">Print done Successfully....</p>
+        <p id="excel" class="downloadMessage">Excel download Successfully....</p>
+        <p id="update" class="downloadMessage update">Update failed. Try again....</p>
+        
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-3">
@@ -60,84 +65,87 @@
         <div id="myModal2" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <form id="editForm" action="editAction.cfm" method="post" enctype="multipart/form-data">
-                    <p id="label1">Fill All Inputs. And try again....</p>
-                    <fieldset>
-                        <legend>Personal Details</legend>
-                        <div class="form-group">
-                            <label for="title">Title <span>*</span></label>
-                            <p id="l1_title" class="error1">Invalid title. try again...</p>
-                            <select name="title">
-                                <option class="title" value=""></option>
-                                <cfloop query="title">
-                                    <cfoutput>
-                                        <option value="#title.title_id#">#title.title#</option>
-                                    </cfoutput>
-                                </cfloop>
-                            </select>
-                        </div>
+                <div class="container1">
+                    <h1>Update Details</h1>
+                    <form id="editForm" action="editAction.cfm" method="post" enctype="multipart/form-data">
+                        <fieldset>
+                            <legend>Personal Details</legend>
+                            <div class="form-group">
+                                <label for="title">Title <span>*</span></label>
+                                <p id="l1_title" class="error1">Invalid title. try again...</p>
+                                <select name="title">
+                                    <option class="title" value=""></option>
+                                    <cfloop query="title">
+                                        <cfoutput>
+                                            <option value="#title.title_id#">#title.title#</option>
+                                        </cfoutput>
+                                    </cfloop>
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="fname">First Name <span>*</span></label>
-                            <p id="l1_fname" class="error1">Invalid first name. try again...</p>
-                            <input type="text" class="fname" id="fname" name="fname" value="">
-                        </div>
+                            <div class="form-group">
+                                <label for="fname">First Name <span>*</span></label>
+                                <p id="l1_fname" class="error1">Invalid first name. try again...</p>
+                                <input type="text" class="fname" id="efname" name="fname" value="">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="lname">Last Name <span>*</span></label>
-                            <p id="l1_lname" class="error1">Invalid last name. try again...</p>
-                            <input type="text" class="lname" id="lname" name="lname" value="">
-                        </div>
+                            <div class="form-group">
+                                <label for="lname">Last Name <span>*</span></label>
+                                <p id="l1_lname" class="error1">Invalid last name. try again...</p>
+                                <input type="text" class="lname" id="elname" name="lname" value="">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="gender">Gender <span>*</span></label>
-                            <p id="l1_gender" class="error1">Invalid gender. try again...</p>
-                            <select class="gender" id="gender" name="gender">
-                                <option value=""></option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="gender">Gender <span>*</span></label>
+                                <p id="l1_gender" class="error1">Invalid gender. try again...</p>
+                                <select class="gender" id="egender" name="gender">
+                                    <option value=""></option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="dob">Date of Birth <span>*</span></label>
-                            <p id="l1_dob" class="error1">Date of Birth is Mandatory!. try again...</p>
-                            <input type="date" class="dob" id="dob" name="dob" value="" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth <span>*</span></label>
+                                <p id="l1_dob" class="error1">Date of Birth is Mandatory!. try again...</p>
+                                <input type="date" class="dob" id="edob" name="dob" value="" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="photo">Photo <span>*</span></label>
-                            <p id="l1_file" class="error1">File Upload is Mandatory!. try again...</p>
-                            <input type="file" class="photo1" id="photo" name="photo" value="" accept="image/*" >
-                        </div>
-                    </fieldset>
-    
-                    <fieldset>
-                        <legend>Contact Details</legend>
-                        <div class="form-group">
-                            <label for="phone">Phone No <span>*</span></label>
-                            <p id="l1_phone" class="error1">Invalid phone number. try again...</p>
-                            <input type="text" class="phone" id="phone" name="phone" value="">
-                        </div>
+                            <div class="form-group">
+                                <label for="photo">Photo <span>*</span></label>
+                                <p id="l1_file" class="error1">File Upload is Mandatory!. try again...</p>
+                                <input type="file" class="photo1" id="ephoto" name="photo" value="" accept="image/*" >
+                                <span class="image"></span>
+                            </div>
+                        </fieldset>
+        
+                        <fieldset>
+                            <legend>Contact Details</legend>
+                            <div class="form-group">
+                                <label for="phone">Phone No <span>*</span></label>
+                                <p id="l1_phone" class="error1">Invalid phone number. try again...</p>
+                                <input type="text" class="phone" id="ephone" name="phone" value="">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="address">Address <span>*</span></label>
-                            <p id="l1_address" class="error1">Invalid address. try again...</p>
-                            <input type="text" class="address" id="addres" name="address" value="">
-                        </div>
+                            <div class="form-group">
+                                <label for="address">Address <span>*</span></label>
+                                <p id="l1_address" class="error1">Invalid address. try again...</p>
+                                <input type="text" class="address" id="eaddress" name="address" value="">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="street">Street <span>*</span></label>
-                            <p id="l1_street" class="error1">Invalid street. try again...</p>
-                            <input type="text" class="street" id="stree" name="street" value="">
-                        </div>
-                    </fieldset>
+                            <div class="form-group">
+                                <label for="street">Street <span>*</span></label>
+                                <p id="l1_street" class="error1">Invalid street. try again...</p>
+                                <input type="text" class="street" id="estreet" name="street" value="">
+                            </div>
+                        </fieldset>
 
-                    <input type="hidden" class="userid" name="userid" value="">
+                        <input type="hidden" class="userid" name="userid" value="">
 
-                    <button id="submitId" class="btn2" type="submit" name="submit">Update</button>
-                </form>
+                        <button id="submitId" class="btn2" type="submit" name="submit">Update</button>
+                    </form>
+                </div>
             </div>
         </div>
 

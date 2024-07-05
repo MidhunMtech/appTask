@@ -30,24 +30,23 @@ $(document).ready(function() {
                 $("#l_username").hide();  
         }
 
-        $.ajax({
-            url: '../appTask/component/component.cfc',
-            type: 'GET',
-            data: {
-                method: 'checkUsernameExists',
-                username: username
-            },
-            success: function(response) {
-                // ColdFusion returns a JSON string, parse it
-                var result = JSON.parse(response);
-                if (username in result) {
-                    $("#l_username2").show();
-                    valid = false;
-                } else {
-                        $("#l_username2").hide();  
-                }
-            }
-        });
+        // $.ajax({
+        //     url: '../appTask/component/component.cfc',
+        //     type: 'GET',
+        //     data: {
+        //         method: 'checkUsernameExists',
+        //         username: username
+        //     },
+        //     success: function(response) {
+        //         var result = JSON.parse(response);
+        //         if (username in result) {
+        //             $("#l_username2").show();
+        //             valid = false;
+        //         } else {
+        //                 $("#l_username2").hide();  
+        //         }
+        //     }
+        // });
 
         if(password.trim().length < 8 ) {
             $("#l_password").show();

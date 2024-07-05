@@ -1,4 +1,3 @@
-
 <cfinvoke component="component.component" method="title" returnvariable="title">
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <!DOCTYPE html>
@@ -20,7 +19,7 @@
         </nav>
         <div class="container1">
             <h1>Contact Details</h1>
-            <form id="createForm" action="" method="post" enctype="multipart/form-data">
+            <form id="createForm" action="createAction.cfm" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Personal Details</legend>
                     <div class="form-group">
@@ -95,18 +94,8 @@
                     </div>
                 </fieldset>
 
-                <button id="createSubmit" type="submit" name="submit">Submit</button>
+                <button id="createSubmit" type="submit" name="create">Submit</button>
             </form>
         </div>
     </body>
 </html>
-
-<cftry>
-    <cfif structKeyExists(form, "submit")>
-        <cfset contactCFC = createObject("component", "component.component") />
-        <cfset result = contactCFC.Addcontact(form = #form#) />
-    </cfif>
-<cfcatch >
-    <cfdump  var="#cfcatch#">
-</cfcatch>
-</cftry>

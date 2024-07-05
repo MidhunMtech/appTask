@@ -19,7 +19,7 @@
         </div>
         <div class="container">
             <h2>Signup Form</h2>
-            <cfinvoke  component="component.component" method="errorMessage" returnvariable="errorMsg">
+            <cfinvoke  component="component.component" method="errorMessageList" returnvariable="errorMsg">
             <cfoutput>#errorMsg#</cfoutput>
             <form action="" method="post">
                 <label for="fullname">Full Name</label>
@@ -51,10 +51,18 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset registerCFC = createObject("component", "component.component") />
+        <cfset registerCFC = createObject("component", "component.component") /> 
         <cfset result = registerCFC.registerForm(form = #form#)>
+
+        <cfif result EQ "1">
+            <cflocation  url="login.cfm">
+        <cfelse>
+            <cflocation  url="register.cfm?error=2">
+        </cfif>
     </cfif>
-<cfcatch><cfdump  var="#cfcatch#"></cfcatch>
+<cfcatch>
+    <cfdump  var="#cfcatch#">
+</cfcatch>
 </cftry>
 
 

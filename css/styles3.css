@@ -215,3 +215,17 @@ header ul li a:hover {
     margin: 0;
     padding: 0;
 }
+.image {
+    color: green;
+}
+.downloadMessage {
+    display: none;
+    color: green;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.update {
+    color: red;
+}

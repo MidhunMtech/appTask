@@ -10,10 +10,22 @@ $(document).ready(function() {
     
     var urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has('error') && urlParams.get('error') === '3') {
-        $('#myModal').show();
+    if (urlParams.get('pdf') === 'true') {
+        // Show the element with ID 'pdf'
+        $("#pdf").show();
     }
 
+    if (urlParams.get('print') === 'true') {
+        $("#print").show();
+    }
+
+    if (urlParams.get('excel') === 'true') {
+        $("#excel").show();
+    }
+
+    if (urlParams.get('error') === 'update') {
+        $("#update").show();
+    }
 
     $(".editPop").click(function() {
         var userId = $(this).data('userid');
@@ -25,6 +37,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 var userData = JSON.parse(response);
+                console.log(userData);
                 $('#myModal2').show();
 
                 $('.title').val(userData.DATA[0][10]);
@@ -32,6 +45,7 @@ $(document).ready(function() {
                 $('.fname').val(userData.DATA[0][1]);
                 $('.lname').val(userData.DATA[0][2]);
                 $('.gender').val(userData.DATA[0][3]);
+                $('.image').text(userData.DATA[0][5]);
                 $('.phone').val(userData.DATA[0][6]);
                 $('.address').val(userData.DATA[0][7]);
                 $('.street').val(userData.DATA[0][8]);

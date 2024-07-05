@@ -1,7 +1,4 @@
 <cfdump  var="#form#">
-<cfif NOT structKeyExists(session, "userId")>
-    <cflocation  url="login.cfm">
-</cfif>
 <cfif NOT len(form.title)
     OR NOT len(form.fname)
     OR NOT len(form.lname)
@@ -11,11 +8,16 @@
     OR NOT len(form.address)
     OR NOT len(form.street)
     OR NOT len(form.photo)>
-    <cflocation  url="list.cfm?error=30">
+    <cflocation  url="list.cfm?error=update">
 <cfelse>
     <cftry>
             <cfset updateCFC = createObject("component", "component.component") />
-            <cfset result = updateCFC.updateDetails(form = #form#) />
+            <cffile  action="upload"
+                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
+                fileField="form.photo" 
+                nameConflict="makeunique">
+            <cfset result = updateCFC.updateDetails(form = #form#, photo = cffile.serverfile) />
+            <cflocation  url="list.cfm">
     <cfcatch>
         <cfdump  var="#cfcatch#">
     </cfcatch>
