@@ -1,10 +1,10 @@
 <cfcomponent>
+
     <cfset this.name = "appTask">
     <cfset this.sessionManagement = true>
     <cfset this.sessionTimeout = createTimeSpan(0, 0, 5, 0)>
     <cfset this.setClientCookies = true>
     
-
     <cffunction name="onApplicationStart">
         <cfset application.component = createObject("component", "component.component") />
     </cffunction>
@@ -22,8 +22,7 @@
             AND listLast(arguments.targetPage, "/") != "test2.cfm">
 
             <cflocation url="login.cfm">
-        </cfif>
-        
+        </cfif> 
     </cffunction>
-
+    
 </cfcomponent>
