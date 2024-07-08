@@ -38,6 +38,9 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.input-group input:hover {
+    border: 1px solid #929090;
+}
 
 button {
     width: 100%;
@@ -51,10 +54,18 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #258128;
 }
 .register{
     margin-top: 20px;
+}
+.register a {
+    color: blue;
+    text-decoration: none;
+}
+.register a:hover {
+    color: black;
+    text-decoration: underline;
 }
 .error {
     display: none;
