@@ -9,7 +9,7 @@
             FROM 
                 registerForm
             WHERE 
-                username = <cfqueryparam value="#arguments.form.username#">
+                username = <cfqueryparam value="#arguments.form.username#" cfsqltype="#cf_sql_varchar#">
         </cfquery> 
         
         <cfif queryRecordCount(local.getRegister) EQ "0">
@@ -41,34 +41,6 @@
         </cfif>
 
         <cfreturn local.return />
-    </cffunction>
-
-
-    <cffunction name="checkUsernameExists" access="remote" returnformat="json">
-        <cfargument name="username" type="string" required="true">
-
-        <cfquery name="local.checkUser" datasource="cfTask2">
-            SELECT 
-                COUNT(*) AS userCount
-            FROM 
-                registerForm
-            WHERE 
-                username = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
-        </cfquery>
-
-        <cfreturn local.checkUser>
-    </cffunction>
-
-
-    <cffunction  name="errorMessageList" returnType="string" access="public" hint="All the Error messages in the list page">
-        <cfset local.error = ""/>
-        <cfif structKeyExists(url, "error") AND url.error EQ "2">
-            <cfset local.error = "<p style='color: red;'>Username exists. try again..</p>" />
-        </cfif>
-        <cfif structKeyExists(url, "error") AND url.error EQ "1">
-            <cfset local.error = "<p style='color: red;'>Username or Password not valid. try again..</p>" />
-        </cfif>
-            <cfreturn local.error />
     </cffunction>
 
 
@@ -286,7 +258,6 @@
                 t2.nameId_fk = t1.nameId
             WHERE
                 t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-            ORDER BY ID
         </cfquery>
 
         <cfreturn local.pdfData />
@@ -303,6 +274,18 @@
         </cfquery>
 
         <cfreturn local.title>
+    </cffunction>
+
+
+    <cffunction  name="errorMessageList" returnType="string" access="public" hint="All the Error messages in the list page">
+        <cfset local.error = ""/>
+        <cfif structKeyExists(url, "error") AND url.error EQ "2">
+            <cfset local.error = "<p style='color: red;'>Username exists. try again..</p>" />
+        </cfif>
+        <cfif structKeyExists(url, "error") AND url.error EQ "1">
+            <cfset local.error = "<p style='color: red;'>Username or Password not valid. try again..</p>" />
+        </cfif>
+            <cfreturn local.error />
     </cffunction>
 
 </cfcomponent>

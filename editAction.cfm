@@ -11,12 +11,12 @@
     <cflocation  url="list.cfm?error=update">
 <cfelse>
     <cftry>
-            <cfset updateCFC = createObject("component", "component.component") />
             <cffile  action="upload"
                 destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
-            <cfset result = updateCFC.updateDetails(form = #form#, photo = cffile.serverfile) />
+                
+            <cfset result = application.component.updateDetails(form = #form#, photo = cffile.serverfile) />
             <cflocation  url="list.cfm">
     <cfcatch>
         <cfdump  var="#cfcatch#">

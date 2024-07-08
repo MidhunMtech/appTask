@@ -35,8 +35,7 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset loginCFC = createObject("component", "component.component") />
-        <cfset result = loginCFC.login(Lform=#form#) />
+        <cfset result = application.component.login(Lform=#form#) />
 
         <cfif result EQ "1">
             <cflocation url="list.cfm" />

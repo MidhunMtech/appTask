@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Print</title>
         <script src="js/jquery.min.js"></script>
-        <script src="js/script.js"></script>
+        <script src="js/print.js"></script>
         <link rel="stylesheet" href="css/styles7.css">    
     </head>
     <body>

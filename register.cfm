@@ -9,7 +9,6 @@
         <script src="js/register.js"></script>
     </head>
     <body>
-
         <div class="navbar">
             <a href="">ADDRESS BOOK</a>
             <div class="right">
@@ -51,9 +50,7 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset registerCFC = createObject("component", "component.component") /> 
-        <cfset result = registerCFC.registerForm(form = #form#)>
-
+        <cfset result = application.component.registerForm(form = #form#)>
         <cfif result EQ "1">
             <cflocation  url="login.cfm">
         <cfelse>
@@ -64,6 +61,3 @@
     <cfdump  var="#cfcatch#">
 </cfcatch>
 </cftry>
-
-
-
