@@ -1,7 +1,6 @@
 <cfcomponent>
 
     <cffunction  name="registerForm" returnType="string" access="public" hint="For register">
-    
         <cfargument  name="form" type="any" required="true">
         <cfquery name="local.getRegister" datasource="cfTAsk2">
             SELECT 
@@ -119,7 +118,6 @@
 
 
     <cffunction  name="getContacts" returnType="query" access="public" hint="To fetch the contacts table to show in the list">
-
         <cfquery name="local.getContacts" datasource="cfTask2">
             SELECT 
                 concat(fname," ",lname) AS fullname,
@@ -218,7 +216,7 @@
                     t2.phone AS phone,
                     t2.address AS address,
                     t2.street AS street
-                FROM 
+                FROM
                     registerForm AS t1
                 INNER JOIN 
                     contacts AS t2
@@ -236,8 +234,7 @@
     </cffunction>
 
 
-    <cffunction  name="getData" returnType="query" access="public" hint="Fetching contacts table for pdf and excel download">
-        
+    <cffunction  name="getData" returnType="query" access="public" hint="Fetching contacts table for pdf, print, and excel download">
         <cfquery name="local.pdfData" datasource="cfTask2">
             SELECT 
                 t1.nameID AS ID,
