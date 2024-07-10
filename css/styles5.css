@@ -1,4 +1,3 @@
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -35,3 +34,28 @@ tr:nth-child(even) {
     background-color: aqua;
     text-decoration: none;
 }
+@media print {
+    head,
+    header, 
+    nav, 
+    .edit, 
+    .not-print, 
+    .lft, 
+    .downloadMessage {
+        display: none;
+    }
+  }
+  
+  /* Show only elements with the specified class when printing */
+@media print {
+    .to-print {
+        color: black;
+    }
+}
+
+.disable {
+    pointer-events: none;
+    color: gray; 
+    background-color: rgb(106, 131, 141);
+    cursor: not-allowed;
+  }

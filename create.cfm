@@ -92,8 +92,12 @@
                         <p id="l_street" class="error">Invalid street. try again...</p>
                         <input type="text" id="street" name="street" >
                     </div>
+                    
+                    <div class="check">
+                        <label class="checkBoxL" for="publicl">Make as Public: </label>
+                        <input class="checkBox" type="checkbox" id="publicl" name="public" value="Yes">
+                    </div>
                 </fieldset>
-
                 <button id="createSubmit" type="submit" name="create">Submit</button>
             </form>
         </div>

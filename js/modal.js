@@ -3,15 +3,15 @@ $(document).ready(function() {
         $("#myModal").fadeIn();
     });
 
+
     $(".close").click(function() {
         $("#myModal").fadeOut();
     });
-    
-    
+
+
     var urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.get('pdf') === 'true') {
-        // Show the element with ID 'pdf'
         $("#pdf").show();
     }
 
@@ -27,10 +27,12 @@ $(document).ready(function() {
         $("#update").show();
     }
 
+      
+
     $(".editPop").click(function() {
         var userId = $(this).data('userid');
         $.ajax({
-            url: '../appTask/component/component.cfc?method=userDetails1',
+            url: '../component/component.cfc?method=userDetails1',
             method: 'POST',
             data: {
                 userid: userId
@@ -40,22 +42,28 @@ $(document).ready(function() {
                 console.log(userData);
                 $('#myModal2').show();
 
-                $('.title').val(userData.DATA[0][10]);
-                $('.title').text(userData.DATA[0][0]);
-                $('.fname').val(userData.DATA[0][1]);
-                $('.lname').val(userData.DATA[0][2]);
-                $('.gender').val(userData.DATA[0][3]);
-                $('.image').text(userData.DATA[0][5]);
-                $('.phone').val(userData.DATA[0][6]);
-                $('.address').val(userData.DATA[0][7]);
-                $('.street').val(userData.DATA[0][8]);
-                $('.userid').val(userData.DATA[0][9]);
-                // Assign other fields similarly
-                var dateString = userData.DATA[0][4];
+                $('.title').val(userData.TITLE_ID);
+                $('.title').text(userData.TITLE_NAME);
+                $('.fname').val(userData.FNAME);
+                $('.lname').val(userData.LNAME);
+                $('.gender').val(userData.GENDER);
+                $('.image').text(userData.PHOTONAME);
+                $('.phone').val(userData.PHONE);
+                $('.address').val(userData.ADDRESS);
+                $('.street').val(userData.STREET);
+                $('.userid').val(userData.USERID);
+                // $('.title').val(userData.DATA[0][10]);
+                // changing format of DOB.
+                var dateString = userData.DOB;
                 var dateObj = new Date(dateString);
                 var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
                 $('.dob').val(formattedDate);
-                
+                if (userData.PUBLIC === "YES") {
+                    // console.log(userData.DATA[0][11]);
+                    $('.checkBox').prop('checked', true);
+                } else {
+                    $('.checkBox').prop('checked', false);   
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching user details:", error);
@@ -63,12 +71,12 @@ $(document).ready(function() {
         });
     });
     
+
     $(".close").click(function() {
         $("#myModal2").fadeOut()
     });
 
-    
-    
+
     $("#submitId").click(function() {
         var title = $(".title").val();
         var fname = $(".fname").val();
@@ -149,25 +157,26 @@ $(document).ready(function() {
     });
 
     
-    
     $(".viewPop").click(function() {
         var userid = $(this).data('userid');
         $.ajax({
-            url: '../appTask/component/component.cfc?method=viewUser',
+            url: '../component/component.cfc?method=viewUser',
             method: 'GET',
             data: {
                 userid: userid
             },
             success: function(response) {
                 var userData = JSON.parse(response);
+                // console.log(userData);
+                // console.log(userData.ADDRESS);
                 $('#myModal3').show();  
-                var img = "uploads/" + userData.DATA[0][5]
-                $('.fullnameView').text(userData.DATA[0][2]);
-                $('.viewEmail').text(userData.DATA[0][0]);
-                $('.phoneView').text(userData.DATA[0][6]);
-                $('.genderView').text(userData.DATA[0][3]);
-                $('.addressView').text(userData.DATA[0][7]);
-                $('.streetView').text(userData.DATA[0][8]);
+                var img = "uploads/" + userData.PHOTONAME
+                $('.fullnameView').text(userData.FULLNAME);
+                $('.viewEmail').text(userData.EMAIL);
+                $('.phoneView').text(userData.PHONE);
+                $('.genderView').text(userData.GENDER);
+                $('.addressView').text(userData.ADDRESS);
+                $('.streetView').text(userData.STREET);
                 $(".viewImg").attr("src", img);
             }
         });
@@ -186,12 +195,14 @@ $(document).ready(function() {
         }
     });
 
+
+    //For delete alert
     $(document).off('click', '.deletePop').on('click', '.deletePop', function(){
         var userid = $(this).data('userid');
 
         if (confirm("Are you sure you want to delete this user?")) {
             $.ajax({
-                url: '../appTask/component/component.cfc?method=deleteUser',
+                url: '../component/component.cfc?method=deleteUser',
                 method: 'POST',
                 data: {
                     userid: userid  
@@ -202,6 +213,35 @@ $(document).ready(function() {
             });
         }
     });
-    
-    
+
+
+    //for pdf download message.
+    $(document).off('click', '#pdfBtn').on('click', '#pdfBtn', function(){
+        if (confirm("Do you want to download PDF?")) {
+            window.location.href = 'pdf.cfm';
+            setTimeout(function() {
+                window.location.href = 'list.cfm?pdf=true';
+            }, 500);
+        }
+    });
+
+
+    //for excel download message.
+    $(document).off('click', '#excelBtn').on('click', '#excelBtn', function(){
+        if (confirm("Do you want to download EXCEL?")) {
+            window.location.href = 'excel.cfm';
+            setTimeout(function() {
+                window.location.href = 'list.cfm?excel=true';
+            }, 500);
+        }
+    });
+
+
+    $("#printBtn").click(function() {
+        window.print();
+        setTimeout(function() {
+            window.location.href = 'list.cfm?print=true';
+        }, 500);
+    })
+ 
 });

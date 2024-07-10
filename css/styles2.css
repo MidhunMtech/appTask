@@ -71,3 +71,8 @@ button:hover {
     margin: 0;
     padding: 0;
 }
+#userNameMsg {
+    color: red;
+    display: none;
+    font-size: 14px;
+}

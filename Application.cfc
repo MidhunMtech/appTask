@@ -7,6 +7,7 @@
     
     <cffunction name="onApplicationStart">
         <cfset application.component = createObject("component", "component.component") />
+        <cfset application.db = "cfTask2" />
     </cffunction>
 
     <cffunction name="onRequestStart" returntype="void" output="false">

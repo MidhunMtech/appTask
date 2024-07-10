@@ -23,20 +23,21 @@
 
         <header>
             <ul>
-                <li><a href="print.cfm">Print</a></li>
-                <li><a href="excel.cfm">Excel</a></li>
-                <li><a href="pdf.cfm">Pdf</a></li>
+                <li><a id="printBtn">Print</a></li>
+                <li><a id="excelBtn">Excel</a></li>
+                <li><a id="pdfBtn">Pdf</a></li>
             </ul>
         </header>
-
-        <p id="pdf" class="downloadMessage">PDF download Successfully....</p>
-        <p id="print" class="downloadMessage">Print done Successfully....</p>
-        <p id="excel" class="downloadMessage">Excel download Successfully....</p>
-        <p id="update" class="downloadMessage update">Update failed. Try again....</p>
+        <div class="messages" >
+            <p id="pdf" class="downloadMessage">PDF downloaded Successfully....</p>
+            <p id="print" class="downloadMessage">Print done Successfully....</p>
+            <p id="excel" class="downloadMessage">Excel downloaded Successfully....</p>
+            <p id="update" class="downloadMessage update">Update failed. Try again....</p>
+        </div>
         
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 lft">
                     <section class="left-section">
                         <cfoutput>
                             <h2>#session.userName#</h2>
@@ -58,7 +59,7 @@
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p id="createPop"><cfinclude template="create.cfm"></p>
+                <p id="createPop" class="to-print"><cfinclude template="create.cfm"></p>
             </div>
         </div>
 
@@ -138,6 +139,11 @@
                                 <label for="street">Street <span>*</span></label>
                                 <p id="l1_street" class="error1">Invalid street. try again...</p>
                                 <input type="text" class="street" id="estreet" name="street" value="">
+                            </div>
+
+                            <div class="check">
+                                <label class="checkBoxL" for="epublic">Make as Public: </label>
+                                <input class="checkBox" type="checkbox" id="epublic" name="epublic" value="True">
                             </div>
                         </fieldset>
 

@@ -18,28 +18,27 @@
         </div>
         <div class="container">
             <h2>Signup Form</h2>
-            <cfinvoke  component="component.component" method="errorMessageList" returnvariable="errorMsg">
-            <cfoutput>#errorMsg#</cfoutput>
+            <p id="userNameMsg">Username exists. Try again..</p>
             <form action="" method="post">
                 <label for="fullname">Full Name</label>
-                <p id="l_fullname" class="error">Invalid fullname. try again...</p>
+                <p id="l_fullname" class="error">Invalid fullname. Try again...</p>
                 <input type="text" id="fullname" name="fullname" placeholder="Your name..">
 
                 <label for="email">Email</label>
-                <p id="l_email" class="error">Invalid email. try again...</p>
+                <p id="l_email" class="error">Invalid email. Try again...</p>
                 <input type="email" id="email" name="email" placeholder="Your email..">
 
                 <label for="username">Username</label>
-                <p id="l_username" class="error">Invalid username. try again...</p>
-                <p id="l_username2" class="error">Username exists. try again...</p>
+                <p id="l_username" class="error">Invalid username. Try again...</p>
+                <p id="l_username2" class="error">Username exists. Try again...</p>
                 <input type="text" id="username" name="username" placeholder="Your username.." >
 
                 <label for="psw">Password</label>
-                <p id="l_password" class="error">Password must contain 8 characters!. try again...</p>
+                <p id="l_password" class="error">Password must contain 8 characters!. Try again...</p>
                 <input type="password" id="password" name="password" placeholder="Your password.." >
 
                 <label for="Cpsw">Confirm Password</label>
-                <p id="l_confirmPassword" class="error">password and confirm password not matching. try again...</p>
+                <p id="l_confirmPassword" class="error">password and confirm password not matching. Try again...</p>
                 <input type="password" id="confirmPassword" name="Cpassword" placeholder="Your password.." >
 
                 <button type="submit" name="submit" id="registerForm">Register</button>

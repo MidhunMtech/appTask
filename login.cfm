@@ -3,25 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <title>Login Page</title>
-        <link rel="stylesheet" href="css/styles.css">
-        <script src="js/jquery.min.js"></script>
-        <script src="js/login.js"></script>
+        <link rel="stylesheet" href="/css/styles.css">
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/login.js"></script>
     </head>
     <body>
         <div class="login-container">
             <h2>Login</h2>
-            <cfinvoke  component="component.component" method="errorMessageList" returnvariable="errorMsg">
-            <cfoutput>#errorMsg#</cfoutput>
+            <p id="userNameMsg">Username or Password not valid. Try again..</p>
             <form action="" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>
-                    <p id="l_username" class="error">Invalid username. try again...</p>
+                    <p id="l_username" class="error">Invalid username. Try again...</p>
                     <input type="text" id="username" name="username">
                 </div>
 
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <p id="l_password" class="error">Invalid Password. try again...</p>
+                    <p id="l_password" class="error">Invalid Password. Try again...</p>
                     <input type="password" id="password" name="password">
                 </div>
 

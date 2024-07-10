@@ -11,13 +11,22 @@
     <cflocation  url="list.cfm?error=update">
 <cfelse>
     <cftry>
+        <cfif structKeyExists(form, "submit")>
+            <cfset pathDir = expandPath("uploads") />
             <cffile  action="upload"
-                destination="C:\ColdFusion2021\cfusion\wwwroot\appTask\uploads" 
+                destination="#pathDir#" 
                 fileField="form.photo" 
                 nameConflict="makeunique">
+
+            <cfif structKeyExists(form, "epublic")>
+                <cfset isPublic = "YES" />
+            <cfelse>
+                <cfset isPublic = "NO" />
+            </cfif>
                 
-            <cfset result = application.component.updateDetails(form = #form#, photo = cffile.serverfile) />
+            <cfset result = application.component.updateDetails(form = #form#, photo = cffile.serverfile, isPublic = isPublic) />
             <cflocation  url="list.cfm">
+        </cfif>
     <cfcatch>
         <cfdump  var="#cfcatch#">
     </cfcatch>

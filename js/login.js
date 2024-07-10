@@ -1,4 +1,11 @@
 $(document).ready(function() {
+
+    var urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get('error') == 1) {
+        $("#userNameMsg").show();
+    }
+
     $("#registerForm").click(function(){
         var username = $("#username").val();
         var password = $("#password").val();

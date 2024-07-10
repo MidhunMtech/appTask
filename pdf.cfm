@@ -39,4 +39,5 @@
     </cfoutput>
 </cfdocument>
 
-<cflocation  url="list.cfm?pdf=true">
+<cfheader name="Content-Disposition" value="attachment; filename=AddressBook.pdf">
+<cfcontent type="application/pdf" file="#pdfPath#" deleteFile="false"> <!--- deleteFile="false" is for not to delete file in server side" --->

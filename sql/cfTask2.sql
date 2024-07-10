@@ -47,7 +47,9 @@ SET FOREIGN_KEY_CHECKS = 1;
     photoName VARCHAR(100),
     phone VARCHAR(20),
     address VARCHAR(100),
-    street VARCHAR(50)
+    street VARCHAR(50),
+    is_delete INT DEFAULT FALSE,
+    public VARCHAR(20)
 );
 
 ALTER TABLE 
@@ -83,13 +85,18 @@ MODIFY COLUMN `delete` INT DEFAULT FALSE;
 ALTER TABLE contacts
 CHANGE `delete` is_delete INT DEFAULT FALSE;
 
+ALTER TABLE contacts
+ADD COLUMN public INT;
+
+ALTER TABLE contacts
+MODIFY COLUMN public VARCHAR(20);
 -- to disable the safe updates mode
 SET SQL_SAFE_UPDATES = 0;
 /*update contacts
 set `is_delete` = 0
 where `is_delete` = 1;*/
 
-truncate table contacts;
+-- truncate table contacts;
 select * from contacts;
 
 SELECT 
@@ -126,11 +133,12 @@ INNER JOIN
 	contacts AS T2
 ON T1.title_id = T2.title_id;
 
+UPDATE contacts
+SET public = 'NO';
 
-CREATE TABLE Users (
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    PRIMARY KEY (username)
-);
 
-select * from Users;
+DELETE FROM contacts
+WHERE userId > 26;
+
+select * from contacts;
+use cfTask2;
