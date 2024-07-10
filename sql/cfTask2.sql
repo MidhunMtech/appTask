@@ -11,16 +11,22 @@ CREATE TABLE registerForm (
         salt VARCHAR(255) NOT NULL
 );
 
-ALTER TABLE registerForm
-ADD COLUMN salt VARCHAR(255) NOT NULL;
+ALTER TABLE 
+	registerForm
+ADD COLUMN 
+	salt VARCHAR(255) NOT NULL;
 
 -- Disable foreign key checks
 SET FOREIGN_KEY_CHECKS = 0;
 -- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
- SELECT * FROM registerForm;
- truncate table registerForm;
+ SELECT 
+	* 
+ FROM 
+	registerForm;
+    
+ -- truncate table registerForm;
  
  CREATE TABLE title_names (
 	title_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,8 +67,10 @@ FOREIGN KEY
 REFERENCES 
 	registerForm(nameID);
 
-ALTER TABLE contacts
-CHANGE title title_id INT;
+ALTER TABLE 
+	contacts
+CHANGE 
+	title title_id INT;
 
 ALTER TABLE 
 	contacts
@@ -73,23 +81,36 @@ FOREIGN KEY
 REFERENCES 
 	title_names(title_id);
     
-ALTER TABLE contacts
-ADD COLUMN `delete` INT DEFAULT TRUE;
+ALTER TABLE 
+	contacts
+ADD COLUMN 
+	`delete` INT DEFAULT TRUE;
 
-ALTER TABLE contacts
-ADD COLUMN nameId_fk INT;
+ALTER TABLE 
+	contacts
+ADD COLUMN 
+	nameId_fk INT;
 
-ALTER TABLE contacts
-MODIFY COLUMN `delete` INT DEFAULT FALSE;
+ALTER TABLE 
+	contacts
+MODIFY COLUMN 
+	`delete` INT DEFAULT FALSE;
 
-ALTER TABLE contacts
-CHANGE `delete` is_delete INT DEFAULT FALSE;
+ALTER TABLE 
+	contacts
+CHANGE 
+	`delete` is_delete INT DEFAULT FALSE;
 
-ALTER TABLE contacts
-ADD COLUMN public INT;
+ALTER TABLE 
+	contacts
+ADD COLUMN 
+	public INT;
 
-ALTER TABLE contacts
-MODIFY COLUMN public VARCHAR(20);
+ALTER TABLE 
+	contacts
+MODIFY COLUMN 
+	public VARCHAR(20);
+    
 -- to disable the safe updates mode
 SET SQL_SAFE_UPDATES = 0;
 /*update contacts
@@ -131,14 +152,18 @@ FROM
 	title_names as T1
 INNER JOIN
 	contacts AS T2
-ON T1.title_id = T2.title_id;
+ON 
+	T1.title_id = T2.title_id;
 
-UPDATE contacts
-SET public = 'NO';
+UPDATE 
+	contacts
+SET 
+	public = 'NO';
 
-
-DELETE FROM contacts
-WHERE userId > 26;
+DELETE FROM 
+	contacts
+WHERE 
+	userId > 26;
 
 select * from contacts;
 use cfTask2;
