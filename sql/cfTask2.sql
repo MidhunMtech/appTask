@@ -25,7 +25,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 	* 
  FROM 
 	registerForm;
-    
+
+
  -- truncate table registerForm;
  
  CREATE TABLE title_names (

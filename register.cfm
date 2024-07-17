@@ -19,6 +19,7 @@
         <div class="container">
             <h2>Signup Form</h2>
             <p id="userNameMsg">Username exists. Try again..</p>
+            <p id="registerMsg">Registration failed. Try again...</p>
             <form action="" method="post">
                 <label for="fullname">Full Name</label>
                 <p id="l_fullname" class="error">Invalid fullname. Try again...</p>
@@ -49,11 +50,20 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset result = application.component.registerForm(form = #form#)>
-        <cfif result EQ "1">
-            <cflocation  url="login.cfm">
+        <cfif NOT len(form.fullname)
+            OR NOT len(form.email)
+            OR NOT len(form.username)
+            OR NOT len(form.password)
+            OR NOT len(form.Cpassword)>
+            
+            <cflocation  url="register.cfm?error=register">
         <cfelse>
-            <cflocation  url="register.cfm?error=2">
+            <cfset result = application.component.registerForm(form = #form#)>
+            <cfif result EQ "1">
+                <cflocation  url="login.cfm">
+            <cfelse>
+                <cflocation  url="register.cfm?error=2">
+            </cfif>
         </cfif>
     </cfif>
 <cfcatch>

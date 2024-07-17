@@ -6,7 +6,7 @@
 </cftry>
 
 <cfschedule action="list" mode="server" result ="res" />
-<cfset tasklist = valueList(res.task)/>
+<cfset taskList = valueList(res.task)/>
 
 <cfloop query="scheduleData">
     <cfset date="#scheduleData.DOB#">
@@ -29,7 +29,7 @@
                 startTime="8:00 AM"
                 interval="once">
 
-        <cfelseif scheduleData.is_delete EQ 1 AND listFind(tasklist, "#name#")>
+        <cfelseif scheduleData.is_delete EQ 1 AND listFind(taskList, "#name#")>
             <cfschedule action="delete" task="#name#">
         </cfif>
     <cfcatch type="any">

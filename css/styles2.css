@@ -76,3 +76,9 @@ button:hover {
     display: none;
     font-size: 14px;
 }
+
+#registerMsg {
+    color: red;
+    display: none;
+    font-size: 14px;
+}

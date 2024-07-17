@@ -6,6 +6,10 @@ $(document).ready(function() {
         $("#userNameMsg").show();
     }
 
+    if (urlParams.get('error') == "register") {
+        $("#registerMsg").show();
+    }
+
     $("#registerForm").click(function(){
         var fullname = $("#fullname").val();
         var email = $("#email").val();
