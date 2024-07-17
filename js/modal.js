@@ -27,6 +27,9 @@ $(document).ready(function() {
         $("#update").show();
     }
 
+    if (urlParams.get('error') === 'create') {
+        $("#create").show();
+    }
       
 
     $(".editPop").click(function() {
@@ -48,6 +51,7 @@ $(document).ready(function() {
                 $('.lname').val(userData.LNAME);
                 $('.gender').val(userData.GENDER);
                 $('.image').text(userData.PHOTONAME);
+                $('.imageName').val(userData.PHOTONAME);
                 $('.phone').val(userData.PHONE);
                 $('.address').val(userData.ADDRESS);
                 $('.street').val(userData.STREET);
@@ -132,12 +136,12 @@ $(document).ready(function() {
             $("#l1_phone").hide();  
         }        
 
-        if(photo.length == "") {
+        /* if(photo.length == "") {
             $("#l1_file").show();
             valid = false;
         } else {
             $("#l1_file").hide();  
-        }
+        } */
 
         if(address.trim().length == "") {
             $("#l1_address").show();
@@ -216,20 +220,20 @@ $(document).ready(function() {
 
 
     //for pdf download message.
-    $(document).off('click', '#pdfBtn').on('click', '#pdfBtn', function(){
+    $('#pdfBtn').click(function() {
         if (confirm("Do you want to download PDF?")) {
             window.location.href = 'pdf.cfm';
             setTimeout(function() {
                 window.location.href = 'list.cfm?pdf=true';
             }, 500);
         }
-    });
+    })
 
 
     //for excel download message.
-    $(document).off('click', '#excelBtn').on('click', '#excelBtn', function(){
+    $('#excelBtn').click(function() {
         if (confirm("Do you want to download EXCEL?")) {
-            window.location.href = 'excel.cfm';
+            window.location.href = 'excelNew.cfm';
             setTimeout(function() {
                 window.location.href = 'list.cfm?excel=true';
             }, 500);
@@ -245,3 +249,24 @@ $(document).ready(function() {
     })
  
 });
+
+
+
+
+/*  $(document).click('#excelBtn', function(){
+        if (confirm("Do you want to download EXCEL?")) {
+            window.location.href = 'excelNew.cfm';
+            setTimeout(function() {
+                window.location.href = 'list.cfm?excel=true';
+            }, 500);
+        }
+    }); */
+
+/* $(document).off('click', '#pdfBtn').on('click', '#pdfBtn', function(){
+        if (confirm("Do you want to download PDF?")) {
+            window.location.href = 'pdf.cfm';
+            setTimeout(function() {
+                window.location.href = 'list.cfm?pdf=true';
+            }, 500);
+        }
+    }); */

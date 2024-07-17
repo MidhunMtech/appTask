@@ -311,8 +311,10 @@
                 t2.nameId_fk = t1.nameId
             WHERE
                 t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-                AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-                OR public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                AND (
+                    t2.nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                    OR t2.public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                )
         </cfquery>
 
         <cfreturn local.pdfData />
@@ -329,6 +331,43 @@
         </cfquery>
 
         <cfreturn local.title>
+    </cffunction>
+
+
+    <cffunction  name="scheduleData" access="public" returnType="query" hint="Data for scheduling mail">
+        <cfquery name="local.scheduleData" datasource="#application.db#">
+            SELECT 
+                DOB,
+                concat(fname, " ", lname) AS fullname,
+                userId,
+                is_delete
+            FROM
+                contacts
+        </cfquery>
+
+        <cfreturn local.scheduleData>
+    </cffunction>
+
+
+    <cffunction  name="mailData" access="public" returnType="query" hint="Data for mail content according to url userId">
+        <cfquery name="local.mailData" datasource="#application.db#">
+            SELECT 
+                t2.userId AS userId,
+                concat(t2.fname, " ", t2.lname) AS fullname,
+                t1.email AS email,
+                t2.userId AS userId
+            FROM 
+                registerForm AS t1
+            INNER JOIN 
+                contacts AS t2
+            ON 
+                t2.nameId_fk = t1.nameId
+            WHERE
+                t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+                AND userId = <cfqueryparam value="#url.id#" cfsqltype="cf_sql_integer">
+        </cfquery>
+
+        <cfreturn local.mailData />
     </cffunction>
 
 </cfcomponent>

@@ -1,4 +1,5 @@
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
+<cfinclude  template="schedule.cfm">
 <cfif logout EQ "1">
     <cflocation  url="login.cfm">
 </cfif>
@@ -33,6 +34,7 @@
             <p id="print" class="downloadMessage">Print done Successfully....</p>
             <p id="excel" class="downloadMessage">Excel downloaded Successfully....</p>
             <p id="update" class="downloadMessage update">Update failed. Try again....</p>
+            <p id="create" class="downloadMessage update">Create contact failed. Try again....</p>
         </div>
         
         <div class="container-fluid">
@@ -118,6 +120,7 @@
                                 <p id="l1_file" class="error1">File Upload is Mandatory!. try again...</p>
                                 <input type="file" class="photo1" id="ephoto" name="photo" value="" accept="image/*" >
                                 <span class="image"></span>
+                                <input type="hidden" name="image" class="imageName" >
                             </div>
                         </fieldset>
         
