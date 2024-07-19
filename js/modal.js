@@ -8,6 +8,13 @@ $(document).ready(function() {
         $("#myModal").fadeOut();
     });
 
+    // Close modal when clicking outside of it
+    $(window).click(function(event) {
+        if (event.target == $("#myModal")[0]) {
+            $("#myModal").hide();
+        }
+    });
+
 
     var urlParams = new URLSearchParams(window.location.search);
 
@@ -30,40 +37,43 @@ $(document).ready(function() {
     if (urlParams.get('error') === 'create') {
         $("#create").show();
     }
+
+    if (urlParams.get('error') === 'hack') {
+        $("#hack").show();
+    }
       
 
     $(".editPop").click(function() {
-        var userId = $(this).data('userid');
+        var userid = $(this).data('userid');
         $.ajax({
-            url: '../component/component.cfc?method=userDetails1',
+            url: '../component/component.cfc?method=userDetails',
             method: 'POST',
             data: {
-                userid: userId
+                userid: userid
             },
             success: function(response) {
                 var userData = JSON.parse(response);
                 console.log(userData);
                 $('#myModal2').show();
 
-                $('.title').val(userData.TITLE_ID);
-                $('.title').text(userData.TITLE_NAME);
-                $('.fname').val(userData.FNAME);
-                $('.lname').val(userData.LNAME);
-                $('.gender').val(userData.GENDER);
-                $('.image').text(userData.PHOTONAME);
-                $('.imageName').val(userData.PHOTONAME);
-                $('.phone').val(userData.PHONE);
-                $('.address').val(userData.ADDRESS);
-                $('.street').val(userData.STREET);
-                $('.userid').val(userData.USERID);
+                $('.title').val(userData.title_id);
+                $('.title').text(userData.title_name);
+                $('.fname').val(userData.fname);
+                $('.lname').val(userData.lname);
+                $('.gender').val(userData.gender);
+                $('.image').text(userData.photoName);
+                $('.imageName').val(userData.photoName);
+                $('.phone').val(userData.phone);
+                $('.address').val(userData.address);
+                $('.street').val(userData.street);
+                $('.userid').val(userData.userId);
                 // $('.title').val(userData.DATA[0][10]);
                 // changing format of DOB.
                 var dateString = userData.DOB;
                 var dateObj = new Date(dateString);
                 var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
                 $('.dob').val(formattedDate);
-                if (userData.PUBLIC === "YES") {
-                    // console.log(userData.DATA[0][11]);
+                if (userData.public === "YES") {
                     $('.checkBox').prop('checked', true);
                 } else {
                     $('.checkBox').prop('checked', false);   
@@ -78,6 +88,12 @@ $(document).ready(function() {
 
     $(".close").click(function() {
         $("#myModal2").fadeOut()
+    });
+
+    $(window).click(function(event) {
+        if (event.target == $("#myModal2")[0]) {
+            $("#myModal2").hide();
+        }
     });
 
 
@@ -164,23 +180,21 @@ $(document).ready(function() {
     $(".viewPop").click(function() {
         var userid = $(this).data('userid');
         $.ajax({
-            url: '../component/component.cfc?method=viewUser',
+            url: '../component/component.cfc?method=userDetails',
             method: 'GET',
             data: {
                 userid: userid
             },
             success: function(response) {
                 var userData = JSON.parse(response);
-                // console.log(userData);
-                // console.log(userData.ADDRESS);
                 $('#myModal3').show();  
-                var img = "uploads/" + userData.PHOTONAME
-                $('.fullnameView').text(userData.FULLNAME);
-                $('.viewEmail').text(userData.EMAIL);
-                $('.phoneView').text(userData.PHONE);
-                $('.genderView').text(userData.GENDER);
-                $('.addressView').text(userData.ADDRESS);
-                $('.streetView').text(userData.STREET);
+                var img = "uploads/" + userData.photoName;
+                $('.fullnameView').text(userData.fullname);
+                $('.viewEmail').text(userData.email);
+                $('.phoneView').text(userData.phone);
+                $('.genderView').text(userData.gender);
+                $('.addressView').text(userData.address);
+                $('.streetView').text(userData.street);
                 $(".viewImg").attr("src", img);
             }
         });

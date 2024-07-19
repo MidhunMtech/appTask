@@ -58,7 +58,7 @@
             
             <cflocation  url="register.cfm?error=register">
         <cfelse>
-            <cfset result = application.component.registerForm(form = #form#)>
+            <cfset result = application.component.signUp(form = #form#)>
             <cfif result EQ "1">
                 <cflocation  url="login.cfm">
             <cfelse>

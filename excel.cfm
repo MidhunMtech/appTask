@@ -1,36 +1,71 @@
 <cfscript>
-    getData = application.component.getData();  //application.component is from application.cfc
-    
-    //Create Spreadsheet
-    spreadsheetObj = SpreadsheetNew('addressBook');
+    try {
+        getData = application.component.fullContacts();  // application.component is from application.cfc
+    } catch (any e) {
+        writeDump(e);
+        abort;
+    }
+
+    // Create Spreadsheet
+    spreadsheetObj = SpreadsheetNew('addressBook', 'yes'); // 'yes' is for xlsx format
 
     // Add header
-    SpreadSheetAddRow(spreadsheetObj,'ID,UserId,fullname,email,gender,DOB,photoName,phone,address,street');
-    //Add Data
-    for (row in getData) {
-        // Remove commas from each field
-        ID = replace(row.ID, ',', '', 'all');
-        userId = replace(row.userId, ',', '', 'all');
-        fullname = replace(row.fullname, ',', '', 'all');
-        email = replace(row.email, ',', '', 'all');
-        gender = replace(row.gender, ',', '', 'all');
-        DOB = replace(row.DOB, ',', '', 'all');
-        photoName = replace(row.photoName, ',', '', 'all');
-        phone = replace(row.phone, ',', '', 'all');
-        address = replace(row.address, ',', ' ', 'all');
-        street = replace(row.street, ',', ' ', 'all');
+    SpreadsheetAddRow(spreadsheetObj, 'ID,UserId,fullname,email,gender,DOB,photoName,phone,address,street,photo');
 
-        SpreadSheetAddRow(spreadsheetObj, ID & ',' & userId & ',' & fullname & ',' & email & ',' & gender & ',' & DOB & ',' & photoName & ',' & phone & ',' & address & ',' & street);
+    // Add Data
+    i = 2;
+    try {
+        for (row in getData) {
+            cellRange = "#i#,11,#i+1#,12";
+            SpreadsheetSetCellValue(spreadsheetObj, row.ID, i, 1);
+            SpreadsheetSetCellValue(spreadsheetObj, row.userId, i, 2);
+            SpreadsheetSetCellValue(spreadsheetObj, row.fullname, i, 3);
+            SpreadsheetSetCellValue(spreadsheetObj, row.email, i, 4);
+            SpreadsheetSetCellValue(spreadsheetObj, row.gender, i, 5);
+            SpreadsheetSetCellValue(spreadsheetObj, row.DOB, i, 6);
+            SpreadsheetSetCellValue(spreadsheetObj, row.photoName, i, 7);
+            SpreadsheetSetCellValue(spreadsheetObj, row.phone, i, 8);
+            SpreadsheetSetCellValue(spreadsheetObj, row.address, i, 9);
+            SpreadsheetSetCellValue(spreadsheetObj, row.street, i, 10);
+            imagePath = expandPath("uploads/#row.photoName#");
+            spreadsheetAddImage(spreadsheetObj, imagePath, cellRange);
+
+            i += 1;
+        }
+    } catch (any e) {
+        writeDump(e);
+        abort;
     }
-    //Format Header
-    SpreadsheetformatRow(spreadsheetobj,{bold=true,alignment='center'},1);
 
-    // Write the file to a temporary path
-    tempFilePath = expandPath('downloads/excel/AddressBook.xls');
-    SpreadsheetWrite(spreadsheetObj, tempFilePath, true);
+    // Set row height
+    startRow = 2;
+    endRow = i - 1;
+    newRowHeight = 40;
+    for (i = startRow; i <= endRow; i++) {
+        spreadsheetSetRowHeight(spreadsheetObj, i, newRowHeight);
+        spreadsheetSetColumnWidth(spreadsheetObj, 11, 10);
+    }
+
+    // Format Header
+    SpreadsheetFormatRow(spreadsheetObj, {
+        bold = true,
+        alignment = "center",
+        color = "blue",
+        font = "Arial",
+        fgcolor = "green"
+    }, 1);
+
+    try {
+        SpreadSheetAddFreezePane(spreadsheetObj, 0, 1); // header freeze
+    } catch (any e) {
+        writeDump(e);
+        abort;
+    }
+
+    // Write the spreadsheet to a binary variable
+    binaryData = SpreadsheetReadBinary(spreadsheetObj);
 
     // Send the file to the client as an attachment
-    cfheader(name="Content-Disposition", value="attachment; filename=AddressBook.xls");
-    cfcontent(type="application/vnd.ms-excel", file="#tempFilePath#", deleteFile="true"); // deleteFile="true" is for delete this file from server side
-    
+    cfheader(name="Content-Disposition", value="attachment; filename=AddressBook.xlsx");
+    cfcontent(type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", variable="#binaryData#");
 </cfscript>

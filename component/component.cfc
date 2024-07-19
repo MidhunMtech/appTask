@@ -1,6 +1,6 @@
 <cfcomponent>
 
-    <cffunction  name="registerForm" returnType="string" access="public" hint="For register">
+    <cffunction  name="signUp" returnType="string" access="public" hint="For register">
         <cfargument name="form" type="any" required="true">
         <cfquery name="local.getRegister" datasource="#application.db#">
             SELECT 
@@ -82,7 +82,7 @@
     </cffunction>
 
     
-    <cffunction name="Addcontact" returnType="void" access="public" hint="To create new contacts in the contact table">
+    <cffunction name="addContact" returnType="void" access="public" hint="To create new contacts in the contact table">
         <cfargument name="form" type="any" required="true" >
         <cfargument name="photo" type="any" required="true" >
         <cfargument name="isPublic" type="string" required="true">
@@ -119,53 +119,17 @@
     </cffunction>
 
 
-    <cffunction  name="getContacts" returnType="query" access="public" hint="To fetch the contacts table to show in the list">
-        <cfquery name="local.getContacts" datasource="#application.db#">
-            SELECT 
-                concat(fname," ",lname) AS fullname,
-                title_id,
-                phone,
-                photoName,
-                userId,
-                is_delete,
-                nameId_fk
-            FROM 
-                contacts
-            WHERE
-                is_delete = 0
-                AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-        </cfquery>
+    <cffunction name="userDetails" access="remote" returnformat="json" hint="datas to show for update">
+        <cfargument name="userid" type="any" required="true">
 
-        <cfreturn local.getContacts>
-    </cffunction>
+        <cfif isNumeric(arguments.userid)>
+            <cfset local.decryptedUserId = "#arguments.userid#" />
+        <cfelse>
+            <cfset local.encryptionKey = "oK455VMW4Cx55FvtTF5vWg==">  <!---<cfset encryptionKey = GenerateSecretKey("AES")> --->
+            <cfset local.decryptedUserId = Decrypt(#arguments.userid#, local.encryptionKey, "AES", "Base64")>
+        </cfif>
 
-    <cffunction  name="getPublicContacts" returnType="query" access="public" hint="To fetch the contacts table to show in the list">
-        <cfquery name="local.getPublicContacts" datasource="#application.db#">
-            SELECT 
-                concat(fname," ",lname) AS fullname,
-                title_id,
-                phone,
-                photoName,
-                userId,
-                is_delete,
-                nameId_fk,
-                public
-            FROM 
-                contacts
-            WHERE
-                is_delete = 0
-                AND public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
-                AND nameId_fk != <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-
-        <cfreturn local.getPublicContacts>
-    </cffunction>
-
-
-    <cffunction name="userDetails1" access="remote" returnformat="json" hint="datas to show for update">
-        <cfargument name="userid" type="numeric" required="true">
-
-        <cfset local.userStruct = structNew() />
+        <cfset local.userStruct = {}>
         <cfquery name="local.getUser" datasource="#application.db#">
             SELECT 
                 T1.title AS title_name,
@@ -179,29 +143,40 @@
                 T2.street AS street,
                 T2.userId AS userId,
                 T1.title_id AS title_id,
-                T2.public AS public
+                T2.public AS public,
+                T3.email AS email,
+                T2.nameId_fk AS nameId_fk
             FROM 
                 title_names AS T1
             INNER JOIN
                 contacts AS T2
-            ON 
-                T1.title_id = T2.title_id
-            WHERE 
-                userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                ON 
+                    T1.title_id = T2.title_id
+            INNER JOIN 
+                registerForm as T3
+                ON
+                    T2.nameId_fk = T3.nameId
+            WHERE
+                userId = <cfqueryparam value="#local.decryptedUserId#" cfsqltype="cf_sql_integer">
         </cfquery>
 
-        <cfset local.userStruct.title_name = local.getUser.title_name />
-        <cfset local.userStruct.fname = local.getUser.fname />
-        <cfset local.userStruct.lname = local.getUser.lname />
-        <cfset local.userStruct.gender = local.getUser.gender />
-        <cfset local.userStruct.DOB = local.getUser.DOB />
-        <cfset local.userStruct.photoName = local.getUser.photoName />
-        <cfset local.userStruct.phone = local.getUser.phone />
-        <cfset local.userStruct.address = local.getUser.address />
-        <cfset local.userStruct.street = local.getUser.street />
-        <cfset local.userStruct.userId = local.getUser.userId />
-        <cfset local.userStruct.title_id = local.getUser.title_id />
-        <cfset local.userStruct.public = local.getUser.public/>
+        <cfset local.userStruct = structNew() />
+
+        <cfset local.userStruct["title_name"] = local.getUser.title_name />
+        <cfset local.userStruct["fname"] = local.getUser.fname />
+        <cfset local.userStruct["lname"] = local.getUser.lname />
+        <cfset local.userStruct["gender"] = local.getUser.gender />
+        <cfset local.userStruct["DOB"] = local.getUser.DOB />
+        <cfset local.userStruct["photoName"] = local.getUser.photoName />
+        <cfset local.userStruct["phone"] = local.getUser.phone />
+        <cfset local.userStruct["address"] = local.getUser.address />
+        <cfset local.userStruct['street'] = local.getUser.street />
+        <cfset local.userStruct['userId'] = local.getUser.userId />
+        <cfset local.userStruct['title_id'] = local.getUser.title_id />
+        <cfset local.userStruct['public'] = local.getUser.public/>
+        <cfset local.userStruct['email'] = local.getUser.email/>
+        <cfset local.userStruct['nameId_fk'] = local.getUser.nameId_fk/>
+        
         <cfreturn local.userStruct />
     </cffunction>
 
@@ -244,82 +219,6 @@
         </cfquery>
     </cffunction>
 
-
-    <cffunction  name="viewUser" access="remote" returnformat="json" hint="this to view contact details for each user">
-        <cfargument name="userid" type="numeric" required="true"> 
-        <cftry>
-            <cfset local.userArray = structNew() />
-            <cfquery name="local.viewUser" datasource="#application.db#">
-                SELECT 
-                    t1.email AS email,
-                    t2.userId AS userId,
-                    concat(t2.fname," ",t2.lname) AS fullname,
-                    t2.gender AS gender,
-                    t2.DOB AS DOB,
-                    t2.photoName AS PhotoName,
-                    t2.phone AS phone,
-                    t2.address AS address,
-                    t2.street AS street
-                FROM
-                    registerForm AS t1
-                INNER JOIN 
-                    contacts AS t2
-                ON 
-                    t2.nameId_fk = t1.nameId
-                WHERE
-                    t2.userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
-            </cfquery>
-
-            <cfset local.userArray.email = local.viewUser.email />
-            <cfset local.userArray.userId = local.viewUser.userId />
-            <cfset local.userArray.fullname = local.viewUser.fullname />
-            <cfset local.userArray.gender = local.viewUser.gender />
-            <cfset local.userArray.DOB = local.viewUser.DOB />
-            <cfset local.userArray.PhotoName = local.viewUser.PhotoName />
-            <cfset local.userArray.phone = local.viewUser.phone />
-            <cfset local.userArray.address = local.viewUser.address />
-            <cfset local.userArray.street = local.viewUser.street />
-        <cfcatch>
-            <cfdump  var="#cfcatch#">
-        </cfcatch>
-        </cftry>
-           
-        <cfreturn local.userArray/>
-    </cffunction>
-
-
-    <cffunction  name="getData" returnType="query" access="public" hint="Fetching contacts table for pdf, print, and excel download">
-        <cfquery name="local.pdfData" datasource="#application.db#">
-            SELECT 
-                t1.nameID AS ID,
-                t2.userId AS userId,
-                concat(t2.fname, " ", t2.lname) AS fullname,
-                t1.email AS email,
-                t2.gender AS gender,
-                t2.DOB AS DOB,
-                t2.photoName AS photoName,
-                t2.phone AS phone,
-                t2.address AS address,
-                t2.street AS street,
-                t2.nameId_fk AS nameId_fk,
-                t2.public AS public
-            FROM 
-                registerForm AS t1
-            INNER JOIN 
-                contacts AS t2
-            ON 
-                t2.nameId_fk = t1.nameId
-            WHERE
-                t2.is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-                AND (
-                    t2.nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-                    OR t2.public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
-                )
-        </cfquery>
-
-        <cfreturn local.pdfData />
-    </cffunction>
-
     
     <cffunction  name="title" access="public" returnType="query">
         <cfquery name="local.title" datasource="#application.db#">
@@ -355,7 +254,7 @@
                 t2.userId AS userId,
                 concat(t2.fname, " ", t2.lname) AS fullname,
                 t1.email AS email,
-                t2.userId AS userId
+                t2.userId AS userIdb 
             FROM 
                 registerForm AS t1
             INNER JOIN 
@@ -368,6 +267,74 @@
         </cfquery>
 
         <cfreturn local.mailData />
+    </cffunction>
+
+ 
+    <cffunction  name="fullContacts" returnType="array" access="public" hint="For listDetails, Print, Pdf, Excel">
+        <cfargument name="userid" type="numeric" required="false">
+
+        <cfset local.structContacts = {}>
+        <cfset local.returnArray = [] >
+        <cfquery name="local.getContacts" datasource="#application.db#">
+            SELECT
+                t1.nameID AS ID,
+                t2.userId AS userId,
+                concat(t2.fname, " ", t2.lname) AS fullname,
+                t1.email AS email,
+                t2.gender AS gender,
+                t2.DOB AS DOB,
+                t2.photoName AS photoName,
+                t2.phone AS phone,
+                t2.address AS address,
+                t2.street AS street,
+                t2.nameId_fk AS nameId_fk,
+                t2.public AS public,
+                t2.is_delete AS is_delete,
+                t2.title_id AS title_id
+                <!---t3.title AS title_name--->
+            FROM 
+                registerForm AS t1
+            INNER JOIN 
+                contacts AS t2
+                ON 
+                    t2.nameId_fk = t1.nameId
+            <!---INNER JOIN 
+                title_names AS t3
+                ON
+                    t2.title_id = t3.title_id--->
+            WHERE
+                is_delete = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+                AND (
+                    nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                    OR public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                )
+                <!---<cfif structKeyExists(arguments, "userid")>
+                    userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                </cfif>--->
+        </cfquery>
+
+        <cfloop query="local.getContacts">
+            <cfset local.structContacts = {
+                "ID" : local.getContacts.ID,
+                "userId" : local.getContacts.userId,
+                "fullname" : local.getContacts.fullname,
+                "email" : local.getContacts.email,
+                "gender" : local.getContacts.gender,
+                "DOB" : local.getContacts.DOB,
+                "address" : local.getContacts.address,
+                "street" : local.getContacts.street,
+                "title_id" : local.getContacts.title_id,
+                "phone" : local.getContacts.phone,
+                "photoName" : local.getContacts.photoName,
+                "is_delete" : local.getContacts.is_delete,
+                "nameId_fk" : local.getContacts.nameId_fk,
+                "public" : local.getContacts.public
+                <!---"title_name" : local.getContacts.title_name--->
+            } >
+
+            <cfset arrayAppend(local.returnArray, local.structContacts)> 
+        </cfloop>
+        <cfreturn local.returnArray />
     </cffunction>
 
 </cfcomponent>

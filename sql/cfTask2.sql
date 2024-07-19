@@ -168,3 +168,46 @@ WHERE
 
 select * from contacts;
 use cfTask2;
+
+SELECT
+	concat(fname," ",lname) AS fullname,
+	title_id,
+	phone,
+	photoName,
+	userId,
+	is_delete,
+	nameId_fk,
+	public
+FROM 
+	contacts
+WHERE
+	is_delete = 0
+	AND (nameId_fk = 12
+    OR public = "YES");
+    
+SELECT 
+	T1.title AS title_name,
+	T2.fname AS fname, 
+	T2.lname AS lname, 
+	T2.gender AS gender, 
+	T2.DOB AS DOB, 
+	T2.photoName AS photoName, 
+	T2.phone AS phone, 
+	T2.address AS address, 
+	T2.street AS street,
+	T2.userId AS userId,
+	T1.title_id AS title_id,
+	T2.public AS public,
+	T3.email AS email
+FROM 
+	title_names AS T1
+INNER JOIN
+	contacts AS T2
+	ON 
+		T1.title_id = T2.title_id
+INNER JOIN 
+	registerForm as T3
+	ON
+		T2.nameId_fk = T3.nameId
+WHERE
+	userId = 4;

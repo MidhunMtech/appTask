@@ -23,7 +23,7 @@
                 <cfset isPublic = "NO" />
             </cfif>
                 
-            <cfset result = application.component.Addcontact(form = #form#, photo = cffile.serverfile, isPublic = isPublic) />
+            <cfset result = application.component.addContact(form = #form#, photo = cffile.serverfile, isPublic = isPublic) />
     <!---         <cfdump  var="#result#"> --->
             <cflocation  url="list.cfm">
         </cfif>

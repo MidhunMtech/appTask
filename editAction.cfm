@@ -5,8 +5,10 @@
     OR NOT len(form.dob)
     OR NOT len(form.phone)
     OR NOT len(form.address)
-    OR NOT len(form.street)>
-    <cflocation  url="list.cfm?error=update">
+    OR NOT len(form.street)
+    OR NOT len(form.userid)>
+    <cfdump  var="#form#">
+<!---     <cflocation  url="list.cfm?error=update"> --->
 <cfelse>
     <cftry>
         <cfif structKeyExists(form, "submit")>

@@ -67,7 +67,7 @@
                     <div class="form-group">
                         <label for="photo">Photo <span>*</span></label>
                         <p id="l_file" class="error">File Upload is Mandatory!. try again...</p>
-                        <input type="file" id="photo" name="photo" accept="image/*">
+                        <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
                     </div>
                 </fieldset>
 
