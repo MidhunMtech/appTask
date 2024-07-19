@@ -38,7 +38,6 @@ $(document).ready(function() {
         $("#create").show();
     }
       
-
     $(".editPop").click(function() {
         var userid = $(this).data('userid');
         $.ajax({
