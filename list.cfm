@@ -36,7 +36,6 @@
                 <p id="excel" class="downloadMessage">Excel downloaded Successfully....</p>
                 <p id="update" class="downloadMessage update">Update failed. Try again....</p>
                 <p id="create" class="downloadMessage update">Create contact failed. Try again....</p>
-                <p id="hack" class="downloadMessage update">You can't do that. Don't try again....</p>
             </div>
             
             <div class="container-fluid">

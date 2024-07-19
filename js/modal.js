@@ -37,10 +37,6 @@ $(document).ready(function() {
     if (urlParams.get('error') === 'create') {
         $("#create").show();
     }
-
-    if (urlParams.get('error') === 'hack') {
-        $("#hack").show();
-    }
       
 
     $(".editPop").click(function() {
