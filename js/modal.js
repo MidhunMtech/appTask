@@ -80,13 +80,14 @@ $(document).ready(function() {
         });
     });
     
-
     $(".close").click(function() {
+        $('.checkBox').prop('checked', false);
         $("#myModal2").fadeOut()
     });
 
     $(window).click(function(event) {
         if (event.target == $("#myModal2")[0]) {
+            $('.checkBox').prop('checked', false);
             $("#myModal2").hide();
         }
     });

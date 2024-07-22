@@ -211,3 +211,4 @@ INNER JOIN
 		T2.nameId_fk = T3.nameId
 WHERE
 	userId = 4;
+

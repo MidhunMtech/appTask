@@ -4,8 +4,7 @@
     } catch (any e) {
         writeDump(e)
     }
-    
-    
+     
     //Create Spreadsheet
     spreadsheetObj = SpreadsheetNew('addressBook', 'yes'); // this 'yes' is for xlsx format
 

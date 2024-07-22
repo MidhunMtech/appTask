@@ -1,6 +1,5 @@
 <cftry>
     <cfinvoke component="component.component" method="logout" returnvariable="logout">
-<!---     <cfinclude  template="schedule.cfm"> --->
     <cfif logout EQ "1">
         <cflocation  url="login.cfm">
     </cfif>
@@ -53,7 +52,7 @@
 
                     <div class="col-sm-9">
                         <section class="right-section">
-                            <cfinclude  template="listDetailsNew.cfm">
+                            <cfinclude  template="listDetails.cfm">
                         </section>
                     </div>
                 </div>
