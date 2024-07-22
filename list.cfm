@@ -1,6 +1,6 @@
 <cftry>
     <cfinvoke component="component.component" method="logout" returnvariable="logout">
-    <cfinclude  template="schedule.cfm">
+<!---     <cfinclude  template="schedule.cfm"> --->
     <cfif logout EQ "1">
         <cflocation  url="login.cfm">
     </cfif>

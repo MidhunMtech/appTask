@@ -368,3 +368,57 @@ getdata function
         </cftry>
         <cfreturn local.userArray/>
     </cffunction> --->
+
+
+    ScheduledTask Function
+    
+    <!--- <cffunction  name="scheduleData" access="public" returnType="query" hint="Data for scheduling mail">
+        <cfquery name="local.scheduleData" datasource="#application.db#">
+            SELECT 
+                DOB,
+                concat(fname, " ", lname) AS fullname,
+                userId,
+                is_delete
+            FROM
+                contacts
+        </cfquery>
+
+        <cfreturn local.scheduleData>
+    </cffunction> --->
+
+
+schedule
+    <!--- <cftry>
+    <cfinvoke component="component.component" method="mailData" returnVariable="scheduleData">
+<cfcatch type="any">
+    <cfdump  var="#cfcatch#">
+</cfcatch>
+</cftry>
+
+<cfset num = 1>
+<cfloop query="scheduleData">
+    <cfset date="#scheduleData.DOB#">
+    <cfset day = day(date)> 
+    <cfset month = month(date)>
+    <cfset year = year(now())>
+    <cfset myDate = DateFormat(CreateDate(year, month, day), "yyyy-mm-dd")>
+    <cfset today = DateFormat(now(), "yyyy-mm-dd")>
+    
+    <cftry>
+        <cfif myDate EQ today>
+            <cfset name = "sendEmailTask#num#" >
+            <cfschedule action="update"
+                task="#name#"
+                operation="HTTPRequest"
+                url="http://appTask.local.com/scheduledTask/mail.cfm?id=#scheduleData.userId#"
+                startDate="#myDate#"
+                startTime="11:00 AM"
+                interval="once">
+            <cfset num += 1>
+        </cfif>
+    <cfcatch type="any">
+        <cfdump  var="#cfcatch#">
+    </cfcatch>
+    </cftry>
+
+</cfloop> --->
