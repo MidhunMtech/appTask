@@ -1,0 +1,12 @@
+body {
+    width: 100%;
+}
+table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+div {
+    width: 70%;
+    /* text-align: center; */
+    margin: 10px;
+}

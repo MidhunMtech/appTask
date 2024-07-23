@@ -41,7 +41,7 @@ $(document).ready(function() {
     $(".editPop").click(function() {
         var userid = $(this).data('userid');
         $.ajax({
-            url: '../component/component.cfc?method=userDetails',
+            url: '../component/component.cfc?method=fullContacts',
             method: 'POST',
             data: {
                 userid: userid
@@ -51,24 +51,24 @@ $(document).ready(function() {
                 console.log(userData);
                 $('#myModal2').show();
 
-                $('.title').val(userData.title_id);
-                $('.title').text(userData.title_name);
-                $('.fname').val(userData.fname);
-                $('.lname').val(userData.lname);
-                $('.gender').val(userData.gender);
-                $('.image').text(userData.photoName);
-                $('.imageName').val(userData.photoName);
-                $('.phone').val(userData.phone);
-                $('.address').val(userData.address);
-                $('.street').val(userData.street);
-                $('.userid').val(userData.userId);
+                $('.title').val(userData[0].title_id);
+                $('.title').text(userData[0].title_name);
+                $('.fname').val(userData[0].fname);
+                $('.lname').val(userData[0].lname);
+                $('.gender').val(userData[0].gender);
+                $('.image').text(userData[0].photoName);
+                $('.imageName').val(userData[0].photoName);
+                $('.phone').val(userData[0].phone);
+                $('.address').val(userData[0].address);
+                $('.street').val(userData[0].street);
+                $('.userid').val(userData[0].userId);
                 // $('.title').val(userData.DATA[0][10]);
                 // changing format of DOB.
-                var dateString = userData.DOB;
+                var dateString = userData[0].DOB;
                 var dateObj = new Date(dateString);
                 var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
                 $('.dob').val(formattedDate);
-                if (userData.public === "YES") {
+                if (userData[0].public === "YES") {
                     $('.checkBox').prop('checked', true);
                 } else {
                     $('.checkBox').prop('checked', false);   
@@ -176,21 +176,23 @@ $(document).ready(function() {
     $(".viewPop").click(function() {
         var userid = $(this).data('userid');
         $.ajax({
-            url: '../component/component.cfc?method=userDetails',
+            url: '../component/component.cfc?method=fullContacts',
             method: 'GET',
             data: {
                 userid: userid
             },
             success: function(response) {
                 var userData = JSON.parse(response);
+                console.log(userData);
+                console.log(userData[0].photoName);
                 $('#myModal3').show();  
-                var img = "uploads/" + userData.photoName;
-                $('.fullnameView').text(userData.fullname);
-                $('.viewEmail').text(userData.email);
-                $('.phoneView').text(userData.phone);
-                $('.genderView').text(userData.gender);
-                $('.addressView').text(userData.address);
-                $('.streetView').text(userData.street);
+                var img = "uploads/" + userData[0].photoName;
+                $('.fullnameView').text(userData[0].fullname);
+                $('.viewEmail').text(userData[0].email);
+                $('.phoneView').text(userData[0].phone);
+                $('.genderView').text(userData[0].gender);
+                $('.addressView').text(userData[0].address);
+                $('.streetView').text(userData[0].street);
                 $(".viewImg").attr("src", img);
             }
         });
@@ -243,7 +245,7 @@ $(document).ready(function() {
     //for excel download message.
     $('#excelBtn').click(function() {
         if (confirm("Do you want to download EXCEL?")) {
-            window.location.href = 'excelNew.cfm';
+            window.location.href = 'excel.cfm';
             setTimeout(function() {
                 window.location.href = 'list.cfm?excel=true';
             }, 500);

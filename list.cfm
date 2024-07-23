@@ -119,7 +119,7 @@
                                     <label for="photo">Photo <span>*</span></label>
                                     <p id="l1_file" class="error1">File Upload is Mandatory!. try again...</p>
                                     <input type="file" class="photo1" id="ephoto" name="photo" value="" accept="image/*" >
-                                    <span class="image"></span>
+                                    <p><span class="image"></span></p>
                                     <input type="hidden" name="image" class="imageName" >
                                 </div>
                             </fieldset>
@@ -148,7 +148,7 @@
                                     <label class="checkBoxL" for="epublic">Make as Public: </label>
                                     <input class="checkBox" type="checkbox" id="epublic" name="epublic" value="True">
                                 </div>
-                                            </fieldset>
+                            </fieldset>
 
                             <input type="hidden" class="userid" name="userid" value="">
 

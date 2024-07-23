@@ -1,21 +1,18 @@
 <cftry>
-    <cfinvoke component="component.component" method="userDetailsQuery" returnVariable="mailData"></cfinvoke>
+    <cfset today = DateFormat(now(), "yyyy-mm-dd")>
+    <cfinvoke component="component.component" method="fullContacts" returnVariable="mailData">
+        <cfinvokeargument  name="birthDay"  value="#today#">
+    </cfinvoke>
+    
+    <cfloop array="#mailData#" index="mailData">
+        <cfmail 
+            to="#mailData.email#" 
+            from="midhun@gmail.com"
+            subject="Happy Birthday #mailData.fullname#">
 
-    <cfloop query="mailData">
-        <cfset date="#mailData.DOB#">
-        <cfset myDate = DateFormat(CreateDate(year(now()), month(date), day(date)), "yyyy-mm-dd")>
-        <cfset today = DateFormat(now(), "yyyy-mm-dd")>
+            <p>Happyy Birthday!!!!!!!!</p>
 
-        <cfif myDate EQ today>
-            <cfmail 
-                to="#mailData.email#" 
-                from="midhun@gmail.com"
-                subject="Happy Birthday #mailData.fullname#">
-
-                <p>Happyy Birthday!!!!!!!!</p>
-
-            </cfmail>
-        </cfif>
+        </cfmail>
     </cfloop>
 <cfcatch type="any">
     <cfdump  var="#cfcatch#">

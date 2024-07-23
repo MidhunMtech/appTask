@@ -7,8 +7,8 @@
     OR NOT len(form.address)
     OR NOT len(form.street)
     OR NOT len(form.userid)>
-    <cfdump  var="#form#">
-<!---     <cflocation  url="list.cfm?error=update"> --->
+    <!--- <cfdump  var="#form#"> --->
+    <cflocation  url="list.cfm?error=update">
 <cfelse>
     <cftry>
         <cfif structKeyExists(form, "submit")>
@@ -31,7 +31,8 @@
                 <cfset photo = cffile.serverfile />
             </cfif>
                 
-            <cfset result = application.component.updateDetails(form = #form#,
+            <cfset result = application.component.updateContactDetails(
+                form = form,
                 photo = photo, 
                 isPublic = isPublic) />
 
