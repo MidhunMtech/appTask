@@ -1,12 +1,11 @@
 <cftry>
-    <cfset today = DateFormat(now(), "yyyy-mm-dd")>
     <cfinvoke component="component.component" method="fullContacts" returnVariable="mailData">
-        <cfinvokeargument  name="birthDay"  value="#today#">
+        <cfinvokeargument  name="getBirthdayOnly"  value="1">
     </cfinvoke>
     
     <cfloop array="#mailData#" index="mailData">
         <cfmail 
-            to="#mailData.email#" 
+            to="#mailData.contactEmail#" 
             from="midhun@gmail.com"
             subject="Happy Birthday #mailData.fullname#">
 

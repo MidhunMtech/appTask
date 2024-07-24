@@ -21,10 +21,11 @@
             <h1>Contact Details</h1>
             <form id="createForm" action="createAction.cfm" method="post" enctype="multipart/form-data">
                 <fieldset>
+                    <p id="l_email" class="error email"><b>Email Id Exists</b>. Try again with another email...</p>
                     <legend>Personal Details</legend>
                     <div class="form-group">
                         <label for="title">Title <span>*</span></label>
-                        <p id="l_title" class="error">Invalid title. try again...</p>
+                        <p id="l_title" class="error">Invalid title. Try again...</p>
                         <select id="title" name="title">
                             <option value=""></option>
                             <cfloop query="title">
@@ -37,19 +38,19 @@
 
                     <div class="form-group">
                         <label for="fname">First Name <span>*</span></label>
-                        <p id="l_fname" class="error">Invalid first name. try again...</p>
+                        <p id="l_fname" class="error">Invalid first name. Try again...</p>
                         <input type="text" id="fname" name="fname" >
                     </div>
 
                     <div class="form-group">
                         <label for="lname">Last Name <span>*</span></label>
-                        <p id="l_lname" class="error">Invalid last name. try again...</p>
+                        <p id="l_lname" class="error">Invalid last name. Try again...</p>
                         <input type="text" id="lname" name="lname" >
                     </div>
                     
                     <div class="form-group">
                         <label for="gender">Gender <span>*</span></label>
-                        <p id="l_gender" class="error">Invalid gender. try again...</p>
+                        <p id="l_gender" class="error">Invalid gender. Try again...</p>
                         <select id="gender" name="gender">
                             <option value=""></option>
                             <option value="Male">Male</option>
@@ -60,13 +61,13 @@
 
                     <div class="form-group">
                         <label for="dob">Date of Birth <span>*</span></label>
-                        <p id="l_dob" class="error">Date of Birth is Mandatory!. try again...</p>
+                        <p id="l_dob" class="error">Date of Birth is Mandatory!. Try again...</p>
                         <input type="date" id="dob" name="dob" >
                     </div>
 
                     <div class="form-group">
                         <label for="photo">Photo <span>*</span></label>
-                        <p id="l_file" class="error">File Upload is Mandatory!. try again...</p>
+                        <p id="l_file" class="error">File Upload is Mandatory!. Try again...</p>
                         <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
                     </div>
                 </fieldset>
@@ -77,19 +78,25 @@
                     
                     <div class="form-group">
                         <label for="phone">Phone No <span>*</span></label>
-                        <p id="l_phone" class="error">Invalid phone number. try again...</p>
+                        <p id="l_phone" class="error">Invalid phone number. Try again...</p>
                         <input type="text" id="phone" name="phone" >
                     </div>
 
                     <div class="form-group">
+                        <label for="contactEmail">Email <span>*</span></label>
+                        <p id="l_contactEmail" class="error">Invalid Email Address. Try again...</p>
+                        <input type="text" id="contactEmail" name="contactEmail" >
+                    </div>
+
+                    <div class="form-group">
                         <label for="address">Address <span>*</span></label>
-                        <p id="l_address" class="error">Invalid address. try again...</p>
+                        <p id="l_address" class="error">Invalid address. Try again...</p>
                         <input type="text" id="address" name="address" >
                     </div>
 
                     <div class="form-group">
                         <label for="street">Street <span>*</span></label>
-                        <p id="l_street" class="error">Invalid street. try again...</p>
+                        <p id="l_street" class="error">Invalid street. Try again...</p>
                         <input type="text" id="street" name="street" >
                     </div>
                     

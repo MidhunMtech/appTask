@@ -9,7 +9,9 @@ $(document).ready(function() {
         var street = $("#street").val();
         var dob = $("#dob").val();
         var photo = $("#photo").val();
+        var email = $("#contactEmail").val();
 
+        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         var valid = true;
 
         if(title.trim().length == "") {
@@ -52,7 +54,14 @@ $(document).ready(function() {
             valid = false;
         } else {
             $("#l_phone").hide();  
-        }        
+        }   
+        
+        if (!email.match(regex)) {
+            $("#l_contactEmail").show();
+            valid = false;
+        } else {
+                $("#l_contactEmail").hide();  
+        }
 
         if(photo.trim().length == "") {
             $("#l_file").show();

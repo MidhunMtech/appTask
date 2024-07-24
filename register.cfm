@@ -42,7 +42,7 @@
                 <p id="l_confirmPassword" class="error">password and confirm password not matching. Try again...</p>
                 <input type="password" id="confirmPassword" name="Cpassword" placeholder="Your password.." >
 
-                <button type="submit" name="submit" id="registerForm">Register</button>
+                <button class="btn" type="submit" name="submit" id="registerForm">Register</button>
             </form>
         </div>
     </body>

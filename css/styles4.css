@@ -152,3 +152,6 @@ img::before {
     margin: 0;
     padding: 0;
 }
+.email {
+    font-size: 14px;
+}

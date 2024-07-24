@@ -37,9 +37,13 @@ $(document).ready(function() {
     if (urlParams.get('error') === 'create') {
         $("#create").show();
     }
-      
-    $(".editPop").click(function() {
-        var userid = $(this).data('userid');
+
+    if (urlParams.get('error') === 'email') {
+        $("#l_email").show();
+        $('#myModal').show();
+    }
+
+    function fetchUserDetails(userid) {
         $.ajax({
             url: '../component/component.cfc?method=fullContacts',
             method: 'POST',
@@ -51,34 +55,44 @@ $(document).ready(function() {
                 console.log(userData);
                 $('#myModal2').show();
 
-                $('.title').val(userData[0].title_id);
-                $('.title').text(userData[0].title_name);
+                $('.title').val(userData[0].title_id).text(userData[0].title_name);
                 $('.fname').val(userData[0].fname);
                 $('.lname').val(userData[0].lname);
                 $('.gender').val(userData[0].gender);
                 $('.image').text(userData[0].photoName);
                 $('.imageName').val(userData[0].photoName);
                 $('.phone').val(userData[0].phone);
+                $('.contactEmail').val(userData[0].contactEmail);
                 $('.address').val(userData[0].address);
                 $('.street').val(userData[0].street);
                 $('.userid').val(userData[0].userId);
-                // $('.title').val(userData.DATA[0][10]);
-                // changing format of DOB.
+
+                // Changing format of DOB
                 var dateString = userData[0].DOB;
                 var dateObj = new Date(dateString);
                 var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
                 $('.dob').val(formattedDate);
-                if (userData[0].public === "YES") {
-                    $('.checkBox').prop('checked', true);
-                } else {
-                    $('.checkBox').prop('checked', false);   
-                }
+
+                $('.checkBox').prop('checked', userData[0].public === "YES");
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching user details:", error);
             }
         });
+    }
+
+    if (urlParams.get('errorEmail')) {
+        console.log(urlParams.get('errorEmail'));
+        $("#l1_email").show();
+        var userid = urlParams.get('errorEmail');
+        fetchUserDetails(userid);
+    }
+
+    $(".editPop").click(function() {
+        var userid = $(this).data('userid');
+        fetchUserDetails(userid);
     });
+    
     
     $(".close").click(function() {
         $('.checkBox').prop('checked', false);
@@ -103,7 +117,9 @@ $(document).ready(function() {
         var street = $(".street").val();
         var dob = $(".dob").val();
         var photo = $(".photo1").val();
+        var email = $(".contactEmail").val();
 
+        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         var valid = true;
 
         if(title.trim().length == "") {
@@ -148,6 +164,13 @@ $(document).ready(function() {
             $("#l1_phone").hide();  
         }        
 
+        if (!email.match(regex)) {
+            $("#l1_contactEmail").show();
+            valid = false;
+        } else {
+                $("#l1_contactEmail").hide();  
+        }
+
         /* if(photo.length == "") {
             $("#l1_file").show();
             valid = false;
@@ -188,7 +211,7 @@ $(document).ready(function() {
                 $('#myModal3').show();  
                 var img = "uploads/" + userData[0].photoName;
                 $('.fullnameView').text(userData[0].fullname);
-                $('.viewEmail').text(userData[0].email);
+                $('.viewEmail').text(userData[0].contactEmail);
                 $('.phoneView').text(userData[0].phone);
                 $('.genderView').text(userData[0].gender);
                 $('.addressView').text(userData[0].address);
@@ -224,7 +247,7 @@ $(document).ready(function() {
                     userid: userid  
                 },
                 success: function(response) {
-                    location.reload();
+                    window.location.href = 'list.cfm';
                 }
             });
         }
@@ -281,4 +304,47 @@ $(document).ready(function() {
                 window.location.href = 'list.cfm?pdf=true';
             }, 500);
         }
+    }); */
+
+ /*
+    $(".editPop").click(function() {
+        var userid = $(this).data('userid');
+        $.ajax({
+            url: '../component/component.cfc?method=fullContacts',
+            method: 'POST',
+            data: {
+                userid: userid
+            },
+            success: function(response) {
+                var userData = JSON.parse(response);
+                console.log(userData);
+                $('#myModal2').show();
+
+                $('.title').val(userData[0].title_id);
+                $('.title').text(userData[0].title_name);
+                $('.fname').val(userData[0].fname);
+                $('.lname').val(userData[0].lname);
+                $('.gender').val(userData[0].gender);
+                $('.image').text(userData[0].photoName);
+                $('.imageName').val(userData[0].photoName);
+                $('.phone').val(userData[0].phone);
+                $('.address').val(userData[0].address);
+                $('.street').val(userData[0].street);
+                $('.userid').val(userData[0].userId);
+                // $('.title').val(userData.DATA[0][10]);
+                // changing format of DOB.
+                var dateString = userData[0].DOB;
+                var dateObj = new Date(dateString);
+                var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
+                $('.dob').val(formattedDate);
+                if (userData[0].public === "YES") {
+                    $('.checkBox').prop('checked', true);
+                } else {
+                    $('.checkBox').prop('checked', false);   
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching user details:", error);
+            }
+        });
     }); */

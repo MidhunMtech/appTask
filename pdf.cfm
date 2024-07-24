@@ -5,7 +5,7 @@
 </cfcatch>
 </cftry>
 <!--- 
-<link rel="stylesheet" href="#expandPath('../css/')#styles7.css">
+<link rel="stylesheet" href="css/styles7.css">
 <cfset pdfPath = expandPath("./downloads/pdf/addressBook.pdf")> 
 --->
 <cfdocument format="PDF"
@@ -42,7 +42,7 @@
                             <td>#getData.ID#</td>
                             <td>#getData.userId#</td>
                             <td>#getdata.fullname#</td>
-                            <td>#getdata.email#</td>
+                            <td>#getdata.contactEmail#</td>
                             <td>#getdata.gender#</td>
                             <td>#getdata.DOB#</td>
                             <td>#getdata.photoName#</td>

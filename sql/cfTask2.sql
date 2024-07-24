@@ -53,6 +53,7 @@ SET FOREIGN_KEY_CHECKS = 1;
     DOB DATE,
     photoName VARCHAR(100),
     phone VARCHAR(20),
+    emailAddress VARCHAR(200),
     address VARCHAR(100),
     street VARCHAR(50),
     is_delete INT DEFAULT FALSE,
@@ -106,6 +107,12 @@ ALTER TABLE
 	contacts
 ADD COLUMN 
 	public INT;
+    
+ALTER TABLE 
+	contacts
+MODIFY COLUMN
+	emailAddress VARCHAR(200)
+after phone;
 
 ALTER TABLE 
 	contacts
@@ -120,6 +127,7 @@ where `is_delete` = 1;*/
 
 -- truncate table contacts;
 select * from contacts;
+use cfTask2;
 
 SELECT 
 	t1.email,
@@ -211,4 +219,31 @@ INNER JOIN
 		T2.nameId_fk = T3.nameId
 WHERE
 	userId = 4;
+    
+
+            select
+                *
+            from
+                contacts
+            where
+                userId = 16;
+                
+SELECT 
+	fname,
+    DOB,
+	CURDATE() AS today,
+    year(NOW()) AS yearToday,
+    day(DOB) AS dayToday,
+    month(DOB) AS monthToday,
+    STR_TO_DATE(CONCAT(YEAR(NOW()), '-', MONTH(DOB), '-', DAY(DOB)), "%Y-%m-%d") AS myDate,
+    MAKEDATE(YEAR(NOW()), DAYOFYEAR(DOB)) AS mydate2,
+    DAYOFYEAR(DOB) AS `no of days`,
+    MAKEDATE(year(NOW()), 12) AS myBirthDay
+FROM 
+	contacts
+WHERE 
+	is_delete = 0
+;
+
+select * from contacts;
 

@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.input-group input:hover {
+    border: 1px solid #929090;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #258128;
+}
+.register{
+    margin-top: 20px;
+}
+.register a {
+    color: blue;
+    text-decoration: none;
+}
+.register a:hover {
+    color: black;
+    text-decoration: underline;
+}
+.error {
+    display: none;
+    color: red;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+#userNameMsg {
+    display: none;
+    color: red;
+    font-size: 14px;
+}
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    height: 100vh;
+    /* overflow: hidden; 
+} */
+
+.navbar {
+    background-color: #70dff3;
+    overflow: hidden;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.navbar .right {
+    float: right;
+}
+
+.container {
+    width: 400px;
+    padding: 16px;
+    background-color: white;
+    margin: 10px auto 50px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type=text], input[type=password], input[type=email] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button .btn {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button .btn:hover {
+    background-color: #113113;
+}
+/* .error {
+    display: none;
+    color: red;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+} */
+#userNameMsg {
+    color: red;
+    display: none;
+    font-size: 14px;
+}
+
+#registerMsg {
+    color: red;
+    display: none;
+    font-size: 14px;
+}

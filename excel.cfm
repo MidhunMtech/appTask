@@ -20,7 +20,7 @@
                 SpreadsheetSetCellValue(spreadsheetObj,row.ID,i,1);
                 SpreadsheetSetCellValue(spreadsheetObj,row.userId,i,2);
                 SpreadsheetSetCellValue(spreadsheetObj,row.fullname,i,3);
-                SpreadsheetSetCellValue(spreadsheetObj,row.email,i,4);
+                SpreadsheetSetCellValue(spreadsheetObj,row.contactEmail,i,4);
                 SpreadsheetSetCellValue(spreadsheetObj,row.gender,i,5);
                 SpreadsheetSetCellValue(spreadsheetObj,row.DOB,i,6);
                 SpreadsheetSetCellValue(spreadsheetObj,row.photoName,i,7);

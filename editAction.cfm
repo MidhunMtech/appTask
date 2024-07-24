@@ -31,12 +31,16 @@
                 <cfset photo = cffile.serverfile />
             </cfif>
                 
-            <cfset result = application.component.updateContactDetails(
+            <cfset result = application.component.createAndUpdateContact(
                 form = form,
                 photo = photo, 
                 isPublic = isPublic) />
 
-            <cflocation  url="list.cfm">
+            <cfif result EQ 0>
+                <cflocation  url="list.cfm?errorEmail=#form.userid#">
+            <cfelse>
+                <cflocation  url="list.cfm">
+            </cfif>
         </cfif>
     <cfcatch>
         <cfdump  var="#cfcatch#">

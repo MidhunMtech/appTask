@@ -591,3 +591,78 @@ MAILDATA FUNCTION
 
         <cfreturn local.getUser />
     </cffunction> --->
+
+
+ajax editpop
+ <!---
+    $(".editPop").click(function() {
+        var userid = $(this).data('userid');
+        $.ajax({
+            url: '../component/component.cfc?method=fullContacts',
+            method: 'POST',
+            data: {
+                userid: userid
+            },
+            success: function(response) {
+                var userData = JSON.parse(response);
+                console.log(userData);
+                $('#myModal2').show();
+
+                $('.title').val(userData[0].title_id);
+                $('.title').text(userData[0].title_name);
+                $('.fname').val(userData[0].fname);
+                $('.lname').val(userData[0].lname);
+                $('.gender').val(userData[0].gender);
+                $('.image').text(userData[0].photoName);
+                $('.imageName').val(userData[0].photoName);
+                $('.phone').val(userData[0].phone);
+                $('.address').val(userData[0].address);
+                $('.street').val(userData[0].street);
+                $('.userid').val(userData[0].userId);
+                // $('.title').val(userData.DATA[0][10]);
+                // changing format of DOB.
+                var dateString = userData[0].DOB;
+                var dateObj = new Date(dateString);
+                var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
+                $('.dob').val(formattedDate);
+                if (userData[0].public === "YES") {
+                    $('.checkBox').prop('checked', true);
+                } else {
+                    $('.checkBox').prop('checked', false);   
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching user details:", error);
+            }
+        });
+    }); --->
+
+
+
+updateContactDetails function
+    <!---
+<cffunction name="updateContactDetails" returnType="void" access="public" hint="To update the contact details">
+        <cfargument  name="form" type="any" required="true">
+        <cfargument  name="photo" type="any" required="true">
+        <cfargument  name="isPublic" type="string" required="true">
+
+        <cfquery name="local.contactInsert" datasource="#application.db#">
+            UPDATE 
+                contacts
+            SET 
+                title_id = <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
+                fname = <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
+                lname = <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
+                gender = <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
+                DOB = <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
+                PhotoName = <cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
+                phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
+                public = <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">
+            WHERE
+                userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+                AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+    </cffunction>
+    --->

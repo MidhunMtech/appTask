@@ -6,7 +6,8 @@
     OR NOT len(form.phone)
     OR NOT len(form.address)
     OR NOT len(form.street)
-    OR NOT len(form.photo)>
+    OR NOT len(form.photo)
+    OR NOT len(form.contactEmail)>
     <cflocation  url="list.cfm?error=create">
 <cfelse>
     <cftry>
@@ -23,12 +24,21 @@
                 <cfset isPublic = "NO" />
             </cfif>
                 
-            <cfset result = application.component.createContact(
+            <cfset result = application.component.createAndUpdateContact(
                 form = form, 
                 photo = cffile.serverfile, 
                 isPublic = isPublic) />
+            <cftry>
+            <cfif result EQ 0>
+                <cflocation  url="list.cfm?error=email">
+            <cfelse>
+                <cflocation  url="list.cfm">
+            </cfif> 
+            <cfcatch type="any">
+                <cfdump  var="#cfcatch#">
+            </cfcatch>
+            </cftry>
                 
-            <cflocation  url="list.cfm">
         </cfif>
     <cfcatch >
         <cfdump  var="#cfcatch#">
