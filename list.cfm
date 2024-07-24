@@ -13,7 +13,7 @@
             <link rel="stylesheet" href="css/styles3.css">
             <link rel="stylesheet" href="css/bootstrap.min.css">
             <script src="js/jquery.min.js"></script>
-            <script src="js/modal.js"></script>
+            <script src="js/modal.js" defer></script>
         </head>
         <body>
             <nav>

@@ -6,7 +6,7 @@
         <title>Register Page</title>
         <link rel="stylesheet" href="css/styles2.css" type="text/css">
         <script src="js/jquery.min.js"></script>
-        <script src="js/register.js"></script>
+        <script src="js/register.js" defer></script>
     </head>
     <body>
         <div class="navbar">

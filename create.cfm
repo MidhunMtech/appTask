@@ -8,7 +8,7 @@
         <title>Create Contact Details</title>
         <link rel="stylesheet" href="css/styles4.css">
         <script src="js/jquery.min.js"></script>
-        <script src="js/create.js"></script>
+        <script src="js/create.js" defer></script>
     </head>
     <body>
         <nav>
