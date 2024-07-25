@@ -1,4 +1,5 @@
 <cfinvoke component="component.component" method="title" returnvariable="title">
+<cfinvoke component="component.component" method="hobbies" returnvariable="hobbies">
 <cfinvoke component="component.component" method="logout" returnvariable="logout">
 <!DOCTYPE html>
 <html lang="en">
@@ -70,6 +71,18 @@
                         <p id="l_file" class="error">File Upload is Mandatory!. Try again...</p>
                         <input type="file" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg">
                     </div>
+
+                    <div class="form-group">
+                        <label for="hobby">Hobbies <span>*</span></label>
+                        <p id="l_hobbie" class="error">Select minimum 3. Try again...</p>
+                        <select id="hobbie" name="hobbie" multiple>
+                            <cfloop query="hobbies">
+                                <cfoutput>
+                                    <option value="#hobbies.Id#">#hobbies.hobbies#</option>
+                                </cfoutput>
+                            </cfloop>
+                        </select>
+                    </div>
                 </fieldset>
 
                 <fieldset>
@@ -105,7 +118,7 @@
                         <input class="checkBox" type="checkbox" id="publicl" name="public" value="Yes">
                     </div>
                 </fieldset>
-                <button id="createSubmit" type="submit" name="create">Submit</button>
+                <button id="createSubmit" type="submit" name="submit">Submit</button>
             </form>
         </div>
     </body>

@@ -14,7 +14,7 @@
         <cfif structKeyExists(form, "submit")>
             <cfset pathDir = expandPath("uploads") />
     
-            <cfif structKeyExists(form, "epublic")>
+            <cfif structKeyExists(form, "public")>
                 <cfset isPublic = "YES" />
             <cfelse>
                 <cfset isPublic = "NO" />

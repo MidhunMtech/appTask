@@ -33,8 +33,21 @@
                 <p id="pdf" class="downloadMessage">PDF downloaded Successfully....</p>
                 <p id="print" class="downloadMessage">Print done Successfully....</p>
                 <p id="excel" class="downloadMessage">Excel downloaded Successfully....</p>
-                <p id="update" class="downloadMessage update">Update failed. Try again....</p>
+                <!---<p id="update" class="downloadMessage update">Update failed. Try again....</p>
                 <p id="create" class="downloadMessage update">Create contact failed. Try again....</p>
+                <p id="ue" class="downloadMessage update"><b>Failed due to unexpected error</b>. Try again....</p> --->
+
+                <cfif structKeyExists(session, "returnStruct") AND session.returnStruct.success EQ 1>
+                    <p class="downloadMessage noerror">
+                        <b><cfdump  var="#session.returnStruct.message#"></b>
+                    </p>
+                    <cfset structDelete(session, "returnStruct") />
+                <cfelseif structKeyExists(session, "returnStruct") AND session.returnStruct.success == 0>
+                    <p class="downloadMessage yeserror">
+                        <b><cfdump  var="#session.returnStruct.message#"></b>
+                    </p>
+                    <cfset structDelete(session, "returnStruct") />
+                </cfif>
             </div>
             
             <div class="container-fluid">
@@ -70,7 +83,7 @@
                     <span class="close">&times;</span>
                     <div class="container1">
                         <h1>Update Details</h1>
-                        <form id="editForm" action="editAction.cfm" method="post" enctype="multipart/form-data">
+                        <form id="editForm" action="createAction.cfm" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <p id="l1_email" class="error email"><b>Email Id Exists</b>. Try again with another email...</p>
                                 <legend>Personal Details</legend>
@@ -123,6 +136,18 @@
                                     <p><span class="image"></span></p>
                                     <input type="hidden" name="image" class="imageName" >
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="hobby">Hobbies <span>*</span></label>
+                                    <p id="l1_hobbie" class="error1">Select minimum 3. Try again...</p>
+                                    <select class="hobbie" name="hobbie" multiple>
+                                        <cfloop query="hobbies">
+                                            <cfoutput>
+                                                <option value="#hobbies.Id#">#hobbies.hobbies#</option>
+                                            </cfoutput>
+                                        </cfloop>
+                                    </select>
+                                </div>
                             </fieldset>
             
                             <fieldset>
@@ -153,7 +178,7 @@
 
                                 <div class="check">
                                     <label class="checkBoxL" for="epublic">Make as Public: </label>
-                                    <input class="checkBox" type="checkbox" id="epublic" name="epublic" value="True">
+                                    <input class="checkBox" type="checkbox" id="epublic" name="public" value="True">
                                 </div>
                             </fieldset>
 

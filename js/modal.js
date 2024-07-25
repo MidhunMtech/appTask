@@ -37,6 +37,9 @@ $(document).ready(function() {
     if (urlParams.get('error') === 'create') {
         $("#create").show();
     }
+    if (urlParams.get('error') === 'ue') {
+        $("#ue").show();
+    }
 
     if (urlParams.get('error') === 'email') {
         $("#l_email").show();

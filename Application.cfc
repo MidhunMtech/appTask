@@ -24,7 +24,7 @@
             <!--- AND listLast(arguments.targetPage, "/") != "mail.cfm" --->
             AND listLast(arguments.targetPage, "/") != "test2.cfm">
 
-            <cflocation url="login.cfm">
+            <cflocation url="/login.cfm">
         </cfif> 
     </cffunction>
     

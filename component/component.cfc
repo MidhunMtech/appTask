@@ -82,87 +82,147 @@
     </cffunction>
 
     
-    <cffunction name="createAndUpdateContact" returnType="numeric" access="public" hint="function for Create and Update contacts">
+    <cffunction name="createAndUpdateContact" returnType="query" access="public" hint="function for Create and Update contacts">
         <cfargument name="form" type="any" required="true" >
         <cfargument name="photo" type="any" required="true" >
         <cfargument name="isPublic" type="string" required="true">
         
-        <cfquery name="local.checkEmailExists" datasource="#application.db#">
-            SELECT 
-                emailAddress
-            FROM 
-                contacts
-            WHERE 
-                emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
-                AND is_delete = 0
-                <cfif structKeyExists(arguments.form, "userid")>
-                    AND userId != <cfqueryparam value="#arguments.form.userid#" cfsqltype="cf_sql_integer">
-                </cfif>
-        </cfquery>
+        <cfset local.return = {
+            "success" : 1,
+            "message" : ""
+        }>
 
-        <cfif queryRecordCount(local.checkEmailExists) EQ 0>
+        <cftry>
+            <cfquery name="local.checkEmailExists" datasource="#application.db#">
+                SELECT 
+                    emailAddress
+                FROM 
+                    contacts
+                WHERE 
+                    emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
+                    AND is_delete = 0
+                    <cfif structKeyExists(arguments.form, "userid")>
+                        AND userId != <cfqueryparam value="#arguments.form.userid#" cfsqltype="cf_sql_integer">
+                    </cfif>
+            </cfquery>
+
+            <cfset local.hobbieArray = listToArray(arguments.form.hobbie)>
+
             <cfif structKeyExists(arguments.form, "userid")>
-                <cfquery name="local.contactUpdate" datasource="#application.db#">
-                    UPDATE 
-                        contacts
-                    SET 
-                        title_id = <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
-                        fname = <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
-                        lname = <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
-                        gender = <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
-                        DOB = <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
-                        PhotoName = <cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
-                        phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
-                        address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
-                        street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
-                        public = <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">,
-                        emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
-                    WHERE
-                        userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
-                        AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-                </cfquery>
+                <cfif queryRecordCount(local.checkEmailExists) EQ 0>
+                    <cfquery name="local.contactUpdate" datasource="#application.db#">
+                        UPDATE 
+                            contacts
+                        SET 
+                            title_id = <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
+                            fname = <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
+                            lname = <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
+                            gender = <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
+                            DOB = <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
+                            PhotoName = <cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
+                            phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                            address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                            street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
+                            public = <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">,
+                            emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
+                        WHERE
+                            userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+                            AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                    </cfquery>
 
-                <cfset local.isCreated = 1>
+                    <!--- <cfloop array="#hobbieArray#" item="hobbie">
+                        <cfquery name="local.updateHobbie" datasource="#application.db#">
+                            UPDATE
+                                User_Hobbies
+                            SET
+                                contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">,
+                                hobbie_id = <cfqueryparam value="#hobbie#" cfsqltype="cf_sql_integer">
+                        </cfquery>
+                    </cfloop> --->
+
+                    <cfset local.return.message = "Contact Updated Successfully">
+                <cfelse>
+                    <cfset local.return.success = 0>
+                    <cfset local.return.message = "Update Failed due to Email Id Exists. Try again...">
+                </cfif>
             <cfelse>
-                <cfquery name="local.contactInsert" datasource="#application.db#">
-                    INSERT INTO 
-                        contacts(
-                            title_id,
-                            fname,
-                            lname,
-                            gender,
-                            DOB,
-                            PhotoName,
-                            phone,
-                            emailAddress,
-                            address,
-                            street,
-                            nameId_fk,
-                            public
+                <cfif queryRecordCount(local.checkEmailExists) EQ 0>
+                    <cfquery name="local.contactInsert" datasource="#application.db#">
+                        INSERT INTO 
+                            contacts(
+                                title_id,
+                                fname,
+                                lname,
+                                gender,
+                                DOB,
+                                PhotoName,
+                                phone,
+                                emailAddress,
+                                address,
+                                street,
+                                nameId_fk,
+                                public
+                            )
+                        VALUES (
+                            <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
+                            <cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">
                         )
-                    VALUES (
-                        <cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
-                        <cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">
-                    )
-                </cfquery>
+                    </cfquery>
 
-                <cfset local.isCreated = 1>
+                    <cfquery name="local.getUserId" datasource="#application.db#">
+                        SELECT 
+                            userId
+                        FROM
+                            contacts
+                        WHERE
+                            emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
+                    </cfquery>
+                    <!-- Get the last inserted user ID -->
+                    <!--- <cfquery name="local.getUserId" datasource="#application.db#">
+                        SELECT LAST_INSERT_ID() AS user_id
+                    </cfquery> --->
+
+                    <cfloop array="#local.hobbieArray#" index="hobbie">
+                        <cfquery name="local.addHobbie" datasource="#application.db#">
+                            INSERT INTO
+                                User_Hobbies (
+                                    contact_userId,
+                                    hobbie_id,
+                                    hobbie_nameId_fk
+                                )
+                            VALUES (
+                                <cfqueryparam value="#local.getUserId.userId#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#hobbie#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                            )
+                        </cfquery>
+                    </cfloop>
+
+                    <cfset local.return.message = "Contact Created Successfully">
+                <cfelse>
+                    <cfset local.return.success = 0>
+                    <cfset local.return.message = "Create Failed due to Email Id Exists. Try again...">
+                </cfif>
             </cfif>
-        <cfelse>
-            <cfset local.isCreated = 0>
-        </cfif>
+        <cfcatch type="any">
+        <cfdump  var="#cfcatch#">
+            <!--- <cfset local.return.success = 0>
+            <cfset local.return.message = "Unexpected error. Try again..."> --->
+        </cfcatch>
+        </cftry>
         
-        <cfreturn local.isCreated>
+        <cfset session.returnStruct = local.return>
+        <cfreturn local.getUserId>
     </cffunction>
 
 
@@ -191,6 +251,19 @@
         </cfquery>
 
         <cfreturn local.title>
+    </cffunction>
+
+
+    <cffunction  name="hobbies" access="public" returnType="query" hint="For Hobbies">
+        <cfquery name="local.hobbies" datasource="#application.db#">
+            SELECT 
+                Id,
+                hobbies
+            FROM
+                hobbies
+        </cfquery>
+    
+        <cfreturn local.hobbies>
     </cffunction>
 
  

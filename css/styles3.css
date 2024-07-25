@@ -224,6 +224,13 @@ header ul li a:hover {
 .update {
     color: red;
 }
+.noerror {
+    display: block;
+}
+.yeserror {
+    color: red;
+    display: block;
+}
 @media print {
     .to-print {
         color: black;

@@ -63,11 +63,30 @@ SET FOREIGN_KEY_CHECKS = 1;
 ALTER TABLE 
 	contacts
 ADD CONSTRAINT 
+	fk_hobbie
+FOREIGN KEY 
+	(Hobbies) 
+REFERENCES 
+	hobbies(Id);
+    
+SHOW CREATE TABLE contacts;
+
+ALTER TABLE contacts
+DROP FOREIGN KEY fk_hobbie;
+
+ALTER TABLE contacts
+DROP COLUMN Hobbies;
+
+
+ALTER TABLE 
+	contacts
+ADD CONSTRAINT 
 	fk_user
 FOREIGN KEY 
 	(nameId_fk) 
 REFERENCES 
 	registerForm(nameID);
+    
 
 ALTER TABLE 
 	contacts
@@ -113,6 +132,14 @@ ALTER TABLE
 MODIFY COLUMN
 	emailAddress VARCHAR(200)
 after phone;
+
+ALTER TABLE 
+	contacts
+MODIFY COLUMN
+	Hobbies INT
+after photoName;
+
+select * from contacts;
 
 ALTER TABLE 
 	contacts
@@ -246,4 +273,62 @@ WHERE
 ;
 
 select * from contacts;
+use cfTask2;
 
+CREATE TABLE hobbies (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+    hobbies VARCHAR(50)
+);
+
+
+CREATE TABLE User_Hobbies (
+	user_hobbie_id INT PRIMARY KEY AUTO_INCREMENT,
+    contact_userId INT,
+    hobbie_id INT,
+    contact_nameId_fk INT,
+    FOREIGN KEY (contact_userId) REFERENCES contacts(userId),
+    FOREIGN KEY (hobbie_id) REFERENCES Hobbies(Id)
+);
+
+SELECT * FROM User_Hobbies;
+
+select * from hobbies;
+
+select * from contacts;
+
+
+ALTER table
+	User_Hobbies
+add column
+	hobbie_nameId_fk int;
+
+ALTER table
+	User_Hobbies
+CHANGE
+	hobbie_nameId_fk contact_nameId_fk int;
+
+ALTER TABLE 
+	User_Hobbies
+ADD CONSTRAINT 
+	fk_hobbie_nameId
+FOREIGN KEY 
+	(hobbie_nameId_fk) 
+REFERENCES 
+	contacts(nameId_fk);
+    
+SELECT LAST_INSERT_ID() AS user_hobbie_id;
+
+
+SELECT 
+	hobbies 
+FROM 
+	Hobbies
+INNER JOIN 
+	User_Hobbies
+ON 
+	Hobbies.Id = User_Hobbies.hobbie_id;
+    
+
+update User_Hobbies
+set hobbie_id = 4
+where user_hobbie_id = 3;
