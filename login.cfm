@@ -1,3 +1,6 @@
+<cfif structKeyExists(session, "userId")>
+    <cflocation  url="list.cfm" addToken="false">
+</cfif>
 <!DOCTYPE html>
 <html lang="en">
     <head>

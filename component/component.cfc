@@ -82,10 +82,10 @@
     </cffunction>
 
     
-    <cffunction name="createAndUpdateContact" returnType="query" access="public" hint="function for Create and Update contacts">
+    <cffunction name="createAndUpdateContact" returnType="struct" access="public" hint="function for Create and Update contacts">
         <cfargument name="form" type="any" required="true" >
         <cfargument name="photo" type="any" required="true" >
-        <cfargument name="isPublic" type="string" required="true">
+        <!--- <cfargument name="isPublic" type="string" required="true"> --->
         
         <cfset local.return = {
             "success" : 1,
@@ -106,6 +106,18 @@
                     </cfif>
             </cfquery>
 
+            <cfquery name="local.checkHobbies" datasource="#application.db#">
+                SELECT
+                    Id
+                FROM
+                    hobbies
+            </cfquery>
+
+            <cfset local.hobbiesIdArray = []>
+            <cfloop query="local.checkHobbies">
+                <cfset arrayAppend(local.hobbiesIdArray, #local.checkHobbies.Id#)>
+            </cfloop>
+
             <cfset local.hobbieArray = listToArray(arguments.form.hobbie)>
 
             <cfif structKeyExists(arguments.form, "userid")>
@@ -123,22 +135,23 @@
                             phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
                             address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
                             street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
-                            public = <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">,
+                            public = <cfqueryparam value="#arguments.form.public#" cfsqltype="cf_sql_varchar">,
                             emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
                         WHERE
                             userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
                             AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                     </cfquery>
 
-                    <!--- <cfloop array="#hobbieArray#" item="hobbie">
+                    <cfloop array="#hobbieArray#" item="hobbie">
                         <cfquery name="local.updateHobbie" datasource="#application.db#">
                             UPDATE
                                 User_Hobbies
                             SET
-                                contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">,
                                 hobbie_id = <cfqueryparam value="#hobbie#" cfsqltype="cf_sql_integer">
+                            WHERE 
+                                contact_userId = <cfqueryparam value="#arguments.form.userid#" cfsqltype="cf_sql_integer">
                         </cfquery>
-                    </cfloop> --->
+                    </cfloop>
 
                     <cfset local.return.message = "Contact Updated Successfully">
                 <cfelse>
@@ -147,7 +160,7 @@
                 </cfif>
             <cfelse>
                 <cfif queryRecordCount(local.checkEmailExists) EQ 0>
-                    <cfquery name="local.contactInsert" datasource="#application.db#">
+                    <cfquery name="local.contactInsert" datasource="#application.db#" result="local.contactInsertQueryResult">
                         INSERT INTO 
                             contacts(
                                 title_id,
@@ -175,39 +188,29 @@
                             <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#arguments.isPublic#" cfsqltype="cf_sql_varchar">
+                            <cfqueryparam value="#arguments.form.public#" cfsqltype="cf_sql_varchar">
                         )
                     </cfquery>
 
-                    <cfquery name="local.getUserId" datasource="#application.db#">
-                        SELECT 
-                            userId
-                        FROM
-                            contacts
-                        WHERE
-                            emailAddress = <cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">
-                    </cfquery>
-                    <!-- Get the last inserted user ID -->
-                    <!--- <cfquery name="local.getUserId" datasource="#application.db#">
-                        SELECT LAST_INSERT_ID() AS user_id
-                    </cfquery> --->
-
-                    <cfloop array="#local.hobbieArray#" index="hobbie">
-                        <cfquery name="local.addHobbie" datasource="#application.db#">
-                            INSERT INTO
-                                User_Hobbies (
-                                    contact_userId,
-                                    hobbie_id,
-                                    hobbie_nameId_fk
-                                )
-                            VALUES (
-                                <cfqueryparam value="#local.getUserId.userId#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#hobbie#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-                            )
-                        </cfquery>
+                    <!--- Retrieve the last inserted ID --->
+                    <cfset local.lastInsertedID = local.contactInsertQueryResult.GENERATEDKEY>
+                    <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                        <cfif arrayFind(local.hobbiesIdArray, local.hobbie)>
+                            <cfquery name="local.addHobbie" datasource="#application.db#">
+                                INSERT INTO
+                                    User_Hobbies (
+                                        contact_userId,
+                                        hobbie_id
+                                    )
+                                VALUES
+                                    (
+                                        <cfqueryparam value="#local.lastInsertedID#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                                    )
+                            </cfquery>
+                        </cfif>
                     </cfloop>
-
+                    
                     <cfset local.return.message = "Contact Created Successfully">
                 <cfelse>
                     <cfset local.return.success = 0>
@@ -215,14 +218,14 @@
                 </cfif>
             </cfif>
         <cfcatch type="any">
-        <cfdump  var="#cfcatch#">
-            <!--- <cfset local.return.success = 0>
-            <cfset local.return.message = "Unexpected error. Try again..."> --->
+            <cfdump  var="#cfcatch#">
+            <cfset local.return.success = 0>
+            <cfset local.return.message = "Unexpected error. Try again...">
         </cfcatch>
         </cftry>
         
         <cfset session.returnStruct = local.return>
-        <cfreturn local.getUserId>
+        <cfreturn local.return>
     </cffunction>
 
 
@@ -292,7 +295,11 @@
                 t2.public AS public,
                 t2.is_delete AS is_delete,
                 t2.title_id AS title_id,
-                t2.emailAddress AS contactEmail
+                t2.emailAddress AS contactEmail,
+                t4.hobbie_id AS hobbieNumber,
+                t4.contact_userId AS contactHobbieUserid,
+                t4.user_hobbie_id AS hobbieUniqueId,
+                t5.hobbies AS hobbies
             FROM 
                 registerForm AS t1
             INNER JOIN 
@@ -303,6 +310,14 @@
                 title_names AS t3
                 ON 
                     t3.title_id = t2.title_id
+            INNER JOIN 
+                User_Hobbies As t4
+                ON
+                    t4.contact_userId = t2.userId
+            INNER JOIN 
+                hobbies As t5
+                ON
+                    t4.hobbie_id = t5.Id
             WHERE
                 is_delete = 0
                 <cfif structKeyExists(arguments, "userid")>
@@ -336,7 +351,12 @@
                 "title_name" : local.getContactDetails.title_name,
                 "fname" : local.getContactDetails.fname,
                 "lname" : local.getContactDetails.lname,
-                "contactEmail" : local.getContactDetails.contactEmail
+                "contactEmail" : local.getContactDetails.contactEmail,
+                "hobbieNumber" : local.getContactDetails.hobbieNumber,
+                "contactHobbieUserid" : local.getContactDetails.contactHobbieUserid,
+                "hobbieUniqueId" : local.getContactDetails.hobbieUniqueId,
+                "hobbies" : local.getContactDetails.hobbies
+
             } >
 
             <cfset arrayAppend(local.returnArray, local.structContacts)> 

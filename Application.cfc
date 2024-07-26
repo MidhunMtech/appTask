@@ -13,7 +13,6 @@
 
     <cffunction name="onRequestStart" returntype="void" output="false">
         <cfargument name="targetPage" type="string" required="true">
-        
         <cfif structKeyExists(url, "reset")>
             <cfset onApplicationStart()>
         </cfif>

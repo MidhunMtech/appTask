@@ -115,7 +115,7 @@
                     
                     <div class="check">
                         <label class="checkBoxL" for="publicl">Make as Public: </label>
-                        <input class="checkBox" type="checkbox" id="publicl" name="public" value="Yes">
+                        <input class="checkBox" type="checkbox" id="publicl" name="public" value="YES">
                     </div>
                 </fieldset>
                 <button id="createSubmit" type="submit" name="submit">Submit</button>

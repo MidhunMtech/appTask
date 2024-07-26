@@ -32,28 +32,23 @@
 
                 <cfset photo = cffile.serverfile />
             </cfif>
-            <cfif structKeyExists(form, "public")>
+            <!--- <cfif structKeyExists(form, "public")>
                 <cfset isPublic = "YES" />
             <cfelse>
                 <cfset isPublic = "NO" />
-            </cfif>
-                
-            <cfset result = application.component.createAndUpdateContact(
-                form = form, 
-                photo = photo, 
-                isPublic = isPublic) />
-            <cftry>
-            <!--- <cfdump  var="#result#"> --->
+            </cfif> --->
+
+            <cfparam  name="form.public" default="NO">
+            <cfdump  var="#form.public#">
+
+            <cftry>  
+                <cfset result = application.component.createAndUpdateContact(
+                    form = form, 
+                    photo = photo<!--- , 
+                    isPublic = isPublic --->) />
+            
+                <!--- <cfdump  var="#result#"> --->
                 <cflocation  url="/list.cfm">
-                <!--- <cfif result.success EQ 1 AND result.message EQ "created" OR result.message EQ "updated">
-                    <cflocation  url="list.cfm">
-                <cfelseif result.success EQ 0 AND result.message EQ "create failed">
-                    <cflocation  url="list.cfm?error=email">
-                <cfelseif result.success EQ 0 AND result.message EQ "update failed">
-                    <cflocation  url="list.cfm?errorEmail=#form.userid#">
-                <cfelse>
-                    <cflocation  url="list.cfm?error=ue">
-                </cfif> ---> 
             <cfcatch type="any">
                 <cfdump  var="#cfcatch#">
             </cfcatch>

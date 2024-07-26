@@ -36,15 +36,12 @@
                 <!---<p id="update" class="downloadMessage update">Update failed. Try again....</p>
                 <p id="create" class="downloadMessage update">Create contact failed. Try again....</p>
                 <p id="ue" class="downloadMessage update"><b>Failed due to unexpected error</b>. Try again....</p> --->
-
-                <cfif structKeyExists(session, "returnStruct") AND session.returnStruct.success EQ 1>
-                    <p class="downloadMessage noerror">
-                        <b><cfdump  var="#session.returnStruct.message#"></b>
-                    </p>
-                    <cfset structDelete(session, "returnStruct") />
-                <cfelseif structKeyExists(session, "returnStruct") AND session.returnStruct.success == 0>
-                    <p class="downloadMessage yeserror">
-                        <b><cfdump  var="#session.returnStruct.message#"></b>
+                
+                <cfif structKeyExists(session, "returnStruct")>
+                    <p class="downloadMessage <cfif session.returnStruct.success EQ 1>noerror<cfelse>yeserror</cfif>">
+                        <cfoutput>
+                            <b>#session.returnStruct.message#</b>
+                        </cfoutput>
                     </p>
                     <cfset structDelete(session, "returnStruct") />
                 </cfif>
@@ -144,6 +141,7 @@
                                         <cfloop query="hobbies">
                                             <cfoutput>
                                                 <option value="#hobbies.Id#">#hobbies.hobbies#</option>
+                                                <!--- <input type="hidden" class="hobbieUserId" name="hobbieUserId" value=""> --->
                                             </cfoutput>
                                         </cfloop>
                                     </select>
@@ -178,7 +176,7 @@
 
                                 <div class="check">
                                     <label class="checkBoxL" for="epublic">Make as Public: </label>
-                                    <input class="checkBox" type="checkbox" id="epublic" name="public" value="True">
+                                    <input class="checkBox" type="checkbox" id="epublic" name="public" value="YES">
                                 </div>
                             </fieldset>
 
