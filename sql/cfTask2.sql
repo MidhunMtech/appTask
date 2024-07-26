@@ -285,12 +285,16 @@ CREATE TABLE User_Hobbies (
 	user_hobbie_id INT PRIMARY KEY AUTO_INCREMENT,
     contact_userId INT,
     hobbie_id INT,
-    contact_nameId_fk INT,
+    hobbie_created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (contact_userId) REFERENCES contacts(userId),
     FOREIGN KEY (hobbie_id) REFERENCES Hobbies(Id)
 );
 
+USE cfTask2;
+
 SELECT * FROM User_Hobbies;
+
+select * from contacts;
 
 select * from hobbies;
 
@@ -301,6 +305,11 @@ ALTER table
 	User_Hobbies
 add column
 	hobbie_nameId_fk int;
+    
+ALTER table
+	User_Hobbies
+add column
+	hobbie_created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 ALTER table
 	User_Hobbies
@@ -332,3 +341,11 @@ ON
 update User_Hobbies
 set hobbie_id = 4
 where user_hobbie_id = 3;
+
+ALTER TABLE User_Hobbies
+DROP COLUMN contact_nameId_fk;
+
+ALTER TABLE User_Hobbies
+DROP FOREIGN KEY fk_hobbie_nameId;
+
+

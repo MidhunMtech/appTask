@@ -274,7 +274,8 @@
         <cfargument name="userid" type="numeric" required="false">
         <cfargument  name="getBirthdayOnly" type="numeric" required="false">
 
-        <cfset local.structContacts = {}>
+        <!--- <cfset local.structHobbie = {}>--->
+        <cfset local.structContacts = {}> 
         <cfset local.returnArray = [] >
         <cfquery name="local.getContactDetails" datasource="#application.db#">
             SELECT
@@ -310,14 +311,14 @@
                 title_names AS t3
                 ON 
                     t3.title_id = t2.title_id
-            INNER JOIN 
+            <!---INNER JOIN 
                 User_Hobbies As t4
                 ON
                     t4.contact_userId = t2.userId
             INNER JOIN 
                 hobbies As t5
                 ON
-                    t4.hobbie_id = t5.Id
+                    t4.hobbie_id = t5.Id--->
             WHERE
                 is_delete = 0
                 <cfif structKeyExists(arguments, "userid")>
@@ -359,7 +360,18 @@
 
             } >
 
-            <cfset arrayAppend(local.returnArray, local.structContacts)> 
+            <cfset arrayAppend(local.returnArray, local.structContacts)>
+
+            <!--- <cfif structKeyExists(arguments, "userid")>
+                <cfset local.structHobbie = {
+                    "hobbieNumber" : local.getContactDetails.hobbieNumber,
+                    "contactHobbieUserid" : local.getContactDetails.contactHobbieUserid,
+                    "hobbieUniqueId" : local.getContactDetails.hobbieUniqueId,
+                    "hobbies" : local.getContactDetails.hobbies
+                }>
+    
+                <cfset arrayAppend(local.returnArray, local.structHobbie)>
+            </cfif> --->
         </cfloop>
         <cfreturn local.returnArray />
     </cffunction>
