@@ -274,9 +274,10 @@
         <cfargument name="userid" type="numeric" required="false">
         <cfargument  name="getBirthdayOnly" type="numeric" required="false">
 
-        <!--- <cfset local.structHobbie = {}>--->
-        <cfset local.structContacts = {}> 
+        <!--- <cfset local.structHobbie = {}>
+        <cfset local.structContacts = {}> --->
         <cfset local.returnArray = [] >
+         <cfset local.hobbieArray = [] >
         <cfquery name="local.getContactDetails" datasource="#application.db#">
             SELECT
                 t3.title AS title_name,
@@ -373,6 +374,40 @@
                 <cfset arrayAppend(local.returnArray, local.structHobbie)>
             </cfif> --->
         </cfloop>
+
+        <cfif structKeyExists(arguments, "userid")>
+            <cfquery name="local.getHobbieDetails" datasource="#application.db#">
+                SELECT 
+                    T1.Id AS hobbieId,
+                    T1.hobbies AS hobbieName,
+                    T2.hobbie_id AS T2hobbieId,
+                    T3.is_delete AS is_delete
+                FROM
+                    hobbies AS T1
+                INNER JOIN
+                    User_Hobbies AS T2
+                    ON
+                        T1.Id = T2.hobbie_id
+                INNER JOIN
+                    contacts AS T3
+                    ON
+                        T3.userId = T2.contact_userId
+                WHERE
+                    T2.contact_userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                    AND is_delete = 0
+            </cfquery>
+
+            <cfloop query="local.getHobbieDetails">
+                <!--- <cfset local.structHobbie = {
+                    "hobbieId" : local.getHobbieDetails.hobbieId,
+                    "hobbieName" : local.getHobbieDetails.hobbieName,
+                    "T2hobbieId" : local.getHobbieDetails.T2hobbieId
+                }> --->
+    
+                <cfset arrayAppend(local.hobbieArray, local.getHobbieDetails.T2hobbieId)>
+            </cfloop>
+            <cfset arrayAppend(local.returnArray, local.hobbieArray)>
+        </cfif>
         <cfreturn local.returnArray />
     </cffunction>
 

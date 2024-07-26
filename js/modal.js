@@ -55,7 +55,8 @@ $(document).ready(function() {
             },
             success: function(response) {
                 var userData = JSON.parse(response);
-                console.log(userData);
+                /* console.log(userData);
+                console.log(userData[1]); */
                 $('#myModal2').show();
 
                 $('.title').val(userData[0].title_id).text(userData[0].title_name);
@@ -77,6 +78,12 @@ $(document).ready(function() {
                 $('.dob').val(formattedDate);
 
                 $('.checkBox').prop('checked', userData[0].public === "YES");
+
+                for (var i in userData[1]){
+                    // console.log(i);
+                    // console.log(userData[1]);
+                    $(".hobbie").val(userData[1]);
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching user details:", error);
