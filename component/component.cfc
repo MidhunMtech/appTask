@@ -295,11 +295,11 @@
                 t2.public AS public,
                 t2.is_delete AS is_delete,
                 t2.title_id AS title_id,
-                t2.emailAddress AS contactEmail,
+                t2.emailAddress AS contactEmail<!---,
                 t4.hobbie_id AS hobbieNumber,
                 t4.contact_userId AS contactHobbieUserid,
                 t4.user_hobbie_id AS hobbieUniqueId,
-                t5.hobbies AS hobbies
+                t5.hobbies AS hobbies--->
             FROM 
                 registerForm AS t1
             INNER JOIN 
@@ -351,11 +351,11 @@
                 "title_name" : local.getContactDetails.title_name,
                 "fname" : local.getContactDetails.fname,
                 "lname" : local.getContactDetails.lname,
-                "contactEmail" : local.getContactDetails.contactEmail,
+                "contactEmail" : local.getContactDetails.contactEmail<!---,
                 "hobbieNumber" : local.getContactDetails.hobbieNumber,
                 "contactHobbieUserid" : local.getContactDetails.contactHobbieUserid,
                 "hobbieUniqueId" : local.getContactDetails.hobbieUniqueId,
-                "hobbies" : local.getContactDetails.hobbies
+                "hobbies" : local.getContactDetails.hobbies--->
 
             } >
 
