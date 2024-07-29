@@ -1,9 +1,9 @@
 <cftry>
     <cfinvoke component="component.component" method="fullContacts" returnVariable="mailData">
-        <cfinvokeargument  name="getBirthdayOnly"  value="1">
+        <cfinvokeargument name="getBirthdayOnly"  value="1">
     </cfinvoke>
     
-    <cfloop array="#mailData#" index="mailData">
+    <cfloop array="#mailData[1]#" index="mailData">
         <cfmail 
             to="#mailData.contactEmail#" 
             from="midhun@gmail.com"

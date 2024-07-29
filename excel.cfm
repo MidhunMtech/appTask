@@ -9,14 +9,21 @@
     spreadsheetObj = SpreadsheetNew('addressBook', 'yes'); // this 'yes' is for xlsx format
 
     // Add header
-    SpreadSheetAddRow(spreadsheetObj,'ID,UserId,fullname,email,gender,DOB,photoName,phone,address,street,photo');
+    SpreadSheetAddRow(spreadsheetObj,'ID,UserId,fullname,email,gender,DOB,photoName,phone,address,street,photo,hobbies');
 
     //Add Data
      i = 2;
      
     try {
-            for (row in getData) {
+            for (row in getData[1]) {
                 cellRange = "#i#,11,#i+1#,12";
+                hobbiesArray = [];
+                for (hobbie in getData[2]) {
+                    if (row.userId EQ hobbie.contactHobbieUserid) {
+                        ArrayAppend(hobbiesArray, hobbie.hobbieName);
+                    }
+                }
+
                 SpreadsheetSetCellValue(spreadsheetObj,row.ID,i,1);
                 SpreadsheetSetCellValue(spreadsheetObj,row.userId,i,2);
                 SpreadsheetSetCellValue(spreadsheetObj,row.fullname,i,3);
@@ -29,6 +36,7 @@
                 SpreadsheetSetCellValue(spreadsheetObj,row.street,i,10);
                 imagePath = expandPath("uploads/#row.photoName#");
                 spreadsheetAddImage(spreadsheetObj, imagePath, cellRange);
+                SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray, ", "),i,12);
 
                 i += 1;
             }

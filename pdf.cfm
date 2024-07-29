@@ -1,5 +1,6 @@
 <cftry>
     <cfinvoke  component="component.component" method="fullContacts" returnvariable="getData">
+<!---     <cfdump  var="#getdata#" abort> --->
 <cfcatch type="any">
     <cfdump  var="#cfcatch#">
 </cfcatch>
@@ -8,6 +9,8 @@
 <link rel="stylesheet" href="css/styles7.css">
 <cfset pdfPath = expandPath("./downloads/pdf/addressBook.pdf")> 
 --->
+<cftry>
+
 <cfdocument format="PDF"
     <!--- filename="#pdfPath#" ---> 
     name="pdfDoc" 
@@ -23,7 +26,7 @@
         <table border="2">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!--- <th>ID</th> --->
                     <th>user Id</th>
                     <th>fullname</th>
                     <th>Email Id</th>
@@ -32,31 +35,42 @@
                     <th>Photo Name</th>
                     <th>Phone No</th>
                     <th>Address</th>
-                    <th>Street</th>
+                    <!--- <th>Street</th> --->
+                    <th>Hobbies</th>
                 </tr>
             </thead>
             <tbody>
-                <cfoutput>
-                    <cfloop array="#getData#" index="getData">
-                        <tr>
-                            <td>#getData.ID#</td>
-                            <td>#getData.userId#</td>
-                            <td>#getdata.fullname#</td>
-                            <td>#getdata.contactEmail#</td>
-                            <td>#getdata.gender#</td>
-                            <td>#getdata.DOB#</td>
-                            <td>#getdata.photoName#</td>
-                            <td>#getdata.phone#</td>
-                            <td>#getdata.address#</td>
-                            <td>#getdata.street#</td>
-                        </tr>
-                    </cfloop>
-                </cfoutput>
+                <cfloop array="#getData[1]#" index="data">
+                    <tr>
+                        <cfset hobbiesList = []>
+                        <cfloop array="#getData[2]#" index="hobbie">
+                            <cfif data.userId EQ hobbie.contactHobbieUserid>
+                                <cfset ArrayAppend(hobbiesList, hobbie.hobbieName)>
+                            </cfif>
+                        </cfloop>
+                        <!--- <td>#getData.ID#</td> --->
+                        <td>#data.userId#</td>
+                        <td>#data.fullname#</td>
+                        <td>#data.contactEmail#</td>
+                        <td>#data.gender#</td>
+                        <td>#data.DOB#</td>
+                        <td>#data.photoName#</td>
+                        <td>#data.phone#</td>
+                        <td>#data.address#</td>
+                        <!--- <td>#getdata.street#</td> --->
+                        <td>#ArrayToList(hobbiesList, ", ")#</td>
+                    </tr>
+                </cfloop>     
             </tbody>
         </table>
     </cfoutput>
 
 </cfdocument>
+
+<cfcatch type="any">
+    <cfdump  var="#cfcatch#">
+</cfcatch>
+</cftry>
 
 <cfheader name="Content-Disposition" value="attachment; filename=AddressBook.pdf">
 <cfcontent type="application/pdf" variable="#toBinary(pdfDoc)#">

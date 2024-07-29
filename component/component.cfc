@@ -142,15 +142,47 @@
                             AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                     </cfquery>
 
-                    <cfloop array="#hobbieArray#" item="hobbie">
-                        <cfquery name="local.updateHobbie" datasource="#application.db#">
-                            UPDATE
-                                User_Hobbies
-                            SET
-                                hobbie_id = <cfqueryparam value="#hobbie#" cfsqltype="cf_sql_integer">
-                            WHERE 
-                                contact_userId = <cfqueryparam value="#arguments.form.userid#" cfsqltype="cf_sql_integer">
-                        </cfquery>
+                    <cfquery name="local.getHobbiesOfUser" datasource="#application.db#">
+                        SELECT
+                            hobbie_id
+                        FROM
+                            User_Hobbies
+                        WHERE
+                            contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+
+                    <cfset local.arrayCheckHobbie = []>
+                    <cfloop query="local.getHobbiesOfUser">
+                        <cfset arrayAppend(local.arrayCheckHobbie, local.getHobbiesOfUser.hobbie_id)>
+                    </cfloop>
+
+                    <cfloop array="#local.arrayCheckHobbie#" index="local.hobbie">
+                        <cfif NOT arrayFind(local.hobbieArray, local.hobbie)>
+                            <cfquery name="local.deleteHobbie" datasource="#application.db#">
+                                DELETE FROM 
+                                    User_Hobbies
+                                WHERE 
+                                    contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+                                    AND hobbie_id = <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                            </cfquery>
+                        </cfif>
+                    </cfloop>
+                    
+                    <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                        <cfif NOT arrayFind(local.arrayCheckHobbie, local.hobbie) AND arrayFind(local.hobbiesIdArray, local.hobbie)>
+                            <cfquery name="local.insertHobbieEdit" datasource="#application.db#">
+                                INSERT INTO
+                                    User_Hobbies (
+                                        contact_userId,
+                                        hobbie_id
+                                    )
+                                VALUES
+                                    (
+                                        <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                                    )
+                            </cfquery>
+                        </cfif>
                     </cfloop>
 
                     <cfset local.return.message = "Contact Updated Successfully">
@@ -194,6 +226,7 @@
 
                     <!--- Retrieve the last inserted ID --->
                     <cfset local.lastInsertedID = local.contactInsertQueryResult.GENERATEDKEY>
+
                     <cfloop array="#local.hobbieArray#" index="local.hobbie">
                         <cfif arrayFind(local.hobbiesIdArray, local.hobbie)>
                             <cfquery name="local.addHobbie" datasource="#application.db#">
@@ -274,10 +307,9 @@
         <cfargument name="userid" type="numeric" required="false">
         <cfargument  name="getBirthdayOnly" type="numeric" required="false">
 
-        <!--- <cfset local.structHobbie = {}>
-        <cfset local.structContacts = {}> --->
         <cfset local.returnArray = [] >
-         <cfset local.hobbieArray = [] >
+        <cfset local.contactsArray = [] >
+        <cfset local.hobbieArray = [] >
         <cfquery name="local.getContactDetails" datasource="#application.db#">
             SELECT
                 t3.title AS title_name,
@@ -297,11 +329,7 @@
                 t2.public AS public,
                 t2.is_delete AS is_delete,
                 t2.title_id AS title_id,
-                t2.emailAddress AS contactEmail<!---,
-                t4.hobbie_id AS hobbieNumber,
-                t4.contact_userId AS contactHobbieUserid,
-                t4.user_hobbie_id AS hobbieUniqueId,
-                t5.hobbies AS hobbies--->
+                t2.emailAddress AS contactEmail
             FROM 
                 registerForm AS t1
             INNER JOIN 
@@ -312,14 +340,6 @@
                 title_names AS t3
                 ON 
                     t3.title_id = t2.title_id
-            <!---INNER JOIN 
-                User_Hobbies As t4
-                ON
-                    t4.contact_userId = t2.userId
-            INNER JOIN 
-                hobbies As t5
-                ON
-                    t4.hobbie_id = t5.Id--->
             WHERE
                 is_delete = 0
                 <cfif structKeyExists(arguments, "userid")>
@@ -353,61 +373,57 @@
                 "title_name" : local.getContactDetails.title_name,
                 "fname" : local.getContactDetails.fname,
                 "lname" : local.getContactDetails.lname,
-                "contactEmail" : local.getContactDetails.contactEmail<!---,
-                "hobbieNumber" : local.getContactDetails.hobbieNumber,
-                "contactHobbieUserid" : local.getContactDetails.contactHobbieUserid,
-                "hobbieUniqueId" : local.getContactDetails.hobbieUniqueId,
-                "hobbies" : local.getContactDetails.hobbies--->
-
+                "contactEmail" : local.getContactDetails.contactEmail
             } >
 
-            <cfset arrayAppend(local.returnArray, local.structContacts)>
-
-            <!--- <cfif structKeyExists(arguments, "userid")>
-                <cfset local.structHobbie = {
-                    "hobbieNumber" : local.getContactDetails.hobbieNumber,
-                    "contactHobbieUserid" : local.getContactDetails.contactHobbieUserid,
-                    "hobbieUniqueId" : local.getContactDetails.hobbieUniqueId,
-                    "hobbies" : local.getContactDetails.hobbies
-                }>
-    
-                <cfset arrayAppend(local.returnArray, local.structHobbie)>
-            </cfif> --->
+            <cfset arrayAppend(local.contactsArray, local.structContacts)>
         </cfloop>
 
-        <cfif structKeyExists(arguments, "userid")>
-            <cfquery name="local.getHobbieDetails" datasource="#application.db#">
-                SELECT 
-                    T1.Id AS hobbieId,
-                    T1.hobbies AS hobbieName,
-                    T2.hobbie_id AS T2hobbieId,
-                    T3.is_delete AS is_delete
-                FROM
-                    hobbies AS T1
-                INNER JOIN
-                    User_Hobbies AS T2
-                    ON
-                        T1.Id = T2.hobbie_id
-                INNER JOIN
-                    contacts AS T3
-                    ON
-                        T3.userId = T2.contact_userId
-                WHERE
-                    T2.contact_userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
-                    AND is_delete = 0
-            </cfquery>
+        <cfset arrayAppend(local.returnArray, local.contactsArray)>
 
-            <cfloop query="local.getHobbieDetails">
-                <!--- <cfset local.structHobbie = {
-                    "hobbieId" : local.getHobbieDetails.hobbieId,
-                    "hobbieName" : local.getHobbieDetails.hobbieName,
-                    "T2hobbieId" : local.getHobbieDetails.T2hobbieId
-                }> --->
-    
-                <cfset arrayAppend(local.hobbieArray, local.getHobbieDetails.T2hobbieId)>
-            </cfloop>
-            <cfset arrayAppend(local.returnArray, local.hobbieArray)>
-        </cfif>
+        <cfquery name="local.getHobbieDetails" datasource="#application.db#">
+            SELECT 
+                T1.Id AS hobbieId,
+                T1.hobbies AS hobbieName,
+                T2.hobbie_id AS T2hobbieId,
+                T2.contact_userId AS contactHobbieUserid,
+                T2.user_hobbie_id AS hobbieUniqueId,
+                T3.is_delete AS is_delete
+            FROM
+                hobbies AS T1
+            INNER JOIN
+                User_Hobbies AS T2
+                ON
+                    T1.Id = T2.hobbie_id
+            INNER JOIN
+                contacts AS T3
+                ON
+                    T3.userId = T2.contact_userId
+            WHERE
+                is_delete = 0
+                <cfif structKeyExists(arguments, "userid")>
+                    AND T2.contact_userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                <cfelseif NOT structKeyExists(arguments, "getBirthdayOnly")>
+                    AND (
+                        T3.nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                        OR T3.public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                    )
+                </cfif>
+        </cfquery>
+
+        <cfloop query="local.getHobbieDetails">
+            <cfset local.structHobbie = {
+                "hobbieId" : local.getHobbieDetails.hobbieId,
+                "hobbieName" : local.getHobbieDetails.hobbieName,
+                "T2hobbieId" : local.getHobbieDetails.T2hobbieId,
+                "contactHobbieUserid" : local.getHobbieDetails.contactHobbieUserid,
+                "hobbieUniqueId" : local.getHobbieDetails.hobbieUniqueId
+            }> 
+
+            <cfset arrayAppend(local.hobbieArray, local.structHobbie)>
+        </cfloop>
+        <cfset arrayAppend(local.returnArray, local.hobbieArray)>
+        
         <cfreturn local.returnArray />
     </cffunction>
 

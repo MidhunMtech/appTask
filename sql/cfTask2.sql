@@ -348,4 +348,35 @@ DROP COLUMN contact_nameId_fk;
 ALTER TABLE User_Hobbies
 DROP FOREIGN KEY fk_hobbie_nameId;
 
+update hobbies 
+SET hobbies = "Reading"
+where Id = 2;
+
+
+use cfTask2;
+
+SELECT 
+                    T1.Id AS hobbieId,
+                    T1.hobbies AS hobbieName,
+                    T2.hobbie_id AS T2hobbieId,
+                    T2.contact_userId,
+                    T2.user_hobbie_id,
+                    T3.is_delete AS is_delete
+                FROM
+                    hobbies AS T1
+                INNER JOIN
+                    User_Hobbies AS T2
+                    ON
+                        T1.Id = T2.hobbie_id
+                INNER JOIN
+                    contacts AS T3
+                    ON
+                        T3.userId = T2.contact_userId
+                WHERE
+                    is_delete = 0
+                        AND (
+                            T3.nameId_fk = 12
+                            OR T3.public = "YES"
+						);
+
 

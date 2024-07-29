@@ -10,6 +10,7 @@ $(document).ready(function() {
         var dob = $("#dob").val();
         var photo = $("#photo").val();
         var email = $("#contactEmail").val();
+        var hobbie = $("#hobbie").val();
 
         var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         var valid = true;
@@ -68,6 +69,13 @@ $(document).ready(function() {
             valid = false;
         } else {
             $("#l_file").hide();  
+        }
+
+        if(hobbie.length < 3) {
+            $("#l_hobbie").show();
+            valid = false;
+        } else {
+            $("#l_hobbie").hide();  
         }
 
         if(address.trim().length == "") {
