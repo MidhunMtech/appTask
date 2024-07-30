@@ -889,3 +889,128 @@ Full CONTACTS
                             </cfquery>
                         </cfif>
                     </cfloop> --->
+
+FULL CONTACTS <cfloop array="#<!--- <cffunction  name="fullContacts" returnformat="json" access="remote" hint="For listDetails, Pdf, Excel, Scheduled Task, Edit and View">
+        <cfargument name="userid" type="numeric" required="false">
+        <cfargument  name="getBirthdayOnly" type="numeric" required="false">
+
+        <cfset local.returnArray = [] >
+        <cfset local.contactsArray = [] >
+        <cfset local.hobbieArray = [] >
+        <cfquery name="local.getContactDetails" datasource="#application.db#">
+            SELECT
+                t3.title AS title_name,
+                t1.nameID AS ID,
+                t2.userId AS userId,
+                concat(t2.fname, " ", t2.lname) AS fullname,
+                t2.fname AS fname,
+                t2.lname As lname,
+                t1.email AS email,
+                t2.gender AS gender,
+                t2.DOB AS DOB,
+                t2.photoName AS photoName,
+                t2.phone AS phone,
+                t2.address AS address,
+                t2.street AS street,
+                t2.nameId_fk AS nameId_fk,
+                t2.public AS public,
+                t2.is_delete AS is_delete,
+                t2.title_id AS title_id,
+                t2.emailAddress AS contactEmail
+            FROM 
+                registerForm AS t1
+            INNER JOIN 
+                contacts AS t2
+                ON 
+                    t2.nameId_fk = t1.nameId
+            INNER JOIN
+                title_names AS t3
+                ON 
+                    t3.title_id = t2.title_id
+            WHERE
+                is_delete = 0
+                <cfif structKeyExists(arguments, "userid")>
+                    AND userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                <cfelseif structKeyExists(arguments, "getBirthdayOnly") AND arguments.getBirthdayOnly EQ 1>
+                    AND CURDATE() = str_to_date(CONCAT(YEAR(NOW()), '-', MONTH(DOB), '-', DAY(DOB)), "%Y-%m-%d")
+                <cfelse>
+                    AND (
+                        nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                        OR public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                    )
+                </cfif>
+        </cfquery>
+
+        <cfloop query="local.getContactDetails">
+            <cfset local.structContacts = {
+                "ID" : local.getContactDetails.ID,
+                "userId" : local.getContactDetails.userId,
+                "fullname" : local.getContactDetails.fullname,
+                "email" : local.getContactDetails.email,
+                "gender" : local.getContactDetails.gender,
+                "DOB" : local.getContactDetails.DOB,
+                "address" : local.getContactDetails.address,
+                "street" : local.getContactDetails.street,
+                "title_id" : local.getContactDetails.title_id,
+                "phone" : local.getContactDetails.phone,
+                "photoName" : local.getContactDetails.photoName,
+                "is_delete" : local.getContactDetails.is_delete,
+                "nameId_fk" : local.getContactDetails.nameId_fk,
+                "public" : local.getContactDetails.public,
+                "title_name" : local.getContactDetails.title_name,
+                "fname" : local.getContactDetails.fname,
+                "lname" : local.getContactDetails.lname,
+                "contactEmail" : local.getContactDetails.contactEmail
+            } >
+
+            <cfset arrayAppend(local.contactsArray, local.structContacts)>
+        </cfloop>
+
+        <cfset arrayAppend(local.returnArray, local.contactsArray)>
+
+        <cfquery name="local.getHobbieDetails" datasource="#application.db#">
+            SELECT 
+                T1.Id AS hobbieId,
+                T1.hobbies AS hobbieName,
+                T2.hobbie_id AS T2hobbieId,
+                T2.contact_userId AS contactHobbieUserid,
+                T2.user_hobbie_id AS hobbieUniqueId,
+                T3.is_delete AS is_delete
+            FROM
+                hobbies AS T1
+            INNER JOIN
+                User_Hobbies AS T2
+                ON
+                    T1.Id = T2.hobbie_id
+            INNER JOIN
+                contacts AS T3
+                ON
+                    T3.userId = T2.contact_userId
+            WHERE
+                is_delete = 0
+                <cfif structKeyExists(arguments, "userid")>
+                    AND T2.contact_userId = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                <cfelseif NOT structKeyExists(arguments, "getBirthdayOnly")>
+                    AND (
+                        T3.nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                        OR T3.public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                    )
+                </cfif>
+        </cfquery>
+
+        <cfloop query="local.getHobbieDetails">
+            <cfset local.structHobbie = {
+                "hobbieId" : local.getHobbieDetails.hobbieId,
+                "hobbieName" : local.getHobbieDetails.hobbieName,
+                "T2hobbieId" : local.getHobbieDetails.T2hobbieId,
+                "contactHobbieUserid" : local.getHobbieDetails.contactHobbieUserid,
+                "hobbieUniqueId" : local.getHobbieDetails.hobbieUniqueId
+            }> 
+
+            <cfset arrayAppend(local.hobbieArray, local.structHobbie)>
+        </cfloop>
+        <cfset arrayAppend(local.returnArray, local.hobbieArray)>
+        
+        <cfreturn local.returnArray />
+    </cffunction> --->#" index="index">
+</cfloop>

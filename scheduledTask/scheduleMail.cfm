@@ -3,7 +3,7 @@
         <cfinvokeargument name="getBirthdayOnly"  value="1">
     </cfinvoke>
     
-    <cfloop array="#mailData[1]#" index="mailData">
+    <cfloop array="#mailData#" index="mailData">
         <cfmail 
             to="#mailData.contactEmail#" 
             from="midhun@gmail.com"

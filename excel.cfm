@@ -15,31 +15,29 @@
      i = 2;
      
     try {
-            for (row in getData[1]) {
-                cellRange = "#i#,11,#i+1#,12";
-                hobbiesArray = [];
-                for (hobbie in getData[2]) {
-                    if (row.userId EQ hobbie.contactHobbieUserid) {
-                        ArrayAppend(hobbiesArray, hobbie.hobbieName);
-                    }
-                }
-
-                SpreadsheetSetCellValue(spreadsheetObj,row.ID,i,1);
-                SpreadsheetSetCellValue(spreadsheetObj,row.userId,i,2);
-                SpreadsheetSetCellValue(spreadsheetObj,row.fullname,i,3);
-                SpreadsheetSetCellValue(spreadsheetObj,row.contactEmail,i,4);
-                SpreadsheetSetCellValue(spreadsheetObj,row.gender,i,5);
-                SpreadsheetSetCellValue(spreadsheetObj,row.DOB,i,6);
-                SpreadsheetSetCellValue(spreadsheetObj,row.photoName,i,7);
-                SpreadsheetSetCellValue(spreadsheetObj,row.phone,i,8);
-                SpreadsheetSetCellValue(spreadsheetObj,row.address,i,9);
-                SpreadsheetSetCellValue(spreadsheetObj,row.street,i,10);
-                imagePath = expandPath("uploads/#row.photoName#");
-                spreadsheetAddImage(spreadsheetObj, imagePath, cellRange);
-                SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray, ", "),i,12);
-
-                i += 1;
+        for (row in getData) {
+            cellRange = "#i#,11,#i+1#,12";
+            hobbiesArray = [];
+            for (hobbie in row.hobbies) {
+                ArrayAppend(hobbiesArray, hobbie.Name);
             }
+
+            SpreadsheetSetCellValue(spreadsheetObj,row.ID,i,1);
+            SpreadsheetSetCellValue(spreadsheetObj,row.userId,i,2);
+            SpreadsheetSetCellValue(spreadsheetObj,row.fullname,i,3);
+            SpreadsheetSetCellValue(spreadsheetObj,row.contactEmail,i,4);
+            SpreadsheetSetCellValue(spreadsheetObj,row.gender,i,5);
+            SpreadsheetSetCellValue(spreadsheetObj,row.DOB,i,6);
+            SpreadsheetSetCellValue(spreadsheetObj,row.photoName,i,7);
+            SpreadsheetSetCellValue(spreadsheetObj,row.phone,i,8);
+            SpreadsheetSetCellValue(spreadsheetObj,row.address,i,9);
+            SpreadsheetSetCellValue(spreadsheetObj,row.street,i,10);
+            imagePath = expandPath("uploads/#row.photoName#");
+            spreadsheetAddImage(spreadsheetObj, imagePath, cellRange);
+            SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray, ", "),i,12);
+
+            i += 1;
+        }
     } catch (any e){
         writeDump(e)
     }

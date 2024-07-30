@@ -1,7 +1,6 @@
 <cftry>
     <cfinvoke  component="component.component" method="fullContacts" returnvariable="contacts">
-    <!--- <cfdump  var="#contacts#">
-    <cfdump  var="#contacts[1]#" abort> --->
+<!---     <cfdump  var="#contacts#" abort> --->
 <cfcatch type="any">
     <cfdump  var="#cfcatch#">
 </cfcatch>
@@ -25,7 +24,7 @@
         <tbody>
             <cftry>     
                 <cfoutput>
-                    <cfloop array="#contacts[1]#" index="contacts">
+                    <cfloop array="#contacts#" index="contacts">
                         <cfif #contacts.public# EQ "YES" AND #contacts.nameId_fk# NEQ #session.userId#>
                             <cfset element = "disable">
                             <!--- <cfset encryptionKey = "oK455VMW4Cx55FvtTF5vWg==">  ---<cfset encryptionKey = GenerateSecretKey("AES")> ---

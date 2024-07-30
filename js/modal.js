@@ -57,29 +57,30 @@ $(document).ready(function() {
                 var userData = JSON.parse(response);
                 $('#myModal2').show();
 
-                $('.title').val(userData[0][0].title_id).text(userData[0][0].title_name);
-                $('.fname').val(userData[0][0].fname);
-                $('.lname').val(userData[0][0].lname);
-                $('.gender').val(userData[0][0].gender);
-                $('.image').text(userData[0][0].photoName);
-                $('.imageName').val(userData[0][0].photoName);
-                $('.phone').val(userData[0][0].phone);
-                $('.contactEmail').val(userData[0][0].contactEmail);
-                $('.address').val(userData[0][0].address);
-                $('.street').val(userData[0][0].street);
-                $('.userid').val(userData[0][0].userId);
+                $('.title').val(userData[0].title_id).text(userData[0].title_name);
+                $('.fname').val(userData[0].fname);
+                $('.lname').val(userData[0].lname);
+                $('.gender').val(userData[0].gender);
+                $('.image').text(userData[0].photoName);
+                $('.imageName').val(userData[0].photoName);
+                $('.phone').val(userData[0].phone);
+                $('.contactEmail').val(userData[0].contactEmail);
+                $('.address').val(userData[0].address);
+                $('.street').val(userData[0].street);
+                $('.userid').val(userData[0].userId);
 
                 // Changing format of DOB
-                var dateString = userData[0][0].DOB;
+                var dateString = userData[0].DOB;
                 var dateObj = new Date(dateString);
                 var formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + dateObj.getDate()).slice(-2);
                 $('.dob').val(formattedDate);
 
-                $('.checkBox').prop('checked', userData[0][0].public === "YES");
+                $('.checkBox').prop('checked', userData[0].public === "YES");
 
                 var selectedHobbies = [];
-                for (var i in userData[1]){
-                    selectedHobbies.push(userData[1][i].hobbieId);
+                for (var i in userData[0].hobbies){
+                    // console.log((userData[0].hobbies[i].Id));
+                    selectedHobbies.push(userData[0].hobbies[i].Id);
                 }
                 $(".hobbie").val(selectedHobbies);
             },
@@ -222,16 +223,14 @@ $(document).ready(function() {
             },
             success: function(response) {
                 var userData = JSON.parse(response);
-                /* console.log(userData);
-                console.log(userData[0][0].photoName); */
                 $('#myModal3').show();  
-                var img = "uploads/" + userData[0][0].photoName;
-                $('.fullnameView').text(userData[0][0].fullname);
-                $('.viewEmail').text(userData[0][0].contactEmail);
-                $('.phoneView').text(userData[0][0].phone);
-                $('.genderView').text(userData[0][0].gender);
-                $('.addressView').text(userData[0][0].address);
-                $('.streetView').text(userData[0][0].street);
+                var img = "uploads/" + userData[0].photoName;
+                $('.fullnameView').text(userData[0].fullname);
+                $('.viewEmail').text(userData[0].contactEmail);
+                $('.phoneView').text(userData[0].phone);
+                $('.genderView').text(userData[0].gender);
+                $('.addressView').text(userData[0].address);
+                $('.streetView').text(userData[0].street);
                 $(".viewImg").attr("src", img);
             }
         });
