@@ -39,15 +39,13 @@
             </cfif> --->
 
             <cfparam  name="form.public" default="NO">
-            <cfdump  var="#form.public#">
-
             <cftry>  
                 <cfset result = application.component.createAndUpdateContact(
                     form = form, 
                     photo = photo<!--- , 
                     isPublic = isPublic --->) />
             
-                <!--- <cfdump  var="#result#"> --->
+                <cfdump  var="#result#">
                 <cflocation  url="/list.cfm">
             <cfcatch type="any">
                 <cfdump  var="#cfcatch#">

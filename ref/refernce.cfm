@@ -669,8 +669,8 @@ updateContactDetails function
 
 
 
-
-    <cffunction  name="fullContacts" returnformat="json" access="remote" hint="For listDetails, Pdf, Excel, Scheduled Task, Edit and View">
+Full CONTACTS
+    <!--- <cffunction  name="fullContacts" returnformat="json" access="remote" hint="For listDetails, Pdf, Excel, Scheduled Task, Edit and View">
         <cfargument name="userid" type="numeric" required="false">
         <cfargument  name="getBirthdayOnly" type="numeric" required="false">
 
@@ -832,4 +832,60 @@ updateContactDetails function
         <cfset arrayAppend(local.returnArray, local.hobbieArray)>
         
         <cfreturn local.returnArray />
-    </cffunction>
+    </cffunction> --->
+
+
+    CREATE AND UPDATE FUNCTION
+<!--- <cfloop query="local.checkHobbies">
+                <cfset arrayAppend(local.hobbiesIdArray, local.checkHobbies.Id)>
+            </cfloop> --->
+
+            <!--- <cfset local.hobbieArray = listToArray(arguments.form.hobbie)> --->
+    <!--- <cfloop query="local.getHobbiesOfUser">
+                        <cfset arrayAppend(local.arrayCheckHobbie, local.getHobbiesOfUser.hobbie_id)>
+                    </cfloop> --->
+
+                    <!--- <cfloop array="#local.arrayCheckHobbie#" index="local.hobbie">
+                        <cfif NOT arrayFind(local.hobbieArray, local.hobbie)>
+                            <cfquery name="local.deleteHobbie" datasource="#application.db#">
+                                DELETE FROM 
+                                    User_Hobbies
+                                WHERE 
+                                    contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
+                                    AND hobbie_id = <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                            </cfquery>
+                        </cfif>
+                    </cfloop> --->
+                    
+                    <!--- <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                        <cfif NOT arrayFind(local.arrayCheckHobbie, local.hobbie) AND arrayFind(local.hobbiesIdArray, local.hobbie)>
+                            <cfquery name="local.insertHobbieEdit" datasource="#application.db#">
+                                INSERT INTO
+                                    User_Hobbies (
+                                        contact_userId,
+                                        hobbie_id
+                                    )
+                                VALUES
+                                    (
+                                        <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                                    )
+                            </cfquery>
+                        </cfif>
+                    </cfloop> --->
+                        <!--- <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                        <cfif arrayFind(local.hobbiesIdArray, local.hobbie)>
+                            <cfquery name="local.addHobbie" datasource="#application.db#">
+                                INSERT INTO
+                                    User_Hobbies (
+                                        contact_userId,
+                                        hobbie_id
+                                    )
+                                VALUES
+                                    (
+                                        <cfqueryparam value="#local.lastInsertedID#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#local.hobbie#" cfsqltype="cf_sql_integer">
+                                    )
+                            </cfquery>
+                        </cfif>
+                    </cfloop> --->
