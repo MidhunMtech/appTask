@@ -59,7 +59,7 @@
                                 <li><a id="createId">Create Contact</a></li>
                             </ul>
                             <ul class="btn">
-                                <li><a id="updateId">Upload File</a></li>
+                                <li><a id="updateId" class="bg-primary">Upload File</a></li>
                             </ul>
                         </section>
                     </div>
