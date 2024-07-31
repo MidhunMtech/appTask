@@ -11,7 +11,7 @@
                 username = <cfqueryparam value="#arguments.form.username#" cfsqltype="cf_sql_varchar">
         </cfquery> 
         
-        <cfif queryRecordCount(local.toCheckUsernameExists) EQ "0">
+        <cfif queryRecordCount(local.toCheckUsernameExists) EQ 0>
             <cfif arguments.form.password EQ arguments.form.Cpassword>
                 <cfset local.salt = createUUID()>
                 <cfset local.saltedPassword = arguments.form.password & local.salt />
@@ -278,7 +278,7 @@
     </cffunction>
 
     
-    <cffunction  name="title" access="public" returnType="query">
+    <cffunction  name="title" access="public" returnType="query" hint="For Titles">
         <cfquery name="local.title" datasource="#application.db#">
             SELECT
                 title_id,
@@ -361,9 +361,9 @@
             ORDER BY t2.userId, t4.Id
         </cfquery>
 
-        <cfset local.previousUserId = 0>
-        <cfset local.structContacts = {}>
-        <cfloop query="local.getContactDetails">
+        <!--- <cfset local.previousUserId = 0>
+        <cfset local.structContacts = {}> --->
+        <!--- <cfloop query="local.getContactDetails">
             <cfif local.previousUserId NEQ local.getContactDetails.userId>
                 <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
                     <cfset arrayAppend(local.returnArray, local.structContacts)>
@@ -400,11 +400,41 @@
             </cfif>
 
             <cfset local.previousUserId = local.getContactDetails.userId>
+        </cfloop> --->
+        <cfloop query="local.getContactDetails" group="userId">
+            <cfset local.structContacts = {
+                "ID": local.getContactDetails.ID,
+                "userId": local.getContactDetails.userId,
+                "fullname": local.getContactDetails.fullname,
+                "email": local.getContactDetails.email,
+                "gender": local.getContactDetails.gender,
+                "DOB": local.getContactDetails.DOB,
+                "address": local.getContactDetails.address,
+                "street": local.getContactDetails.street,
+                "title_id": local.getContactDetails.title_id,
+                "phone": local.getContactDetails.phone,
+                "photoName": local.getContactDetails.photoName,
+                "is_delete": local.getContactDetails.is_delete,
+                "nameId_fk": local.getContactDetails.nameId_fk,
+                "public": local.getContactDetails.public,
+                "title_name": local.getContactDetails.title_name,
+                "fname": local.getContactDetails.fname,
+                "lname": local.getContactDetails.lname,
+                "contactEmail": local.getContactDetails.contactEmail,
+                "hobbies": []
+            }>
+            <cfloop>
+                <cfset arrayAppend(local.structContacts.hobbies, {
+                    "Id": local.getContactDetails.hobbieId,
+                    "Name": local.getContactDetails.hobbieName
+                })>
+            </cfloop>
+            <cfset arrayAppend(local.returnArray, local.structContacts)>
         </cfloop>
 
-        <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
+    <!--- <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
             <cfset arrayAppend(local.returnArray, local.structContacts)>
-        </cfif>
+        </cfif> --->
 
         <cfreturn local.returnArray />
     </cffunction>

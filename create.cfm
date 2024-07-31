@@ -20,7 +20,7 @@
         </nav>
         <div class="container1">
             <h1>Contact Details</h1>
-            <form id="createForm" action="createAction.cfm" method="post" enctype="multipart/form-data">
+            <form id="createForm" action="" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <p id="l_email" class="error email"><b>Email Id Exists</b>. Try again with another email...</p>
                     <legend>Personal Details</legend>

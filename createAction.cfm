@@ -1,3 +1,4 @@
+<cfif structKeyExists(form, "submit")>
 <cfif NOT len(form.title)
     OR NOT len(form.fname)
     OR NOT len(form.lname)
@@ -40,13 +41,13 @@
 
             <cfparam  name="form.public" default="NO">
             <cftry>  
-                <cfset result = application.component.createAndUpdateContact(
+                <cfset variables.result = application.component.createAndUpdateContact(
                     form = form, 
                     photo = photo<!--- , 
                     isPublic = isPublic --->) />
             
-                <cfdump  var="#result#">
-                <cflocation  url="/list.cfm">
+                <!--- <cfdump  var="#result#"> --->
+                <!--- <cflocation  url="/list.cfm"> --->
             <cfcatch type="any">
                 <cfdump  var="#cfcatch#">
             </cfcatch>
@@ -57,4 +58,5 @@
         <cfdump  var="#cfcatch#">
     </cfcatch>
     </cftry>
+</cfif>
 </cfif>

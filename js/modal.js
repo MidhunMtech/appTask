@@ -297,6 +297,15 @@ $(document).ready(function() {
             window.location.href = 'list.cfm?print=true';
         }, 500);
     })
+
+
+    $("#updateId").click(function() {
+        $("#myModal4").show()
+    })
+
+    $(".close").click(function() {
+        $("#myModal4").hide()
+    });
  
 });
 

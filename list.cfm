@@ -1,3 +1,4 @@
+<cfinclude  template="createAction.cfm">
 <cftry>
     <cfinvoke component="component.component" method="logout" returnvariable="logout">
     <cfif logout EQ "1">
@@ -37,13 +38,13 @@
                 <p id="create" class="downloadMessage update">Create contact failed. Try again....</p>
                 <p id="ue" class="downloadMessage update"><b>Failed due to unexpected error</b>. Try again....</p> --->
                 
-                <cfif structKeyExists(session, "returnStruct")>
-                    <p class="downloadMessage <cfif session.returnStruct.success EQ 1>noerror<cfelse>yeserror</cfif>">
+                <cfif structKeyExists(variables, "result")>
+                    <p class="downloadMessage <cfif result.success EQ 1>noerror<cfelse>yeserror</cfif>">
                         <cfoutput>
-                            <b>#session.returnStruct.message#</b>
+                            <b>#result.message#</b>
                         </cfoutput>
                     </p>
-                    <cfset structDelete(session, "returnStruct") />
+                    <!--- <cfset structDelete(session, "returnStruct") /> --->
                 </cfif>
             </div>
             
@@ -56,6 +57,9 @@
                             </cfoutput>
                             <ul class="btn">
                                 <li><a id="createId">Create Contact</a></li>
+                            </ul>
+                            <ul class="btn">
+                                <li><a id="updateId">Upload File</a></li>
                             </ul>
                         </section>
                     </div>
@@ -80,7 +84,7 @@
                     <span class="close">&times;</span>
                     <div class="container1">
                         <h1>Update Details</h1>
-                        <form id="editForm" action="createAction.cfm" method="post" enctype="multipart/form-data">
+                        <form id="editForm" action="" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <p id="l1_email" class="error email"><b>Email Id Exists</b>. Try again with another email...</p>
                                 <legend>Personal Details</legend>
@@ -201,6 +205,27 @@
                                 <p>Address: <span class="addressView"></span></p>
                                 <p>Street: <span class="streetView"></span></p>
                             </div>
+                        </div>
+                </div>
+            </div>
+
+            <div id="myModal4" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                        <div class="container2">
+                            <form class="fileUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                                <div class="header-buttons">
+                                    <button class="bg-primary" id="dataTemplate">
+                                        <a href="dataTemplate.cfm">Template With Data</a>
+                                    </button>
+                                    <button id="plainTemplate">
+                                        <a href="plainTemplate.cfm">Plain Template</a>
+                                    </button>
+                                </div>
+                                <label for="fileUpload">Upload Excel file:</label>
+                                <input type="file" id="excelFileUpload" name="excelFileUpload" accept=".xls,.xlsx" required>
+                                <input type="submit" value="Upload">
+                            </form>
                         </div>
                 </div>
             </div>
