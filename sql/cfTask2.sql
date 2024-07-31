@@ -290,7 +290,7 @@ CREATE TABLE User_Hobbies (
     FOREIGN KEY (hobbie_id) REFERENCES Hobbies(Id)
 );
 
-USE cfTask2;
+USE cfTask2; 
 
 SELECT * FROM User_Hobbies;
 
@@ -378,5 +378,50 @@ WHERE
 		T3.nameId_fk = 12
 		OR T3.public = "YES"
 	);
+    
+    
+SELECT
+	t3.title AS title_name,
+	t1.nameID AS ID,
+	t2.userId AS userId,
+	concat(t2.fname, " ", t2.lname) AS fullname,
+	t2.fname AS fname,
+	t2.lname AS lname,
+	t1.email AS email,
+	t2.gender AS gender,
+	t2.DOB AS DOB,
+	t2.photoName AS photoName,
+	t2.phone AS phone,
+	t2.address AS address,
+	t2.street AS street,
+	t2.nameId_fk AS nameId_fk,
+	t2.public AS public,
+	t2.is_delete AS is_delete,
+	t2.title_id AS title_id,
+	t2.emailAddress AS contactEmail,
+	t4.Id AS hobbieId,
+	t4.hobbies AS hobbieName
+FROM 
+	registerForm AS t1
+INNER JOIN 
+	contacts AS t2
+	ON t2.nameId_fk = t1.nameId
+INNER JOIN
+	title_names AS t3
+	ON t3.title_id = t2.title_id
+LEFT JOIN
+	User_Hobbies AS t5
+	ON t2.userId = t5.contact_userId
+LEFT JOIN
+	hobbies AS t4
+	ON t5.hobbie_id = t4.Id
+WHERE
+	t2.is_delete = 0
+	AND (
+		t2.nameId_fk = 12
+		OR t2.public = "YES"
+	)
+ORDER BY t2.userId, t4.Id;
+
 
 
