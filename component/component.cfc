@@ -396,7 +396,7 @@
     </cffunction>
 
 
-    <cffunction name="ExcelUploadContact" returnType="any" access="public" hint="function for Create and Update contacts usinf Excel">
+    <cffunction name="ExcelUploadContact" returnType="any" access="public" hint="function for Create and Update contacts using Excel">
         <cfargument name="form" type="any" required="true" >
         
         <cfset local.return = {

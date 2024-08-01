@@ -1,20 +1,18 @@
 <cfscript>
-try {
     try {
-        getData = application.component.fullContacts();  //application.component is from application.cfc
-    } catch (any e) {
-        writeDump(e)
-    }
+        try {
+            getData = application.component.fullContacts();  //application.component is from application.cfc
+        } catch (any e) {
+            writeDump(e)
+        }
 
-    spreadsheetObj = SpreadsheetNew('dataTemplate', 'yes'); // this 'yes' is for xlsx format
+        spreadsheetObj = SpreadsheetNew('dataTemplate', 'yes'); // this 'yes' is for xlsx format
 
-    // Add header
-    SpreadSheetAddRow(spreadsheetObj,'Title,FirstName,LastName,Email,Gender,DOB,phone,address,street,hobbies');
+        // Add header
+        SpreadSheetAddRow(spreadsheetObj,'Title,FirstName,LastName,Email,Gender,DOB,phone,address,street,hobbies');
 
-    //Add Data
-     i = 2;
-     
-    
+        //Add Data
+        i = 2;
         for (row in getData) {
             if (row.nameId_fk EQ session.userId) {
                 hobbiesArray = [];
@@ -36,28 +34,28 @@ try {
 
             }
         }
-    
+        
 
-    //Format Header
-    SpreadsheetFormatRow(spreadsheetobj, {
-        bold = true,
-        alignment = "center",
-        color="black",
-        font="Arial"
-    }, 1);
-    
-    try {
-        SpreadSheetAddFreezePane(spreadsheetobj,0,1); // header freeze
-    } catch (any e) {
-        writeDump(e)
-    }
+        //Format Header
+        SpreadsheetFormatRow(spreadsheetobj, {
+            bold = true,
+            alignment = "center",
+            color="black",
+            font="Arial"
+        }, 1);
+        
+        try {
+            SpreadSheetAddFreezePane(spreadsheetobj,0,1); // header freeze
+        } catch (any e) {
+            writeDump(e)
+        }
 
-    // Write the spreadsheet to a binary variable
-    binaryData = SpreadsheetReadBinary(spreadsheetObj);
+        // Write the spreadsheet to a binary variable
+        binaryData = SpreadsheetReadBinary(spreadsheetObj);
 
-    // Send the file to the client as an attachment
-    cfheader(name="Content-Disposition", value="attachment; filename=dataTemplate.xlsx");
-    cfcontent(type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", variable="#binaryData#");
+        // Send the file to the client as an attachment
+        cfheader(name="Content-Disposition", value="attachment; filename=dataTemplate.xlsx");
+        cfcontent(type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", variable="#binaryData#");
     } catch (any e){
         writeDump(e)
     }

@@ -283,7 +283,7 @@ $(document).ready(function() {
     //for excel download message.
     $('#excelBtn').click(function() {
         if (confirm("Do you want to download EXCEL?")) {
-            window.location.href = 'excel.cfm';
+            window.location.href = 'excel.cfm?excel=list';
             setTimeout(function() {
                 window.location.href = 'list.cfm?excel=true';
             }, 500);
