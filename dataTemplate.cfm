@@ -30,7 +30,7 @@ try {
                 SpreadsheetSetCellValue(spreadsheetObj,row.phone,i,7);
                 SpreadsheetSetCellValue(spreadsheetObj,row.address,i,8);
                 SpreadsheetSetCellValue(spreadsheetObj,row.street,i,9);
-                SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray, ", "),i,10);
+                SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray),i,10);
 
                 i += 1;
 

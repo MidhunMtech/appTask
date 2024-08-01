@@ -361,46 +361,6 @@
             ORDER BY t2.userId, t4.Id
         </cfquery>
 
-        <!--- <cfset local.previousUserId = 0>
-        <cfset local.structContacts = {}> --->
-        <!--- <cfloop query="local.getContactDetails">
-            <cfif local.previousUserId NEQ local.getContactDetails.userId>
-                <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
-                    <cfset arrayAppend(local.returnArray, local.structContacts)>
-                </cfif>
-
-                <cfset local.structContacts = {
-                    "ID": local.getContactDetails.ID,
-                    "userId": local.getContactDetails.userId,
-                    "fullname": local.getContactDetails.fullname,
-                    "email": local.getContactDetails.email,
-                    "gender": local.getContactDetails.gender,
-                    "DOB": local.getContactDetails.DOB,
-                    "address": local.getContactDetails.address,
-                    "street": local.getContactDetails.street,
-                    "title_id": local.getContactDetails.title_id,
-                    "phone": local.getContactDetails.phone,
-                    "photoName": local.getContactDetails.photoName,
-                    "is_delete": local.getContactDetails.is_delete,
-                    "nameId_fk": local.getContactDetails.nameId_fk,
-                    "public": local.getContactDetails.public,
-                    "title_name": local.getContactDetails.title_name,
-                    "fname": local.getContactDetails.fname,
-                    "lname": local.getContactDetails.lname,
-                    "contactEmail": local.getContactDetails.contactEmail,
-                    "hobbies": []
-                }>
-            </cfif>
-
-            <cfif local.getContactDetails.hobbieId NEQ "">
-                <cfset arrayAppend(local.structContacts.hobbies, {
-                    "Id": local.getContactDetails.hobbieId,
-                    "Name": local.getContactDetails.hobbieName
-                })>
-            </cfif>
-
-            <cfset local.previousUserId = local.getContactDetails.userId>
-        </cfloop> --->
         <cfloop query="local.getContactDetails" group="userId">
             <cfset local.structContacts = {
                 "ID": local.getContactDetails.ID,
@@ -432,11 +392,188 @@
             <cfset arrayAppend(local.returnArray, local.structContacts)>
         </cfloop>
 
-    <!--- <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
-            <cfset arrayAppend(local.returnArray, local.structContacts)>
-        </cfif> --->
-
         <cfreturn local.returnArray />
+    </cffunction>
+
+
+    <cffunction name="ExcelUploadContact" returnType="any" access="public" hint="function for Create and Update contacts usinf Excel">
+        <cfargument name="form" type="any" required="true" >
+        
+        <cfset local.return = {
+            "success" : 1,
+            "message" : ""
+        }>
+
+        <cftry>
+            <cfquery name="local.checkEmailExists" datasource="#application.db#">
+                SELECT 
+                    emailAddress,
+                    userId
+                FROM 
+                    contacts
+                WHERE 
+                    emailAddress = <cfqueryparam value="#arguments.form.Email#" cfsqltype="cf_sql_varchar">
+                    AND is_delete = 0
+                    AND nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_varchar">
+            </cfquery>
+
+            <cfset local.exceluserIdCheck = valueList(local.checkEmailExists.userId)>
+
+            <cfquery name="local.checkEmailExistsForInsert" datasource="#application.db#">
+                SELECT 
+                    emailAddress,
+                    userId
+                FROM 
+                    contacts
+                WHERE 
+                    emailAddress = <cfqueryparam value="#arguments.form.Email#" cfsqltype="cf_sql_varchar">
+                    AND is_delete = 0
+                    <cfif structKeyExists(local, "checkEmailExists")>
+                        AND userId NOT IN (<cfqueryparam value="#local.exceluserIdCheck#" cfsqltype="cf_sql_integer" list="true">)
+                    </cfif>
+            </cfquery>
+
+            <cfquery name="local.checkHobbies" datasource="#application.db#">
+                SELECT
+                    Id
+                FROM
+                    hobbies
+            </cfquery>
+
+            <cfquery name="local.toFindTitleId" datasource="#application.db#">
+                SELECT
+                    title_id,
+                    title
+                FROM
+                    title_names
+                WHERE
+                    UPPER(title) = UPPER(<cfqueryparam value="#arguments.form.Title#" cfsqltype="cf_sql_varchar">)
+            </cfquery>
+
+            <cfset local.hobbiesIdArray = valueArray(local.checkHobbies, "Id")>
+
+            <cfquery name="local.excelHobbieId" datasource="#application.db#">
+                SELECT
+                    Id,
+                    hobbies
+                FROM
+                    hobbies
+                WHERE
+                    hobbies IN (<cfqueryparam value="#arguments.form.hobbies#" cfsqltype="cf_sql_varchar" list="true">)
+            </cfquery>
+
+            <cfset local.excelHobbieIdList = valueList(local.excelHobbieId.Id)>
+            
+            <cfif queryRecordCount(local.checkEmailExists) EQ 1>
+                <cfquery name="local.contactUpdate" datasource="#application.db#">
+                    UPDATE 
+                        contacts
+                    SET 
+                        title_id = <cfqueryparam value="#local.toFindTitleId.title_id#" cfsqltype="cf_sql_integer">,
+                        fname = <cfqueryparam value="#arguments.form.FirstName#" cfsqltype="cf_sql_varchar">,
+                        lname = <cfqueryparam value="#arguments.form.LastName#" cfsqltype="cf_sql_varchar">,
+                        gender = <cfqueryparam value="#arguments.form.Gender#" cfsqltype="cf_sql_varchar">,
+                        DOB = <cfqueryparam value="#arguments.form.DOB#" cfsqltype="cf_sql_date">,
+                        phone = <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                        address = <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                        street = <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">
+                    WHERE
+                        emailAddress = <cfqueryparam value="#arguments.form.Email#" cfsqltype="cf_sql_varchar">
+                </cfquery>
+
+                <cfquery name="local.getHobbiesOfUser" datasource="#application.db#">
+                    SELECT
+                        hobbie_id
+                    FROM
+                        User_Hobbies
+                    WHERE
+                        contact_userId = <cfqueryparam value="#local.checkEmailExists.userId#" cfsqltype="cf_sql_integer">
+                </cfquery>
+
+                <cfset local.arrayCheckHobbie = valueArray(local.getHobbiesOfUser, "hobbie_id")>
+
+                <cfquery datasource="#application.db#">
+                    DELETE FROM 
+                        User_Hobbies
+                    WHERE 
+                        contact_userId = <cfqueryparam value="#local.checkEmailExists.userId#" cfsqltype="cf_sql_integer">
+                        AND hobbie_id NOT IN (<cfqueryparam value="#local.excelHobbieIdList#" cfsqltype="cf_sql_integer" list="true">)
+                </cfquery>
+                
+                <cfset local.newHobbies = "">
+                <cfloop list="#local.excelHobbieIdList#" item="local.hobbie">
+                    <cfif NOT arrayFind(local.arrayCheckHobbie, local.hobbie)>
+                        <cfset local.newHobbies = listAppend(local.newHobbies, local.hobbie)>
+                    </cfif>
+                </cfloop>
+
+                <cfset local.return.message = "Updated">
+            <cfelseif queryRecordCount(local.checkEmailExistsForInsert) EQ 0>
+                <cfquery name="local.contactInsert" datasource="#application.db#" result="local.contactInsertResult">
+                    INSERT INTO 
+                        contacts(
+                            title_id,
+                            fname,
+                            lname,
+                            gender,
+                            DOB,
+                            phone,
+                            emailAddress,
+                            address,
+                            street,
+                            nameId_fk,
+                            public
+                        )
+                    VALUES (
+                        <cfqueryparam value="#local.toFindTitleId.title_id#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.form.FirstName#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.LastName#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.Gender#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.DOB#" cfsqltype="cf_sql_date">,
+                        <cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.Email#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
+                        'NO'
+                    )
+                </cfquery>
+
+                <!--- Retrieve the last inserted ID --->
+                <cfset local.lastInsertedID = local.contactInsertResult.GENERATEDKEY>
+
+                <cfset local.hobbieArray = listToArray(local.excelHobbieIdList)>
+                <cfset local.insertHobbie = []>
+                <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                    <cfif arrayFind(local.hobbiesIdArray, local.hobbie)>
+                        <cfset arrayAppend(local.insertHobbie, local.hobbie)>
+                    </cfif>
+                </cfloop>
+
+                <cfquery name="local.addHobbie" datasource="#application.db#">
+                    INSERT INTO
+                        User_Hobbies (
+                            contact_userId,
+                            hobbie_id
+                        )
+                    VALUES
+                        <cfloop from="1" to="#arrayLen(local.insertHobbie)#" index="local.i">
+                            (
+                                <cfqueryparam value="#local.lastInsertedID#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.insertHobbie[local.i]#" cfsqltype="cf_sql_integer">
+                            )<cfif local.i NEQ arrayLen(local.insertHobbie)>,</cfif>
+                        </cfloop>
+                </cfquery>
+                
+                <cfset local.return.message = "Added">
+            </cfif>
+        <cfcatch type="any">
+            <cfdump  var="#cfcatch#">
+            <cfset local.return.success = 0>
+            <cfset local.return.message = "Unexpected error">
+        </cfcatch>
+        </cftry>
+        <cfreturn local.return>
     </cffunction>
 
 </cfcomponent>

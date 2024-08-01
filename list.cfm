@@ -1,4 +1,5 @@
 <cfinclude  template="createAction.cfm">
+<cfinclude  template="excelUpload.cfm">
 <cftry>
     <cfinvoke component="component.component" method="logout" returnvariable="logout">
     <cfif logout EQ "1">
@@ -213,7 +214,7 @@
                 <div class="modal-content">
                     <span class="close">&times;</span>
                         <div class="container2">
-                            <form class="fileUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                            <form class="fileUploadForm" action="" method="post" enctype="multipart/form-data">
                                 <div class="header-buttons">
                                     <button class="bg-primary" id="dataTemplate">
                                         <a href="dataTemplate.cfm">Template With Data</a>
@@ -223,8 +224,8 @@
                                     </button>
                                 </div>
                                 <label for="fileUpload">Upload Excel file:</label>
-                                <input type="file" id="excelFileUpload" name="excelFileUpload" accept=".xls,.xlsx" required>
-                                <input type="submit" value="Upload">
+                                <input type="file" id="excelFileUpload" name="excelFileUpload" accept=".xls,.xlsx">
+                                <input type="submit" value="Upload" name="excelSubmit" id="excelUpload">
                             </form>
                         </div>
                 </div>

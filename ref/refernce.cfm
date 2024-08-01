@@ -1014,3 +1014,122 @@ FULL CONTACTS <cfloop array="#<!--- <cffunction  name="fullContacts" returnforma
         <cfreturn local.returnArray />
     </cffunction> --->#" index="index">
 </cfloop>
+
+
+
+FLL CONTACTS FUNCTION AGAIN
+<!--- <cfset local.previousUserId = 0>
+        <cfset local.structContacts = {}> --->
+        <!--- <cfloop query="local.getContactDetails">
+            <cfif local.previousUserId NEQ local.getContactDetails.userId>
+                <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
+                    <cfset arrayAppend(local.returnArray, local.structContacts)>
+                </cfif>
+
+                <cfset local.structContacts = {
+                    "ID": local.getContactDetails.ID,
+                    "userId": local.getContactDetails.userId,
+                    "fullname": local.getContactDetails.fullname,
+                    "email": local.getContactDetails.email,
+                    "gender": local.getContactDetails.gender,
+                    "DOB": local.getContactDetails.DOB,
+                    "address": local.getContactDetails.address,
+                    "street": local.getContactDetails.street,
+                    "title_id": local.getContactDetails.title_id,
+                    "phone": local.getContactDetails.phone,
+                    "photoName": local.getContactDetails.photoName,
+                    "is_delete": local.getContactDetails.is_delete,
+                    "nameId_fk": local.getContactDetails.nameId_fk,
+                    "public": local.getContactDetails.public,
+                    "title_name": local.getContactDetails.title_name,
+                    "fname": local.getContactDetails.fname,
+                    "lname": local.getContactDetails.lname,
+                    "contactEmail": local.getContactDetails.contactEmail,
+                    "hobbies": []
+                }>
+            </cfif>
+
+            <cfif local.getContactDetails.hobbieId NEQ "">
+                <cfset arrayAppend(local.structContacts.hobbies, {
+                    "Id": local.getContactDetails.hobbieId,
+                    "Name": local.getContactDetails.hobbieName
+                })>
+            </cfif>
+
+            <cfset local.previousUserId = local.getContactDetails.userId>
+        </cfloop> --->
+    <!--- <cfif structKeyExists(local, "structContacts") AND NOT structIsEmpty(local.structContacts)>
+            <cfset arrayAppend(local.returnArray, local.structContacts)>
+        </cfif> --->
+excel upload
+<!---
+    <cfset uploadPath = expandPath("./uploads/Excel")>
+    
+    <cffile action="upload" 
+            fileField="excelFileUpload" 
+            destination="#uploadPath#" 
+            nameConflict="makeUnique">
+
+    <cfspreadsheet action="read" 
+                   src="#uploadPath#/#cffile.SERVERFILE#" 
+                   query="excelData">
+
+    
+    <cfdump var="#excelData#" label="Excel Data"> --->
+
+    <!--- <cfif colIndex EQ 1 AND row EQ ''>
+                <cfset arrayAppend(result, "title")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelseif colIndex EQ  AND row EQ ''>
+                <cfset arrayAppend(result, "")>
+            <cfelse>
+            </cfif> --->
+
+            excel upload function
+
+            <!--- <cfif listLen(local.newHobbies)>
+                    <cfquery name="local.insertHobbieEdit" datasource="#application.db#"> <!--- SELECT INSERT --->
+                        INSERT INTO
+                            User_Hobbies (
+                                contact_userId,
+                                hobbie_id
+                            )
+                        SELECT 
+                            <cfqueryparam value="#local.checkEmailExists.userId#" cfsqltype="cf_sql_integer">,
+                            Id
+                        FROM
+                            hobbies
+                        WHERE
+                            Id IN (<cfqueryparam value="#local.newHobbies#" cfsqltype="cf_sql_integer" list="true">)
+                    </cfquery>
+                </cfif> --->
+
+<!--- <cfquery name="local.toGetHobbieId" datasource="#application.db#">
+                    SELECT
+                        T1.hobbie_id AS hobbie_id,
+                        T2.hobbies AS hobbie_name
+                    FROM
+                        User_Hobbies AS T1
+                    INNER JOIN
+                        hobbies AS T2
+                        ON T2.Id = T1.hobbie_id
+                    WHERE
+                        T1.contact_userId = <cfqueryparam value="#local.checkEmailExists.userId#" cfsqltype="cf_sql_integer">
+                </cfquery> --->
+
+                <!--- <cfset local.anHobbieArray = listToArray(arguments.form.hobbies)> --->

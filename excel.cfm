@@ -34,7 +34,7 @@
             SpreadsheetSetCellValue(spreadsheetObj,row.street,i,10);
             imagePath = expandPath("uploads/#row.photoName#");
             spreadsheetAddImage(spreadsheetObj, imagePath, cellRange);
-            SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray, ", "),i,12);
+            SpreadsheetSetCellValue(spreadsheetObj, ArrayToList(hobbiesArray),i,12);
 
             i += 1;
         }

@@ -306,6 +306,12 @@ $(document).ready(function() {
     $(".close").click(function() {
         $("#myModal4").hide()
     });
+
+    $("#excelUpload").click(function() {
+        setTimeout(function() {
+            window.location.href = 'list.cfm';
+        }, 500);
+    })
  
 });
 
