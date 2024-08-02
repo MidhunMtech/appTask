@@ -301,6 +301,21 @@ select * from hobbies;
 select * from contacts;
 
 
+delete from contacts
+where emailAddress IS NULL;
+
+set SQL_SAFE_UPDATES = 0;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SELECT
+	Id,
+	hobbies
+FROM
+	hobbies
+WHERE
+	hobbies = "Painting" 
+    OR hobbies = "Movie" OR 
+    hobbies = "Dancing";
 ALTER table
 	User_Hobbies
 add column
@@ -423,5 +438,65 @@ WHERE
 	)
 ORDER BY t2.userId, t4.Id;
 
+use cfTask2;
+select * from contacts;
+
+INSERT INTO 
+	contacts(
+		title_id,
+		fname,
+		lname,
+		gender,
+		DOB,
+		phone,
+		emailAddress,
+		address,
+		street,
+        nameId_fk,
+        Public
+	)
+VALUES (
+		1,
+	"Try",
+	'M',
+	'Male',
+	'11-07-2024',
+	12345678910,
+	'something@gmail.com',
+	'midhunam',
+	'odanavattom',
+    12,
+    'NO'
+);
+
+INSERT INTO 
+	contacts(
+		title_id,
+		fname,
+		lname,
+		gender,
+		DOB,
+		PhotoName,
+		phone,
+		emailAddress,
+		address,
+		street,
+		nameId_fk,
+		public
+	)
+VALUES (
+	<cfqueryparam value="#arguments.form.title#" cfsqltype="cf_sql_integer">,
+	<cfqueryparam value="#arguments.form.fname#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.lname#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.gender#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.dob#" cfsqltype="cf_sql_date">,
+	<cfqueryparam value="#arguments.photo#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.phone#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.contactEmail#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.address#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#arguments.form.street#" cfsqltype="cf_sql_varchar">,
+	<cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
+	<cfqueryparam value="#arguments.form.public#" cfsqltype="cf_sql_varchar">
+)
 
 

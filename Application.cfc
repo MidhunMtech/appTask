@@ -26,5 +26,10 @@
             <cflocation url="/login.cfm">
         </cfif> 
     </cffunction>
+
+    <cffunction name="onError" returntype="void" output="false">
+        <cfargument name="exception" type="any" required="true">
+        <cfdump var="#arguments.exception#" abort>
+    </cffunction>
     
 </cfcomponent>

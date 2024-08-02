@@ -217,10 +217,10 @@
                             <form class="fileUploadForm" action="" method="post" enctype="multipart/form-data">
                                 <div class="header-buttons">
                                     <button class="bg-primary" id="dataTemplate">
-                                        <a href="excel.cfm?excel=data">Template With Data</a>
+                                        <a href="./excel.cfm?excel=data">Template With Data</a>
                                     </button>
                                     <button id="plainTemplate">
-                                        <a href="excel.cfm?excel=plain">Plain Template</a>
+                                        <a href="./excel.cfm?excel=plain">Plain Template</a>
                                     </button>
                                 </div>
                                 <label for="fileUpload">Upload Excel file:</label>
