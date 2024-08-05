@@ -94,7 +94,7 @@
 
         <cftry>
             <cfquery name="local.checkEmailExists" datasource="#application.db#">
-                SELECT 
+                SELECT                  <!--- For checking Email exist or not --->
                     emailAddress
                 FROM 
                     contacts
@@ -107,7 +107,7 @@
             </cfquery>
 
             <cfquery name="local.checkHobbies" datasource="#application.db#">
-                SELECT
+                SELECT                     <!--- To check hobbies exist in DB or not --->
                     Id
                 FROM
                     hobbies
@@ -138,7 +138,7 @@
                     </cfquery>
 
                     <cfquery name="local.getHobbiesOfUser" datasource="#application.db#">
-                        SELECT
+                        SELECT            <!--- To get Hobbies of existsing user --->
                             hobbie_id
                         FROM
                             User_Hobbies
@@ -149,7 +149,7 @@
                     <cfset local.arrayCheckHobbie = valueArray(local.getHobbiesOfUser, "hobbie_id")>
 
                     <cfquery datasource="#application.db#">
-                        DELETE FROM 
+                        DELETE FROM       <!--- To delete unwanted hobbies from the existing user --->
                             User_Hobbies
                         WHERE 
                             contact_userId = <cfqueryparam value="#arguments.form.userId#" cfsqltype="cf_sql_integer">
@@ -157,7 +157,7 @@
                     </cfquery>
                     
                     <cfset local.newHobbies = "">
-                    <cfloop list="#arguments.form.hobbie#" item="local.hobbie">
+                    <cfloop list="#arguments.form.hobbie#" item="local.hobbie">     <!--- to check the input hobbies are exist in hobbies table --->
                         <cfif NOT arrayFind(local.arrayCheckHobbie, local.hobbie)>
                             <cfset local.newHobbies = listAppend(local.newHobbies, local.hobbie)>
                         </cfif>
@@ -165,7 +165,7 @@
 
                     <cfif listLen(local.newHobbies)>
                         <cfquery name="local.insertHobbieEdit" datasource="#application.db#"> <!--- SELECT INSERT --->
-                            INSERT INTO
+                            INSERT INTO                 <!--- Insert hobbies during update --->
                                 User_Hobbies (
                                     contact_userId,
                                     hobbie_id
@@ -224,7 +224,7 @@
 
                     <cfset local.hobbieArray = listToArray(arguments.form.hobbie)>
                     <cfset local.insertHobbie = []>
-                    <cfloop array="#local.hobbieArray#" index="local.hobbie">
+                    <cfloop array="#local.hobbieArray#" index="local.hobbie">  <!--- Hobbies Id validation --->
                         <cfif arrayFind(local.hobbiesIdArray, local.hobbie)>
                             <cfset arrayAppend(local.insertHobbie, local.hobbie)>
                         </cfif>
@@ -355,7 +355,7 @@
                 <cfelse>
                     AND (
                         t2.nameId_fk = <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-                        OR t2.public = <cfqueryparam value="YES" cfsqltype="cf_sql_varchar">
+                        OR t2.public = "YES"
                     )
                 </cfif>
             ORDER BY t2.userId, t4.Id
@@ -396,7 +396,7 @@
     </cffunction>
 
 
-    <cffunction name="ExcelUploadContact" returnType="any" access="public" hint="function for Create and Update contacts using Excel">
+    <cffunction name="ExcelUploadContact" returnType="any" access="public" hint="function for Create and Update contacts using Excel"> 
         <cfargument name="form" type="any" required="true" >
         
         <cfset local.return = {
@@ -433,7 +433,7 @@
             </cfquery>
 
             <cfquery name="local.checkHobbies" datasource="#application.db#"> 
-                SELECT                             <!--- To Hobbie Id exist for inserting New user details--->
+                SELECT                             <!--- To check Hobbie Id exist for inserting New user details--->
                     Id
                 FROM
                     hobbies
@@ -467,20 +467,33 @@
             </cfquery>
             <cfset local.excelHobbieIdList = valueList(local.excelHobbieId.Id)>
 
+            <cfset local.resultValidation = ''>
+
             <cfif NOT queryRecordCount(local.toFindTitleId)>    <!---Title Validation --->
                 <cfset local.return.success = 0>
-                <cfset local.return.message = "Invalid Title">      
-            <cfelseif !isDate(arguments.form.DOB) OR year(arguments.form.DOB) GT year(now())>          <!---DOB Validation --->
+                <cfset local.resultValidation = listAppend(local.resultValidation, "Invalid Title")>   
+            </cfif>   
+
+            <cfif !isDate(arguments.form.DOB) OR year(arguments.form.DOB) GT year(now())>          <!---DOB Validation --->
                 <cfset local.return.success = 0>
-                <cfset local.return.message = "Invalid DOB">
-            <cfelseif len(arguments.form.phone) LT 10 OR len(arguments.form.phone) GT 13>       <!---phone No Validation --->
+                <cfset local.resultValidation = listAppend(local.resultValidation, "Invalid DOB")>
+            </cfif>  
+
+            <cfif len(arguments.form.phone) LT 10 OR len(arguments.form.phone) GT 13>       <!---phone No Validation --->
                 <cfset local.return.success = 0>
-                <cfset local.return.message = "Invalid Phone Number">
-            <cfelseif NOT queryRecordCount(local.excelHobbieId)>        <!---Hobbie Validation --->
+                <cfset local.resultValidation = listAppend(local.resultValidation, "Invalid Phone Number")>
+            </cfif>  
+
+            <cfif NOT queryRecordCount(local.excelHobbieId) 
+                OR listLen(local.userHobbieList) NEQ listLen(local.excelHobbieIdList)>        <!---Hobbie Validation --->
                 <cfset local.return.success = 0>
-                <cfset local.return.message = "Invalid Hobbie">
+                <cfset local.resultValidation = listAppend(local.resultValidation, "Invalid Hobbie")>
+            </cfif>  
+
+            <cfif local.resultValidation NEQ ''>
+                <cfset local.return.message = local.resultValidation>
             <cfelse>
-                <cfset local.DOB = DateFormat(ParseDateTime(arguments.form.DOB), "yyyy-mm-dd")>
+                <cfset local.DOB = DateFormat(ParseDateTime(arguments.form.DOB), "yyyy-mm-dd")>    <!--- setting date format --->
 
                 <cfif queryRecordCount(local.checkEmailExists) EQ 1>
                     <cfquery name="local.contactUpdate" datasource="#application.db#">

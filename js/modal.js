@@ -312,6 +312,13 @@ $(document).ready(function() {
             window.location.href = 'list.cfm';
         }, 500);
     })
+
+    $(window).click(function(event) {
+        if (event.target == $("#myModal4")[0]) {
+            $('.checkBox').prop('checked', false);
+            $("#myModal4").hide();
+        }
+    });
  
 });
 
